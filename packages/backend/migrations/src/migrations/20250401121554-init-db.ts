@@ -39,21 +39,24 @@ CREATE TABLE user (
     FOREIGN KEY (label_id) REFERENCES label(id)
 );`.execute(trx);
 
-    await sql`CREATE TABLE milestones (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    value INT NOT NULL,
-);`.execute(trx);
+    await sql`
+CREATE TABLE milestones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  value INT NOT NULL
+);
+`.execute(trx);
+
     await sql`CREATE TABLE skill (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     score INT NOT NULL,
-    exp_value INT  NOT NULL,
+    exp_value INT  NOT NULL
 );`.execute(trx);
 
     await sql`CREATE TABLE genre (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL
 );`.execute(trx);
     await sql`CREATE TABLE artist (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,11 +76,11 @@ CREATE TABLE user (
 
     await sql`CREATE TABLE artist_hired (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    artists_id INT NOT NULL,
+    artist_id INT NOT NULL,
     skill_id INT NOT NULL,
     notoriety FLOAT NOT NULL,
     milestones_id INT NOT NULL,
-    FOREIGN KEY (artists_id) REFERENCES artists(id),
+    FOREIGN KEY (artist_id) REFERENCES artist(id),
     FOREIGN KEY (skill_id) REFERENCES skill(id),
     FOREIGN KEY (milestones_id) REFERENCES milestones(id)
 );`.execute(trx);
@@ -104,7 +107,7 @@ CREATE TABLE user (
     exp_value INT NOT NULL,
     artist_id INT NOT NULL,
     FOREIGN KEY (genre_id) REFERENCES genre(id),
-    FOREIGN KEY (artist_id) REFERENCES artists(id)
+    FOREIGN KEY (artist_id) REFERENCES artist(id)
 );`.execute(trx);
 
     await sql`CREATE TABLE staff (
@@ -112,7 +115,7 @@ CREATE TABLE user (
     job VARCHAR(255) NOT NULL,
     bonus INT NOT NULL,
     price INT NOT NULL,
-    exp_value INT NOT NULL,
+    exp_value INT NOT NULL
 );`.execute(trx);
 
     await sql`CREATE TABLE entourage (
@@ -120,7 +123,7 @@ CREATE TABLE user (
     job VARCHAR(255) NOT NULL,
     bonus INT NOT NULL,
     price  INT NOT NULL,
-    exp_value INT NOT NULL,
+    exp_value INT NOT NULL
 );`.execute(trx);
 
     await sql`CREATE TABLE marketing (
@@ -128,7 +131,7 @@ CREATE TABLE user (
     name VARCHAR(255)  NOT NULL,
     bonus INT NOT NULL,
     price INT NOT NULL,
-    exp_value INT NOT NULL,
+    exp_value INT NOT NULL
 );`.execute(trx);
 
     await sql`CREATE TABLE artist_hired_skill (
