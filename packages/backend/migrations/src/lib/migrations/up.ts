@@ -1,9 +1,11 @@
 /* eslint-disable no-console */
-import { FileMigrationProvider, Migrator } from 'kysely';
+import { Migrator } from 'kysely';
 import { promises as fs } from 'node:fs';
-import * as path from 'node:path';
+import path from 'node:path';
 
 import { db } from '@app/backend-shared';
+
+import { FileMigrationProvider } from './lib/file-migration-provider';
 
 const migrator = new Migrator({
   db,
@@ -11,7 +13,7 @@ const migrator = new Migrator({
     fs,
     path,
     // This needs to be an absolute path.
-    migrationFolder: path.join(import.meta.dirname, '../../migrations'),
+    migrationFolder: path.join(process.cwd(), 'src/migrations'),
   }),
 });
 
