@@ -3,4 +3,154 @@
  * Please do not edit it manually.
  */
 
-export interface DB {}
+import type { ColumnType } from "kysely";
+
+export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
+  ? ColumnType<S, I | undefined, U>
+  : ColumnType<T, T | undefined, T>;
+
+export interface Album {
+  artist_id: number | null;
+  buyer: number | null;
+  exp_value: number | null;
+  genre_id: number | null;
+  id: Generated<number>;
+  money_earned: number | null;
+  note: number | null;
+}
+
+export interface ArtistHired {
+  artists_id: number | null;
+  id: Generated<number>;
+  milestones_id: number | null;
+  notoriety: number | null;
+  skill_id: number | null;
+}
+
+export interface ArtistHiredSkill {
+  artist_hired_id: number | null;
+  id: Generated<number>;
+  score: number | null;
+  skill_id: number | null;
+}
+
+export interface Artists {
+  alias: string | null;
+  exp_value: number | null;
+  firstname: string | null;
+  genre_id: number | null;
+  id: Generated<number>;
+  lastname: string | null;
+  milestone_id: number | null;
+  notoriety: number | null;
+  price: number | null;
+  skill_id: number | null;
+}
+
+export interface ArtistSkill {
+  artist_hired_id: number | null;
+  id: Generated<number>;
+  score: number | null;
+  skill_id: number | null;
+}
+
+export interface Entourage {
+  bonus: number | null;
+  exp_value: number | null;
+  id: Generated<number>;
+  job: string | null;
+  price: number | null;
+}
+
+export interface Genre {
+  id: Generated<number>;
+  name: string | null;
+}
+
+export interface Label {
+  budget: number | null;
+  id: Generated<number>;
+  level_id: number | null;
+  logo_id: number | null;
+  name: string | null;
+  notoriety: number | null;
+  score_xp: number | null;
+}
+
+export interface Level {
+  id: Generated<number>;
+  value: number | null;
+}
+
+export interface Logo {
+  id: Generated<number>;
+  logo_img: string | null;
+}
+
+export interface Marketing {
+  bonus: number | null;
+  exp_value: number | null;
+  id: Generated<number>;
+  name: string | null;
+  price: number | null;
+}
+
+export interface Milestones {
+  id: Generated<number>;
+  name: string | null;
+  value: number | null;
+}
+
+export interface Single {
+  artist_hired_id: number | null;
+  exp_value: number | null;
+  genre_id: number | null;
+  id: Generated<number>;
+  listener: number | null;
+  money_earned: number | null;
+  name: string | null;
+  note: number | null;
+}
+
+export interface Skill {
+  exp_value: number | null;
+  id: Generated<number>;
+  name: string | null;
+  score: number | null;
+}
+
+export interface Staff {
+  bonus: number | null;
+  exp_value: number | null;
+  id: Generated<number>;
+  job: string | null;
+  price: number | null;
+}
+
+export interface User {
+  creation_date: Generated<Date | null>;
+  email: string;
+  id: Generated<number>;
+  is_first_time: number | null;
+  label_id: number | null;
+  password: string;
+}
+
+export interface DB {
+  album: Album;
+  artist_hired: ArtistHired;
+  artist_hired_skill: ArtistHiredSkill;
+  artist_skill: ArtistSkill;
+  artists: Artists;
+  entourage: Entourage;
+  genre: Genre;
+  label: Label;
+  level: Level;
+  logo: Logo;
+  marketing: Marketing;
+  milestones: Milestones;
+  single: Single;
+  skill: Skill;
+  staff: Staff;
+  user: User;
+}
