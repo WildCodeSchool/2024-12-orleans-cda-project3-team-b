@@ -13,7 +13,7 @@ const migrator = new Migrator({
     fs,
     path,
     // This needs to be an absolute path.
-    migrationFolder: path.join(process.cwd(), 'src/migrations'),
+    migrationFolder: path.join(import.meta.dirname, '../../migrations'),
   }),
 });
 
