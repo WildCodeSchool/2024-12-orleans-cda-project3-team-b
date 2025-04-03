@@ -67,7 +67,6 @@ CREATE TABLE milestones (
     genre_id INT NOT NULL,
     milestone_id INT NOT NULL,
     price INT NOT NULL,
-    skill_id INT NOT NULL,
     exp_value INT NOT NULL,
     FOREIGN KEY (genre_id) REFERENCES genre(id),
     FOREIGN KEY (milestone_id) REFERENCES milestones(id),
