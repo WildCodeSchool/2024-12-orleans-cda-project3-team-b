@@ -69,7 +69,7 @@ CREATE TABLE milestones (
     price INT NOT NULL,
     exp_value INT NOT NULL,
     FOREIGN KEY (genre_id) REFERENCES genre(id),
-    FOREIGN KEY (milestone_id) REFERENCES milestones(id),
+    FOREIGN KEY (milestone_id) REFERENCES milestones(id)
 );`.execute(trx);
 
     await sql`CREATE TABLE artist_hired (
