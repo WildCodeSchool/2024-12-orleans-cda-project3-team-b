@@ -75,11 +75,9 @@ CREATE TABLE milestones (
     await sql`CREATE TABLE artists_hired (
     id INT AUTO_INCREMENT PRIMARY KEY,
     artists_id INT NOT NULL,
-    skills_id INT NOT NULL,
     notoriety FLOAT NOT NULL,
     milestones_id INT NOT NULL,
     FOREIGN KEY (artists_id) REFERENCES artists(id),
-    FOREIGN KEY (skills_id) REFERENCES skills(id),
     FOREIGN KEY (milestones_id) REFERENCES milestones(id)
 );`.execute(trx);
 
