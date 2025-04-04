@@ -82,5 +82,9 @@
       "eslint --fix --report-unused-disable-directives",
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.1",
+    "tailwindcss": "^4.1.1"
   }
 }
