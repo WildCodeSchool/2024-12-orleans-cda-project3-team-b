@@ -86,7 +86,7 @@ CREATE TABLE milestones (
     name VARCHAR(255) NOT NULL,
     artists_hired_id INT NOT NULL,
     genres_id INT NOT NULL,
-    note FLOAT NOT NULL,
+    score FLOAT NOT NULL,
     listeners INT NOT NULL,
     money_earned INT NOT NULL,
     exp_value INT NOT NULL,
@@ -96,6 +96,7 @@ CREATE TABLE milestones (
 
     await sql`CREATE TABLE albums (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
     score FLOAT NOT NULL,
     sales INT NOT NULL,
     money_earned INT NOT NULL,
