@@ -32,6 +32,7 @@ export interface Artists {
   firstname: string | null;
   genres_id: number;
   id: Generated<number>;
+  image: number;
   lastname: string | null;
   milestones_id: number;
   notoriety: number;
@@ -70,6 +71,7 @@ export interface CrewMembers {
   bonus: number;
   exp_value: number;
   id: Generated<number>;
+  image: number;
   job: string;
   price: number;
 }
@@ -115,6 +117,7 @@ export interface Marketing {
   bonus: number;
   exp_value: number;
   id: Generated<number>;
+  image: number;
   name: string;
   price: number;
 }
@@ -153,6 +156,7 @@ export interface Staff {
   bonus: number;
   exp_value: number;
   id: Generated<number>;
+  image: number;
   job: string;
   price: number;
 }
