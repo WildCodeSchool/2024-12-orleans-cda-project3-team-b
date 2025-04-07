@@ -9,148 +9,190 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
-export interface Album {
-  artist_id: number | null;
-  buyer: number | null;
-  exp_value: number | null;
-  genre_id: number | null;
+export interface Albums {
+  artists_id: number;
+  exp_value: number;
+  genres_id: number;
   id: Generated<number>;
-  money_earned: number | null;
-  note: number | null;
+  money_earned: number;
+  name: string;
+  sales: number;
+  score: number;
 }
 
-export interface ArtistHired {
-  artists_id: number | null;
+export interface AlbumsMarketing {
+  albums_id: number;
   id: Generated<number>;
-  milestones_id: number | null;
-  notoriety: number | null;
-  skill_id: number | null;
-}
-
-export interface ArtistHiredSkill {
-  artist_hired_id: number | null;
-  id: Generated<number>;
-  score: number | null;
-  skill_id: number | null;
+  marketing_id: number;
 }
 
 export interface Artists {
   alias: string | null;
-  exp_value: number | null;
+  exp_value: number;
   firstname: string | null;
-  genre_id: number | null;
+  genres_id: number;
   id: Generated<number>;
   lastname: string | null;
-  milestone_id: number | null;
-  notoriety: number | null;
-  price: number | null;
-  skill_id: number | null;
+  milestones_id: number;
+  notoriety: number;
+  price: number;
 }
 
-export interface ArtistSkill {
-  artist_hired_id: number | null;
+export interface ArtistsHired {
+  artists_id: number;
   id: Generated<number>;
-  score: number | null;
-  skill_id: number | null;
+  milestones_id: number;
+  notoriety: number;
 }
 
-export interface Entourage {
-  bonus: number | null;
-  exp_value: number | null;
+export interface ArtistsHiredSkills {
+  artists_hired_id: number;
   id: Generated<number>;
-  job: string | null;
-  price: number | null;
+  score: number;
+  skills_id: number;
 }
 
-export interface Genre {
+export interface ArtistsMarketing {
+  albums_id: number;
   id: Generated<number>;
-  name: string | null;
+  marketing_id: number;
+  singles_id: number;
 }
 
-export interface Label {
-  budget: number | null;
+export interface ArtistsSkills {
+  artists_hired_id: number;
   id: Generated<number>;
-  level_id: number | null;
-  logo_id: number | null;
-  name: string | null;
-  notoriety: number | null;
-  score_xp: number | null;
+  score: number;
+  skills_id: number;
 }
 
-export interface Level {
+export interface CrewMembers {
+  bonus: number;
+  exp_value: number;
   id: Generated<number>;
-  value: number | null;
+  job: string;
+  price: number;
 }
 
-export interface Logo {
+export interface CrewMembersHired {
+  artists_id: number;
+  crew_members_id: number;
   id: Generated<number>;
-  logo_img: string | null;
+}
+
+export interface Genres {
+  id: Generated<number>;
+  name: string;
+}
+
+export interface LabelArtists {
+  artists_hired_id: number;
+  id: Generated<number>;
+  labels_id: number;
+}
+
+export interface Labels {
+  budget: number;
+  id: Generated<number>;
+  levels_id: number;
+  logos_id: number;
+  name: string;
+  notoriety: number;
+  score_xp: number;
+}
+
+export interface Levels {
+  id: Generated<number>;
+  value: number;
+}
+
+export interface Logos {
+  id: Generated<number>;
+  logo_img: string;
 }
 
 export interface Marketing {
-  bonus: number | null;
-  exp_value: number | null;
+  bonus: number;
+  exp_value: number;
   id: Generated<number>;
-  name: string | null;
-  price: number | null;
+  name: string;
+  price: number;
 }
 
 export interface Milestones {
   id: Generated<number>;
-  name: string | null;
-  value: number | null;
+  name: string;
+  value: number;
 }
 
-export interface Single {
-  artist_hired_id: number | null;
-  exp_value: number | null;
-  genre_id: number | null;
+export interface Singles {
+  artists_hired_id: number;
+  exp_value: number;
+  genres_id: number;
   id: Generated<number>;
-  listener: number | null;
-  money_earned: number | null;
-  name: string | null;
-  note: number | null;
+  listeners: number;
+  money_earned: number;
+  name: string;
+  score: number;
 }
 
-export interface Skill {
-  exp_value: number | null;
+export interface SinglesAlbums {
+  albums_id: number;
   id: Generated<number>;
-  name: string | null;
-  score: number | null;
+  singles_id: number;
+}
+
+export interface Skills {
+  exp_value: number;
+  id: Generated<number>;
+  name: string;
+  score: number;
 }
 
 export interface Staff {
-  bonus: number | null;
-  exp_value: number | null;
+  bonus: number;
+  exp_value: number;
   id: Generated<number>;
-  job: string | null;
-  price: number | null;
+  job: string;
+  price: number;
 }
 
-export interface User {
-  creation_date: Generated<Date | null>;
+export interface StaffLabel {
+  id: Generated<number>;
+  labels_id: number;
+  staff_id: number;
+}
+
+export interface Users {
+  creation_date: Generated<Date>;
   email: string;
   id: Generated<number>;
-  is_first_time: number | null;
-  label_id: number | null;
+  is_first_time: number;
+  labels_id: number;
   password: string;
 }
 
 export interface DB {
-  album: Album;
-  artist_hired: ArtistHired;
-  artist_hired_skill: ArtistHiredSkill;
-  artist_skill: ArtistSkill;
+  albums: Albums;
+  albums_marketing: AlbumsMarketing;
   artists: Artists;
-  entourage: Entourage;
-  genre: Genre;
-  label: Label;
-  level: Level;
-  logo: Logo;
+  artists_hired: ArtistsHired;
+  artists_hired_skills: ArtistsHiredSkills;
+  artists_marketing: ArtistsMarketing;
+  artists_skills: ArtistsSkills;
+  crew_members: CrewMembers;
+  crew_members_hired: CrewMembersHired;
+  genres: Genres;
+  label_artists: LabelArtists;
+  labels: Labels;
+  levels: Levels;
+  logos: Logos;
   marketing: Marketing;
   milestones: Milestones;
-  single: Single;
-  skill: Skill;
+  singles: Singles;
+  singles_albums: SinglesAlbums;
+  skills: Skills;
   staff: Staff;
-  user: User;
+  staff_label: StaffLabel;
+  users: Users;
 }
