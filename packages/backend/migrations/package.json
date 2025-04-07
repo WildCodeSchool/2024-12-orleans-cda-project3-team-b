@@ -16,8 +16,8 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "kysely": "^0.27.6",
+    "@app/backend-shared": "*",
     "@app/shared": "*",
-    "@app/backend-shared": "*"
+    "kysely": "^0.27.6"
   }
 }
