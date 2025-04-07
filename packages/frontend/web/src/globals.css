@@ -8,6 +8,7 @@
   --color-orange: #ea7f21;
   --color-blue: #15414e;
   --color-white: #f6f6f6;
+  /* --shadow-box: 35px 35px 35px rgba(0, 0, 0, 0.25);  */
 }
 header {
   font-family: var(--font-rosa);
