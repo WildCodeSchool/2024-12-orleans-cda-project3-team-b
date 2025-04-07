@@ -67,7 +67,7 @@ CREATE TABLE milestones (
     genres_id INT NOT NULL,
     milestones_id INT NOT NULL,
     price INT NOT NULL,
-    image INT NOT NULL,
+    image VARCHAR(255) NOT NULL,
     exp_value INT NOT NULL,
     FOREIGN KEY (genres_id) REFERENCES genres(id),
     FOREIGN KEY (milestones_id) REFERENCES milestones(id)
@@ -113,7 +113,7 @@ CREATE TABLE milestones (
     job VARCHAR(255) NOT NULL,
     bonus INT NOT NULL,
     price INT NOT NULL,
-    image INT NOT NULL,
+    image VARCHAR(255) NOT NULL,
     exp_value INT NOT NULL
 );`.execute(trx);
 
@@ -122,7 +122,7 @@ CREATE TABLE milestones (
     job VARCHAR(255) NOT NULL,
     bonus INT NOT NULL,
     price  INT NOT NULL,
-    image INT NOT NULL,
+    image VARCHAR(255) NOT NULL,
     exp_value INT NOT NULL
 );`.execute(trx);
 
@@ -131,7 +131,7 @@ CREATE TABLE milestones (
     name VARCHAR(255)  NOT NULL,
     bonus INT NOT NULL,
     price INT NOT NULL,
-    image INT NOT NULL,
+    image VARCHAR(255) NOT NULL,
     exp_value INT NOT NULL
 );`.execute(trx);
 
