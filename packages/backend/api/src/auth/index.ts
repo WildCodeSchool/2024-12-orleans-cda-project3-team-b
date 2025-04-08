@@ -1,9 +1,10 @@
 import express from 'express';
 
 import postLoginRouter from './post-login';
+import postRegisterRouter from './post-register';
 
 const authRouter = express.Router();
 authRouter.use(postLoginRouter);
-// authRouter.user(registerRoute);
+authRouter.use(postRegisterRouter);
 
 export default authRouter;

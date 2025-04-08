@@ -172,7 +172,7 @@ export interface Users {
   email: string;
   id: Generated<number>;
   is_first_time: number;
-  labels_id: number;
+  labels_id: number | null;
   password: string;
 }
 
