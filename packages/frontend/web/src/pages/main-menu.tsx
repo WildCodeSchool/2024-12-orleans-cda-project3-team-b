@@ -35,24 +35,35 @@ export default function MainMenu() {
           <h1 className='text-6xl text-[#15414E] underline'>{' Record'}</h1>
 
           <div className='flex h-50 items-center justify-center'>
-            <span className='mx-auto flex h-13 w-14 items-center justify-center rounded-xl bg-[#15414E] shadow-[3px_5px_6px_rgba(0,0,0,0.30)] inset-ring-2 inset-ring-white'>
-              <button
-                type='button'
-                onClick={handleClick}
-                className='flex h-11 flex-col items-center justify-center pb-3 text-6xl text-white'
-              >
-                {'+'}
-              </button>
-            </span>
-            <span className='mx-auto flex h-13 w-14 items-center justify-center rounded-xl bg-[#15414E] shadow-[3px_5px_6px_rgba(0,0,0,0.30)] inset-ring-2 inset-ring-white'>
-              <button
-                type='button'
-                onClick={handleClick}
-                className='flex h-11 flex-col items-center justify-center pb-3 text-6xl text-white'
-              >
-                {'+'}
-              </button>
-            </span>
+            <div className='flex flex-col items-center justify-center'>
+              <span className='mx-auto flex h-13 w-14 items-center justify-center rounded-xl bg-[#15414E] shadow-[3px_5px_6px_rgba(0,0,0,0.30)] inset-ring-2 inset-ring-white'>
+                <button
+                  type='button'
+                  onClick={handleClick}
+                  className='flex h-11 flex-col items-center justify-center pb-3 text-6xl text-white'
+                >
+                  {'+'}
+                </button>
+              </span>
+
+              <h2 className='pt-1 text-2xl text-[#15414E]'>
+                {'Create a new single'}
+              </h2>
+            </div>
+            <div className='flex flex-col items-center justify-center pl-10'>
+              <span className='mx-auto flex h-13 w-14 items-center justify-center rounded-xl bg-[#15414E] shadow-[3px_5px_6px_rgba(0,0,0,0.30)] inset-ring-2 inset-ring-white'>
+                <button
+                  type='button'
+                  onClick={handleClick}
+                  className='flex h-11 flex-col items-center justify-center pb-3 text-6xl text-white'
+                >
+                  {'+'}
+                </button>
+              </span>
+              <h2 className='pt-1 text-2xl text-[#15414E]'>
+                {'Create a new album'}
+              </h2>
+            </div>
           </div>
         </div>
         <div className='h-70 pt-7'>
