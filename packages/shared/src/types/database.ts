@@ -171,8 +171,8 @@ export interface Users {
   creation_date: Generated<Date>;
   email: string;
   id: Generated<number>;
-  is_first_time: number;
-  labels_id: number;
+  is_first_time: Generated<number>;
+  labels_id: number | null;
   password: string;
 }
 
