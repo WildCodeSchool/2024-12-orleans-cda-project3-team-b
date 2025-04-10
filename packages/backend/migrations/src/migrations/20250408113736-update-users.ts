@@ -7,6 +7,10 @@ export async function up(db: Kysely<DB>): Promise<void> {
   await db.transaction().execute(async (trx) => {
     await sql`
       ALTER TABLE users MODIFY labels_id INT NULL;
+    `.execute(trx);
+  });
+  await db.transaction().execute(async (trx) => {
+    await sql`
       ALTER TABLE users MODIFY is_first_time BOOLEAN DEFAULT TRUE NOT NULL;
     `.execute(trx);
   });
@@ -17,7 +21,12 @@ export async function down(db: Kysely<DB>): Promise<void> {
   await db.transaction().execute(async (trx) => {
     await sql`
 ALTER TABLE users MODIFY labels_id INT NOT NULL; 
-ALTER TABLE is_first_time BOOLEAN NOT NULL,
+ALTER TABLE is_first_time BOOLEAN NOT NULL DEFAULT TRUE,
+`.execute(trx);
+  });
+  await db.transaction().execute(async (trx) => {
+    await sql`
+ALTER TABLE is_first_time BOOLEAN DEFAULT TRUE NOT NULL ,
 `.execute(trx);
   });
 }

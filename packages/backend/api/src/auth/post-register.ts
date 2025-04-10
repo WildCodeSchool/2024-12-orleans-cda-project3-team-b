@@ -12,13 +12,25 @@ postRegisterRouter.post('/register', async (req, res) => {
     timeCost: 2,
     parallelism: 1,
   });
-  await db
-    .insertInto('users')
-    .values({ email, password: hashPassword, is_first_time: 1 })
-    .execute();
-  res.json({
-    message: 'user register',
-  });
+  const userExists = await db
+    .selectFrom('users')
+    .selectAll()
+    .where('email', '=', email)
+    .executeTakeFirst();
+
+  if (userExists) {
+    res.json({
+      message: 'user already use',
+    });
+  } else {
+    await db
+      .insertInto('users')
+      .values({ email, password: hashPassword })
+      .executeTakeFirst();
+    res.json({
+      message: 'user register',
+    });
+  }
 });
 
 export default postRegisterRouter;
