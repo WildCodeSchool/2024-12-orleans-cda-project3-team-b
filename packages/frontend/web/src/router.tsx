@@ -3,8 +3,8 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './pages/app';
 import Home from './pages/home';
 import HomeGame from './pages/home-game';
-import Loggin from './pages/loggin';
-import Private from './pages/private';
+import InGame from './pages/in-game';
+import Login from './pages/login';
 import Register from './pages/register';
 
 const router = createBrowserRouter([
@@ -14,8 +14,8 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       {
-        path: 'loggin',
-        element: <Loggin />,
+        path: 'login',
+        element: <Login />,
       },
       {
         path: 'register',
@@ -25,8 +25,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Private />,
-    children: [{ path: 'homepage-game', element: <HomeGame /> }],
+    element: <InGame />,
+    children: [
+      {
+        path: 'homepage-game',
+        element: <HomeGame />,
+      },
+    ],
   },
 ]);
 

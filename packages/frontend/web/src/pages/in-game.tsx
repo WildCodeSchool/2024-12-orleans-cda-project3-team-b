@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/auth-context';
 
-export default function Private() {
+export default function InGame() {
   const auth = useAuth();
   const isLoading = auth?.isLoading;
   const isLoggedIn = auth?.isLoggedIn;
@@ -10,7 +10,7 @@ export default function Private() {
     return;
   }
   if (!isLoggedIn) {
-    return <Navigate to='/loggin' />;
+    return <Navigate to='/login' />;
   }
 
   return <Outlet />;

@@ -30,7 +30,7 @@ export default function Loggin() {
       auth?.setIsLoggedIn(true);
       await navigate('/homepage-game');
     } else {
-      setMessage('Invalid login credentials');
+      setMessage('Invalid login or password');
     }
   };
 
