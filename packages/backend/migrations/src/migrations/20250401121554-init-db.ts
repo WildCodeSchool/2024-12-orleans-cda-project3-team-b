@@ -16,7 +16,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
   );`.execute(trx);
 
     await sql`
-    CREATE TABLE labels (
+    CREATE TABLE label (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         logos_id INT NOT NULL,
@@ -33,10 +33,10 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    is_first_time BOOLEAN NOT NULL,
+    is_first_time BOOLEAN  DEFAULT TRUE NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    labels_id INT  NOT NULL,
-    FOREIGN KEY (labels_id) REFERENCES labels(id)
+    label_id INT NULL,
+    FOREIGN KEY (label_id) REFERENCES label(id)
 );`.execute(trx);
 
     await sql`
@@ -50,7 +50,6 @@ CREATE TABLE milestones (
     await sql`CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    score INT NOT NULL,
     exp_value INT  NOT NULL
 );`.execute(trx);
 
@@ -139,18 +138,9 @@ CREATE TABLE milestones (
   id INT AUTO_INCREMENT PRIMARY KEY,
   artists_hired_id INT NOT NULL,
   skills_id INT NOT NULL,
-  score INT NOT NULL,
+  grade INT NOT NULL,
   FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id),
   FOREIGN KEY (skills_id) REFERENCES skills(id)
-);`.execute(trx);
-
-    await sql`CREATE TABLE artists_skills (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    artists_hired_id INT NOT NULL,
-    skills_id INT NOT NULL,
-    score INT NOT NULL,
-    FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id),
-    FOREIGN KEY (skills_id) REFERENCES skills(id)
 );`.execute(trx);
 
     await sql`CREATE TABLE crew_members_hired (
@@ -163,16 +153,16 @@ CREATE TABLE milestones (
     await sql`CREATE TABLE staff_label (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
-    labels_id INT NOT NULL,
+    label_id INT NOT NULL,
     FOREIGN KEY (staff_id) REFERENCES staff(id),
-    FOREIGN KEY (labels_id) REFERENCES labels(id)
+    FOREIGN KEY (label_id) REFERENCES label(id)
 );`.execute(trx);
 
     await sql`CREATE TABLE label_artists (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    labels_id INT NOT NULL,
+    label_id INT NOT NULL,
     artists_hired_id INT NOT NULL,
-    FOREIGN KEY (labels_id) REFERENCES labels(id),
+    FOREIGN KEY (label_id) REFERENCES label(id),
     FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id)
 );`.execute(trx);
 
@@ -184,14 +174,12 @@ CREATE TABLE milestones (
     FOREIGN KEY (albums_id) REFERENCES albums(id)
 );`.execute(trx);
 
-    await sql`CREATE TABLE artists_marketing (
+    await sql`CREATE TABLE singles_marketing (
     id INT AUTO_INCREMENT PRIMARY KEY,
     marketing_id INT NOT NULL,
     singles_id INT NOT NULL,
-    albums_id INT NOT NULL,
     FOREIGN KEY (marketing_id) REFERENCES marketing(id),
-    FOREIGN KEY (singles_id) REFERENCES singles(id),
-    FOREIGN KEY (albums_id) REFERENCES albums(id)
+    FOREIGN KEY (singles_id) REFERENCES singles(id)
 );`.execute(trx);
 
     await sql`CREATE TABLE albums_marketing (
@@ -211,7 +199,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
       DROP TABLE IF EXISTS albums_marketing;
     `.execute(trx);
     await sql`
-      DROP TABLE IF EXISTS artists_marketing;
+      DROP TABLE IF EXISTS singles_marketing;
     `.execute(trx);
     await sql`
       DROP TABLE IF EXISTS singles_albums;
@@ -225,11 +213,9 @@ export async function down(db: Kysely<DB>): Promise<void> {
     await sql`
       DROP TABLE IF EXISTS crew_members_hired;
     `.execute(trx);
+
     await sql`
-      DROP TABLE IF EXISTS  artists_skill;
-    `.execute(trx);
-    await sql`
-      DROP TABLE IF EXISTS artists_hired_skill;
+      DROP TABLE IF EXISTS artists_hired_skills;
     `.execute(trx);
     await sql`
       DROP TABLE IF EXISTS marketing ;
@@ -265,7 +251,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
       DROP TABLE IF EXISTS users;
     `.execute(trx);
     await sql`
-      DROP TABLE IF EXISTS labels;
+      DROP TABLE IF EXISTS label;
     `.execute(trx);
     await sql`
       DROP TABLE IF EXISTS logos;
