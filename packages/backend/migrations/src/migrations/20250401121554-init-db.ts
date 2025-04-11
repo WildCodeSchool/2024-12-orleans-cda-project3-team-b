@@ -138,8 +138,17 @@ CREATE TABLE milestones (
   id INT AUTO_INCREMENT PRIMARY KEY,
   artists_hired_id INT NOT NULL,
   skills_id INT NOT NULL,
-  grade INT NOT NULL,
+  grade INT NULL,
   FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id),
+  FOREIGN KEY (skills_id) REFERENCES skills(id)
+);`.execute(trx);
+
+    await sql`CREATE TABLE artists_skills (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  artists_id INT NOT NULL,
+  skills_id INT NOT NULL,
+  grade INT NULL,
+  FOREIGN KEY (artists_id) REFERENCES artists(id),
   FOREIGN KEY (skills_id) REFERENCES skills(id)
 );`.execute(trx);
 
@@ -212,6 +221,9 @@ export async function down(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
     await sql`
       DROP TABLE IF EXISTS crew_members_hired;
+    `.execute(trx);
+    await sql`
+      DROP TABLE IF EXISTS artists_skills;
     `.execute(trx);
 
     await sql`
