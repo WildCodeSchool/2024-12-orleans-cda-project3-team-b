@@ -6,3 +6,8 @@ body {
   margin: 0;
   padding: 0;
 }
+
+@theme static {
+  --color-primary: #edf4f6;
+  --color-secondary: #15414e;
+}
