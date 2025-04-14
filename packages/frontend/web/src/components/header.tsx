@@ -5,9 +5,9 @@ import MenuBurger from '../../../assets/burger-bar.png';
 import Close from '../../../assets/croix.png';
 
 export default function Header() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const closeMenu = () => {
-    setOpen(false);
+    setIsOpen(false);
   };
   return (
     <header className='--font-display border-b-orange bg-blue flex h-[105px] w-full flex-col border-b-3 text-white sm:h-[185px]'>
@@ -31,20 +31,20 @@ export default function Header() {
         </ul>
       </nav>
       <div
-        className={`absolute z-2 h-full w-full bg-transparent ${open ? 'flex' : 'hidden'}`}
+        className={`absolute z-2 h-full w-full bg-transparent ${isOpen ? 'flex' : 'hidden'}`}
         onClick={closeMenu}
       />
       <div
         className='absolute top-8 right-5 z-4 flex w-[32px] sm:hidden'
         onClick={() => {
-          setOpen(!open);
+          setIsOpen(!isOpen);
         }}
       >
-        <img src={open ? Close : MenuBurger} alt='menu burger' />
+        <img src={isOpen ? Close : MenuBurger} alt='menu burger' />
       </div>
-      <div className={open ? 'flex' : 'hidden'} onClick={closeMenu} />
+      <div className={isOpen ? 'flex' : 'hidden'} onClick={closeMenu} />
       <nav
-        className={`--font-display absolute top-[69px] z-3 h-[247px] w-full items-start justify-center bg-(--color-blue) text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${open ? 'flex' : 'hidden'}`}
+        className={`--font-display absolute top-[69px] z-3 h-[247px] w-full items-start justify-center bg-(--color-blue) text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${isOpen ? 'flex' : 'hidden'}`}
       >
         <ul onClick={closeMenu} className='text-center'>
           <li className='hover:text-orange'>
