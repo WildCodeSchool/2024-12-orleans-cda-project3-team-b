@@ -10,7 +10,7 @@ export default function Header() {
     setOpen(false);
   };
   return (
-    <header className='--font-display flex h-[105px] w-full flex-col border-b-3 border-b-(--color-orange) bg-(--color-blue) text-(--color-white) sm:h-[185px]'>
+    <header className='--font-display border-b-orange bg-blue flex h-[105px] w-full flex-col border-b-3 text-white sm:h-[185px]'>
       <div
         className='slogan m-auto mt-[48px] hidden text-[48px] font-bold sm:block'
         onClick={closeMenu}
@@ -47,22 +47,22 @@ export default function Header() {
         className={`--font-display absolute top-[69px] z-3 h-[247px] w-full items-start justify-center bg-(--color-blue) text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${open ? 'flex' : 'hidden'}`}
       >
         <ul onClick={closeMenu} className='text-center'>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to='/'>{'Home'}</Link>
           </li>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to=''>{'My Album'}</Link>
           </li>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to=''>{'My artists'}</Link>
           </li>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to=''>{'Privacy Policy'}</Link>
           </li>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to=''>{'Profil'}</Link>
           </li>
-          <li className='hover:text-(--color-orange)'>
+          <li className='hover:text-orange'>
             <Link to=''>{'Log out'}</Link>
           </li>
         </ul>
