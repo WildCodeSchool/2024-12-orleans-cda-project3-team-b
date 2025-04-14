@@ -10,53 +10,51 @@ export default function MainMenu() {
       </header>
       <div className='bg-primary mx-auto text-center'>
         <div className='flex h-70 flex-col items-center justify-center'>
-          <h2 className='text-secondary pb-7 text-6xl underline'>
+          <h2 className='text-secondary pb-7 text-3xl underline'>
             {'MyARTISTS'}
           </h2>
           <Link to='/hireartist'>
             <AddButton>{'+'}</AddButton>
           </Link>
 
-          <h2 className='text-secondary pt-1 text-2xl'>
-            {'Hire a new artist'}
-          </h2>
+          <h2 className='text-secondary pt-1 text-xl'>{'Hire a new artist'}</h2>
         </div>
         <div className='h-70 pt-7'>
-          <h2 className='text-secondary text-6xl underline'>{' RECORD'}</h2>
+          <h2 className='text-secondary text-3xl underline'>{' RECORD'}</h2>
 
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center'>
               <AddButton>{'+'}</AddButton>
-              <h2 className='text-secondary pt-1 text-2xl'>
+              <h2 className='text-secondary pt-1 text-xl'>
                 {'Create a new single'}
               </h2>
             </div>
             <div className='flex flex-col items-center justify-center pl-10'>
               <AddButton>{'+'}</AddButton>
-              <h3 className='text-secondary pt-1 text-2xl'>
+              <h3 className='text-secondary pt-1 text-xl'>
                 {'Create a new album'}
               </h3>
             </div>
           </div>
         </div>
         <div className='h-70 pt-7'>
-          <h2 className='text-secondary text-6xl underline'>{' STAFF'}</h2>
+          <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <AddButton>{'+'}</AddButton>
-              <h3>{'Hire staff'}</h3>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <AddButton>{'+'}</AddButton>
-              <h3>{'Hire staff'}</h3>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <AddButton>{'+'}</AddButton>
-              <h3>{'Hire staff'}</h3>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <AddButton>{'+'}</AddButton>
-              <h3>{'Hire staff'}</h3>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
           </div>
         </div>
