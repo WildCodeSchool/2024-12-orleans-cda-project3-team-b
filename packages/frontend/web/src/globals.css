@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Red+Rose:wght@300;400;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Rose:wght@300..700&display=swap');
 
 body {
   height: 100dvh;
@@ -10,4 +13,11 @@ body {
 @theme static {
   --color-primary: #edf4f6;
   --color-secondary: #15414e;
+}
+
+@theme {
+  --font-rosa: '"Red Rose"', 'cursive';
+  --font-inter: 'inter', 'sans-serif';
+  --color-orange: #ea7f21;
+  --color-blue: #15414e;
 }

@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
 import AddButton from '../components/add-button';
+import HeaderDesktop from '../components/header-desktop';
 
 export default function MainMenu() {
   return (
     <>
-      <header className='h-19 text-center text-4xl'>
-        <h1>{'HEADER'}</h1>
-      </header>
+      <HeaderDesktop />
+
       <div className='bg-primary mx-auto text-center'>
         <div className='flex h-70 flex-col items-center justify-center'>
           <h2 className='text-secondary pb-7 text-3xl underline'>
