@@ -6,7 +6,7 @@ import { db } from '@app/backend-shared';
 
 const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '';
 const ACCES_TOKEN_SECRET = process.env.ACCES_TOKEN_SECRET;
-const accesTokenSecret = new TextEncoder().encode(ACCES_TOKEN_SECRET);
+const accessTokenSecret = new TextEncoder().encode(ACCES_TOKEN_SECRET);
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const refreshTokenSecret = new TextEncoder().encode(REFRESH_TOKEN_SECRET);
@@ -45,7 +45,7 @@ postLoginRouter.post('/login', async (req, res) => {
       .setIssuer(FRONTEND_HOST)
       .setAudience(FRONTEND_HOST)
       .setExpirationTime('60s')
-      .sign(accesTokenSecret);
+      .sign(accessTokenSecret);
 
     const refreshToken = await new jose.SignJWT({
       sub: email,

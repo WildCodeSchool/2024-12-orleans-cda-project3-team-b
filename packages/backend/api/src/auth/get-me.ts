@@ -10,7 +10,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
-      coucou: false,
+      user: false,
     });
     return;
   }
@@ -23,7 +23,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
       .executeTakeFirst();
     if (!user) {
       res.json({
-        coucou1: false,
+        user: false,
       });
       return;
     }
@@ -33,7 +33,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
     });
   } catch (_error) {
     res.json({
-      ok: false,
+      root: false,
     });
   }
 });
