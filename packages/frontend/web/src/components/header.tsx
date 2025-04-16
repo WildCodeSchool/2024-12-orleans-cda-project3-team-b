@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import MenuBurger from '../../../assets/burger-bar.png';
-import Close from '../../../assets/croix.png';
+import MenuBurger from '../../public/assets/burger-bar.png';
+import Close from '../../public/assets/croix.png';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +10,7 @@ export default function Header() {
     setIsOpen(false);
   };
   return (
-    <header className='--font-display border-b-orange bg-blue flex h-[105px] w-full flex-col border-b-3 text-white sm:h-[185px]'>
+    <header className='font-display border-b-orange bg-blue flex h-[105px] w-full flex-col border-b-3 text-white sm:h-[185px]'>
       <div
         className='slogan m-auto mt-[48px] hidden text-[48px] font-bold sm:block'
         onClick={closeMenu}
@@ -44,7 +44,7 @@ export default function Header() {
       </div>
       <div className={isOpen ? 'flex' : 'hidden'} onClick={closeMenu} />
       <nav
-        className={`--font-display absolute top-[69px] z-3 h-[247px] w-full items-start justify-center bg-(--color-blue) text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${isOpen ? 'flex' : 'hidden'}`}
+        className={`bg-blue absolute top-[69px] z-3 h-[247px] w-full items-start justify-center text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${isOpen ? 'flex' : 'hidden'}`}
       >
         <ul onClick={closeMenu} className='text-center'>
           <li className='hover:text-orange'>

@@ -7,7 +7,10 @@
   --font-inter: 'inter', 'sans-serif';
   --color-orange: #ea7f21;
   --color-blue: #15414e;
+  --color-primary: #edf4f6;
+  --color-secondary: #15414e;
 }
 header {
   font-family: var(--font-rosa);
 }
+
