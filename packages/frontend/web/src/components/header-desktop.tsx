@@ -53,7 +53,7 @@ export default function HeaderDesktop() {
                 onClick={() => {
                   setIsOpen(!isOpen);
                 }}
-                src='/assets/points.png'
+                src='/assets/dots.png'
                 alt='three dots menu'
               />
             </li>
@@ -77,7 +77,7 @@ export default function HeaderDesktop() {
               <Link to=''>
                 <img
                   className='w-8'
-                  src='\assets\log-out.png'
+                  src='/assets/log-out.png'
                   alt='log out logo'
                 />
               </Link>
