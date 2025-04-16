@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import cinematographie from '../../public/assets/cinematographie.png';
-
 export default function HeaderDesktop() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,7 +17,7 @@ export default function HeaderDesktop() {
       <div className='flex items-center space-x-4 border-r-4 border-r-white pr-4 pl-4 text-xl'>
         <p className='m-0 pr-1 font-bold'>{'Level'}</p>
         <span className='bg-primary text-orange flex h-5 w-5 items-center rounded-xs font-bold'>
-          <p className='ml-1'>{'2'}</p>{' '}
+          <p className='ml-1'>{'2'}</p>
         </span>
         <p className='flex items-center font-bold'>
           {'3,2 '}
@@ -28,13 +26,13 @@ export default function HeaderDesktop() {
         <p className='flex items-center font-bold'>
           {'50,000'}
           <img
-            className='mt-1 h-6 w-6 pl-1'
+            className='mt-0.5 h-5 w-6 pl-1'
             src='/assets/dollar-icon.png'
             alt=''
           />
         </p>
       </div>
-      <nav className='mt-4 ml-158'>
+      <nav className='mt-4 ml-188'>
         <ul className='flex items-center justify-items-end space-x-4 text-xl font-bold'>
           <li>
             <Link to=''>{'MyArtists'}</Link>
@@ -48,8 +46,8 @@ export default function HeaderDesktop() {
               onClick={() => {
                 setIsOpen(!isOpen);
               }}
-              src={cinematographie}
-              alt='cinematographie'
+              src='/assets/points.png'
+              alt='three dots menu'
             />
           </li>
         </ul>
@@ -57,7 +55,7 @@ export default function HeaderDesktop() {
           onClick={() => {
             setIsOpen(true); // Optionnel, cela fermera le menu quand un élément est cliqué
           }}
-          className={`${isOpen ? 'display' : 'hidden'} bg-secondary ml-55 w-45 pl-1 font-bold`}
+          className={`${isOpen ? 'display' : 'hidden'} bg-secondary mt-4 ml-28 w-45 pl-1 font-bold`}
         >
           <li>
             <Link to=''>{'Legal Mentions'}</Link>
@@ -70,7 +68,6 @@ export default function HeaderDesktop() {
           </li>
           <li className='flex items-center'>
             <Link to=''>
-              {' '}
               <img
                 className='w-8'
                 src='\assets\log-out.png'
