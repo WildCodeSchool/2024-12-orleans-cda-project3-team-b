@@ -13,7 +13,7 @@ export default function MainMenu() {
           <h2 className='text-secondary pb-7 text-3xl underline'>
             {'MyARTISTS'}
           </h2>
-          <Link to='/hireartist'>
+          <Link to='/hire-artist'>
             <AddButton>{'+'}</AddButton>
           </Link>
 
