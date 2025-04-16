@@ -11,5 +11,5 @@
   --color-secondary: #15414e;
 }
 header {
-  font-family: var(--font-rosa);
+  @apply font-rosa;
 }
