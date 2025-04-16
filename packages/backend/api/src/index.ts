@@ -30,8 +30,8 @@ app.listen(PORT, () => {
 });
 
 export default app;
-// eslint-disable-next @typescript-eslint/consistent-type-definitions
 declare module 'Express' {
+  // eslint-disable-next @typescript-eslint/consistent-type-definitions
   type Request = {
     isAuthenticated?: boolean;
     userId?: number;
