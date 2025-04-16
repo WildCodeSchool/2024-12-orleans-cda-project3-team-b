@@ -34,12 +34,16 @@ export default function HireArtist() {
         <span className='flex flex-col items-center'>
           <button className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold'>
             {' Hire '}
-            <img className='h-7 w-7' src='/assets/sign.png' alt='' />
+            <img
+              className='h-7 w-7'
+              src='/assets/sign.png'
+              alt='contract logo'
+            />
           </button>
           <h2 className='flex items-center font-bold'>
             {'50,000'}
             <img
-              className='mt-1 h-6 w-6 pl-1'
+              className='mt-1 h-4 w-4'
               src='/assets/dollar-icon.png'
               alt=''
             />
