@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import MenuBurger from '../../public/assets/burger-bar.png';
-import Close from '../../public/assets/cross.png';
 import CustomLink from './customer-link';
 
 export default function Header() {
@@ -41,7 +39,14 @@ export default function Header() {
           setIsOpen(!isOpen);
         }}
       >
-        <img src={isOpen ? Close : MenuBurger} alt='menu burger' />
+        <img
+          src={
+            isOpen
+              ? '../../public/assets/cross.png'
+              : '../../public/assets/burger-bar.png'
+          }
+          alt='menu burger'
+        />
       </div>
       <div className={isOpen ? 'flex' : 'hidden'} onClick={closeMenu} />
       <nav
