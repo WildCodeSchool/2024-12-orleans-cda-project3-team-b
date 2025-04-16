@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-
 body {
   height: 100dvh;
   width: 100dvw;
@@ -12,5 +11,3 @@ body {
   --color-primary: #edf4f6;
   --color-secondary: #15414e;
 }
-
-
