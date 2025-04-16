@@ -1,25 +1,21 @@
-import express from 'express';
-import * as jose from 'jose';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '';
-const JWT_SECRET = process.env.JWT_SECRET;
-const secret = new TextEncoder().encode(JWT_SECRET);
-const getMeRouter = express.Router();
+import authGuardMiddleware from '@/middlewares/auth.guard';
 
-getMeRouter.get('/me', async (req, res) => {
-  const token = req.signedCookies.token;
+const getMeRouter = Router();
+
+getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      coucou: false,
+    });
+    return;
+  }
+
   try {
-    const { payload } = await jose.jwtVerify<{ userId: number }>(
-      token,
-      secret,
-      {
-        audience: FRONTEND_HOST,
-        issuer: FRONTEND_HOST,
-      },
-    );
-    const userId: number = payload.userId;
     const user = await db
       .selectFrom('users')
       .select(['users.id', 'users.email'])
@@ -27,7 +23,7 @@ getMeRouter.get('/me', async (req, res) => {
       .executeTakeFirst();
     if (!user) {
       res.json({
-        ok: false,
+        coucou1: false,
       });
       return;
     }
@@ -35,9 +31,9 @@ getMeRouter.get('/me', async (req, res) => {
       ok: true,
       user,
     });
-  } catch (error) {
+  } catch (_error) {
     res.json({
-      ok: error,
+      ok: false,
     });
   }
 });

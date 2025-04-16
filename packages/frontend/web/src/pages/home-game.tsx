@@ -14,6 +14,7 @@ export default function HomeGame() {
       auth?.setIsLoggedIn(false);
     }
   };
+
   return (
     <>
       <p>{'home Game'}</p>
