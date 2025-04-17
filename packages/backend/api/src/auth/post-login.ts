@@ -5,8 +5,8 @@ import * as jose from 'jose';
 import { db } from '@app/backend-shared';
 
 const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '';
-const ACCES_TOKEN_SECRET = process.env.ACCES_TOKEN_SECRET;
-const accessTokenSecret = new TextEncoder().encode(ACCES_TOKEN_SECRET);
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = new TextEncoder().encode(ACCESS_TOKEN_SECRET);
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const refreshTokenSecret = new TextEncoder().encode(REFRESH_TOKEN_SECRET);

@@ -10,7 +10,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
-      user: false,
+      userId: false,
     });
     return;
   }
@@ -33,7 +33,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
     });
   } catch (_error) {
     res.json({
-      root: false,
+      user: false,
     });
   }
 });

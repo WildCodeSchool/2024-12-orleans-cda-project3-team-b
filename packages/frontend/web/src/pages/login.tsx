@@ -29,7 +29,6 @@ export default function Loggin() {
     if (data.key === true) {
       auth?.setIsLoggedIn(true);
       await navigate('/homepage-game');
-      console.log(data.setIsUser);
     } else {
       setMessage('Invalid login or password');
     }

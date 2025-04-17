@@ -20,7 +20,7 @@ postRegisterRouter.post('/register', async (req, res) => {
 
   if (userExists) {
     res.json({
-      message: 'user already use',
+      message: 'email already used',
     });
   } else {
     await db
@@ -28,7 +28,7 @@ postRegisterRouter.post('/register', async (req, res) => {
       .values({ email, password: hashPassword })
       .executeTakeFirst();
     res.json({
-      message: 'user register',
+      message: 'new user registered',
     });
   }
 });
