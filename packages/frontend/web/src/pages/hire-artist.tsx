@@ -4,7 +4,7 @@ export default function HireArtist() {
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
-        <button className='text-secondary hover:text-orange-500'>
+        <button type='button' className='text-secondary hover:text-orange-500'>
           <ArrowLeft className='h-10 w-10' />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
@@ -32,7 +32,10 @@ export default function HireArtist() {
           <img className='h-6 w-6' src='/assets/star-sign.png' alt='' />
         </h2>
         <span className='flex flex-col items-center'>
-          <button className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+          <button
+            type='button'
+            className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+          >
             {' Hire '}
             <img
               className='h-7 w-7'
@@ -50,7 +53,10 @@ export default function HireArtist() {
           </h2>
         </span>
       </div>
-      <button className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+      <button
+        type='button'
+        className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+      >
         {'See More'}
       </button>
     </div>
