@@ -82,8 +82,6 @@
       "eslint --fix --report-unused-disable-directives",
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "lucide-react": "^0.488.0"
   }
+ 
 }
