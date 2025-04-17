@@ -1,11 +1,13 @@
-import { ArrowLeft } from 'lucide-react';
-
 export default function HireArtist() {
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
         <button type='button' className='text-secondary hover:text-orange-500'>
-          <ArrowLeft className='h-10 w-10' />
+          <img
+            src='/assets/arrow-left.png'
+            alt='arrow left'
+            className='W-10 h-10'
+          />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
           {'HIRE ARTISTS'}
