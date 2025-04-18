@@ -9,7 +9,7 @@ export default function Header() {
     setIsOpen(false);
   };
   return (
-    <header className='border-b-orange bg-blue flex h-26 w-full flex-col border-b-3 text-white sm:h-46'>
+    <header className='font-rosa border-b-orange bg-blue flex h-26 w-full flex-col border-b-3 text-white sm:h-46'>
       <div
         className='slogan m-auto mt-12 hidden text-5xl font-bold sm:block'
         onClick={closeMenu}
