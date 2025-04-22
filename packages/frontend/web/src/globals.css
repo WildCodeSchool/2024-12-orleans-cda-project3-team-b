@@ -2,7 +2,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-rosa: 'Red Rose', 'serif';
+  --font-red-rose: 'Red Rose', 'serif';
   --font-inter: 'inter', 'sans-serif';
   --color-orange: #ea7f21;
   --color-blue: #15414e;
@@ -10,5 +10,5 @@
   --color-secondary: #15414e;
 }
 header {
-  @apply font-rosa;
+  @apply font-red-rose;
 }
