@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import type React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ErrorForm from '@/components/error';
+import Header from '@/components/header';
 import Input from '@/components/input';
 
 export default function SignIn() {
@@ -9,23 +11,23 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [isAcceptpp, setIsAcceptpp] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
-    const newErrors = {};
+    const newErrors: Record<string, string> = {};
     if (!email) {
-      newErrors.email = 'Email required';
+      newErrors.email = 'Email requis';
     } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      newErrors.email = 'Incorrect email';
+      newErrors.email = 'Email invalide';
     }
 
     if (!username) {
-      newErrors.username = 'Username required';
+      newErrors.username = "Nom d'utilisateur requis";
     } else if (username.length < 3 || username.length > 15) {
-      newErrors.username = 'Username must be between 3 and 15 characters.';
+      newErrors.username = 'Le nom doit faire entre 3 et 15 caractères.';
     } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
       newErrors.username =
-        'Caractères non autorisés dans le nom (lettres, chiffres, _ uniquement).';
+        'Caractères non autorisés (lettres, chiffres, _ uniquement).';
     }
 
     if (!password) {
@@ -39,13 +41,15 @@ export default function SignIn() {
         'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.';
     }
 
-    if (!agreepp) {
-      newErrors.agreepp = 'Vous devez accepter la politique de confidentialité';
+    if (!isAcceptpp) {
+      newErrors.isAcceptpp =
+        'Vous devez accepter la politique de confidentialité.';
     }
+
     return newErrors;
   };
 
-  const handleSubmit = (event_) => {
+  const handleSubmit = (event_: React.FormEvent) => {
     event_.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
@@ -55,116 +59,114 @@ export default function SignIn() {
   };
 
   return (
-    <div className='bg-secondary flex h-screen flex-col gap-4'>
-      <div className='header h-30 bg-red-500'>
-        <p>{'test'}</p>
-      </div>
-      <div className='flex h-screen items-center justify-center text-white'>
-        <div className='absolute top-1/2 left-90 -translate-y-1/2'>
-          <img
-            className='h-full w-auto'
-            src='/assets/logo-label.png'
-            alt='Logo Label'
-          />
-        </div>
-        <div className='z-10 flex flex-col items-center justify-center gap-4'>
-          <h1 className='font-inter mb-5 text-3xl font-light tracking-wide'>
-            {'INSCRIPTION'}
-          </h1>
-          <form className='w-4xl'>
-            <div className='mb-5 flex w-full flex-col items-center gap-4'>
-              <Input
-                type='text'
-                placeholder='Username'
-                name='username'
-                value={username}
-                onChange={(event_) => {
-                  setUsername(event_.target.value);
-                }}
-                className='w-1/2'
-                required
-              />
-              {errors.username ? <ErrorForm error={errors.username} /> : null}
-
-              <Input
-                type='email'
-                placeholder='Email'
-                name='email'
-                value={email}
-                onChange={(event_) => {
-                  setEmail(event_.target.value);
-                }}
-                className='w-1/2'
-                required
-              />
-              {errors.email ? <ErrorForm error={errors.email} /> : null}
-
-              <Input
-                type='password'
-                placeholder='Password'
-                name='password'
-                value={password}
-                onChange={(event_) => {
-                  setPassword(event_.target.value);
-                }}
-                className='w-1/2'
-                required
-              />
-              {errors.password ? <ErrorForm error={errors.password} /> : null}
-            </div>
-            <div className='flex w-full flex-col items-center gap-4'>
-              <div className='flex items-center gap-2'>
+    <div className='bg-secondary flex min-h-screen flex-col'>
+      <Header />
+      <div className='flex flex-1 items-center justify-center px-4 py-8'>
+        <div className='relative z-2 w-full max-w-3xl bg-transparent text-white'>
+          <div className='flex flex-col items-center gap-4 text-center'>
+            <img
+              className='h-32 w-auto md:h-42'
+              src='/assets/logo-label.png'
+              alt='Logo Label'
+            />
+            <h1 className='mb-5 text-3xl font-light tracking-wide'>
+              {'INSCRIPTION'}
+            </h1>
+            <form className='w-full max-w-xl' onSubmit={handleSubmit}>
+              <div className='flex flex-col gap-4'>
                 <Input
-                  id='acceptpp'
-                  type='checkbox'
-                  name='agreepp'
-                  className='ml-2 h-4 w-4 accent-[var(--color-details)]'
-                  checked={isAcceptpp}
+                  type='text'
+                  placeholder='Username'
+                  name='username'
+                  value={username}
                   onChange={(event_) => {
-                    setIsAcceptpp(event_.target.checked);
+                    setUsername(event_.target.value);
                   }}
-                  required
+                  className='w-full'
                 />
-                <label htmlFor='acceptpp' className='text-white'>
-                  {'Agree to the Privacy Policy'}
-                </label>
-              </div>
-              {errors.isAcceptpp ? (
-                <ErrorForm error={errors.isAcceptpp} />
-              ) : null}
+                {errors.username ? <ErrorForm error={errors.username} /> : null}
 
-              <Input
-                type='submit'
-                value='Sign In'
-                name='submit'
-                className='w-1/2 !rounded-full bg-white text-black'
-                onClick={handleSubmit}
-              />
-              <div className='flex flex-col items-center gap-1'>
-                <Link
-                  to='/recovery-password'
-                  className='text-white hover:underline'
-                >
-                  {'Forgot Password?'}
-                </Link>
-                <Link to='/sign-in' className='text-white hover:underline'>
-                  {'Already have an account ?'}
-                  <span className='text-[var(--color-details)] hover:text-white'>
-                    {' '}
-                    {'Sign In'}
-                  </span>
-                </Link>
+                <Input
+                  type='email'
+                  placeholder='Email'
+                  name='email'
+                  value={email}
+                  onChange={(event_) => {
+                    setEmail(event_.target.value);
+                  }}
+                  className='w-full'
+                />
+                {errors.email ? <ErrorForm error={errors.email} /> : null}
+
+                <Input
+                  type='password'
+                  placeholder='Password'
+                  name='password'
+                  value={password}
+                  onChange={(event_) => {
+                    setPassword(event_.target.value);
+                  }}
+                  className='w-full'
+                />
+                {errors.password ? <ErrorForm error={errors.password} /> : null}
+
+                <div className='flex items-center gap-2'>
+                  <Input
+                    id='acceptpp'
+                    type='checkbox'
+                    name='acceptpp'
+                    className='h-4 w-4 accent-[var(--color-orange)]'
+                    checked={isAcceptpp}
+                    onChange={(event_) => {
+                      setIsAcceptpp(event_.target.checked);
+                    }}
+                  />
+                  <label htmlFor='acceptpp' className='text-sm select-none'>
+                    {'Please accept the'}{' '}
+                    <Link
+                      to='/privacy-policy'
+                      className='text-[var(--color-orange)] hover:text-white hover:underline'
+                      target='_blank'
+                    >
+                      {'Privacy Policy'}
+                    </Link>
+                  </label>
+                </div>
+                {errors.isAcceptpp ? (
+                  <ErrorForm error={errors.isAcceptpp} />
+                ) : null}
+
+                <Input
+                  type='submit'
+                  value='Sign In'
+                  name='submit'
+                  className='w-full self-center !rounded-full bg-white text-black transition duration-300 ease-in-out hover:bg-[var(--color-orange)] hover:text-white md:w-1/2'
+                />
+
+                <div className='mt-4 flex flex-col items-center gap-1 text-sm'>
+                  <Link to='/recovery-password' className='hover:underline'>
+                    {'Forgotten password ?'}
+                  </Link>
+                  <Link
+                    to='/sign-in'
+                    className='group hover:text-white hover:underline'
+                  >
+                    {'Already have an account ?'}{' '}
+                    <span className='text-[var(--color-orange)] group-hover:text-white'>
+                      {' '}
+                      {'Sign In'}
+                    </span>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-        <div className='absolute right-0 bottom-0 z-[1]'>
-          <img
-            className='h-auto w-4xl'
-            src='/assets/vinyl.png'
-            alt='Logo Label'
-          />
-        </div>
+        <img
+          className='pointer-events-none absolute right-0 bottom-0 w-md md:w-xl lg:w-2xl'
+          src='/assets/vinyl.png'
+          alt='Vinyle'
+        />
       </div>
     </div>
   );
