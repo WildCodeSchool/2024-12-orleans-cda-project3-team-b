@@ -41,19 +41,27 @@ export default function MainMenu() {
           <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
           </div>
