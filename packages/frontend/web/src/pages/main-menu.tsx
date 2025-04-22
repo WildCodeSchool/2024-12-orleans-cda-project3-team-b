@@ -42,29 +42,25 @@ export default function MainMenu() {
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <Link to={'/hire-staff'}>
-                {' '}
-                <AddButton>{'+'}</AddButton>{' '}
+                <AddButton>{'+'}</AddButton>
               </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <Link to={'/hire-staff'}>
-                {' '}
-                <AddButton>{'+'}</AddButton>{' '}
+                <AddButton>{'+'}</AddButton>
               </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <Link to={'/hire-staff'}>
-                {' '}
-                <AddButton>{'+'}</AddButton>{' '}
+                <AddButton>{'+'}</AddButton>
               </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
               <Link to={'/hire-staff'}>
-                {' '}
-                <AddButton>{'+'}</AddButton>{' '}
+                <AddButton>{'+'}</AddButton>
               </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>

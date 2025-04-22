@@ -1,13 +1,15 @@
+import { useNavigate } from 'react-router';
+
 export default function HireStaff() {
-  const handleBack = () => {
-    window.history.back();
-  };
+  const navigate = useNavigate();
 
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
         <button
-          onClick={handleBack}
+          onClick={async () => {
+            await navigate(-1);
+          }}
           type='button'
           className='text-secondary hover:text-orange-500'
         >
@@ -36,7 +38,7 @@ export default function HireStaff() {
           <span className='flex flex-col items-center'>
             <h2 className='ml-2'>{' Community Manager'}</h2>
             <span className='flex items-center'>
-              <h3 className='mr-1 font-bold'>{'  Bonus:'}</h3>
+              <h3 className='mr-1 font-bold'>{'Bonus:'}</h3>
               <p> {'+ 0,1'}</p>
               <img
                 className='mt-0.5 h-5 w-5'
@@ -51,7 +53,7 @@ export default function HireStaff() {
               type='button'
               className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
             >
-              {' Hire '}
+              {'Hire'}
               <img
                 className='h-7 w-7'
                 src='/assets/sign.png'
