@@ -32,7 +32,7 @@ export default function HireStaff() {
         <div className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
           <img
             className='h-16 w-16 rounded-4xl'
-            src='assets/community-manager.png'
+            src='/assets/community-manager.png'
             alt=''
           />
           <span className='flex flex-col items-center'>
