@@ -9,6 +9,6 @@
   --color-primary: #edf4f6;
   --color-secondary: #15414e;
 }
-header{
-  @apply font-rosa
+header {
+  @apply font-rosa;
 }
