@@ -1,13 +1,14 @@
-@import 'tailwindcss';
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Rose:wght@300..700&family=Sofia+Sans+Extra+Condensed:ital,wght@0,1..1000;1,1..1000&display=swap");
+@import "tailwindcss";
 
 body {
-  height: 100dvh;
-  width: 100dvw;
-  margin: 0;
-  padding: 0;
+	height: 100dvh;
+	width: 100dvw;
+	margin: 0;
+	padding: 0;
 }
 
 @theme static {
-  --color-primary: #edf4f6;
-  --color-secondary: #15414e;
+	--color-primary: #edf4f6;
+	--color-secondary: #15414e;
 }
