@@ -32,7 +32,9 @@ export default function MainMenu() {
               </h2>
             </div>
             <div className='flex flex-col items-center justify-center pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/create-album'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary pt-1 text-xl'>
                 {'Create a new album'}
               </h3>
