@@ -36,7 +36,7 @@ export default function CreateSingle() {
             {"Choose your single's name:"}
           </h2>
           <input
-            className='mt-3 flex justify-center rounded border border-blue-400 shadow'
+            className='mt-3 w-full max-w-md rounded-lg border border-gray-200 bg-white px-4 py-2 text-gray-700 shadow-[1px_4px_6px_rgba(0,0,0,0.30)]'
             type='text'
             placeholder="Single's name"
           />
