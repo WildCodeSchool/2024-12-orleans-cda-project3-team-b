@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import CreateSingle from './pages/create-single.tsx';
 import HireArtist from './pages/hire-artist.tsx';
 import Home from './pages/home';
 import MainMenu from './pages/main-menu';
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/hire-artist',
     element: <HireArtist />,
+  },
+  {
+    path: '/create-single',
+    element: <CreateSingle />,
   },
 ]);
 
