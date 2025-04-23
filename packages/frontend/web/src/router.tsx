@@ -20,14 +20,12 @@ const router = createBrowserRouter([
     element: <HireArtist />,
   },
   {
-
     path: '/create-single',
     element: <CreateSingle />,
- },
-   {
+  },
+  {
     path: '/hire-staff',
     element: <HireStaff />,
-
   },
 ]);
 
