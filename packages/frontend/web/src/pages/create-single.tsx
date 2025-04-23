@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router';
 
 import AddButton from '@/components/add-button';
-import CancelButton from '@/components/cancel-button';
-import ConfirmButton from '@/components/confirm-button';
 import HeaderDesktop from '@/components/header-desktop';
+import VerifyButton from '@/components/verify-button';
 
 export default function CreateSingle() {
   const navigate = useNavigate();
@@ -48,8 +47,12 @@ export default function CreateSingle() {
           </h2>
         </span>
         <span className='mt-12 flex items-center justify-between gap-x-16'>
-          <CancelButton />
-          <ConfirmButton />
+          <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
+            {'Cancel'}
+          </VerifyButton>
+          <VerifyButton color='bg-orange-500' image='/assets/check.png'>
+            {'Confirm'}
+          </VerifyButton>
         </span>
       </div>
     </>
