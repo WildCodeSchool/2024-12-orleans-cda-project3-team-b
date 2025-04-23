@@ -24,7 +24,9 @@ export default function MainMenu() {
 
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/create-single'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h2 className='text-secondary pt-1 text-xl'>
                 {'Create a new single'}
               </h2>
