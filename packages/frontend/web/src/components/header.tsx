@@ -14,18 +14,18 @@ export default function Header() {
         className='slogan m-auto mt-12 hidden text-5xl font-bold sm:block'
         onClick={closeMenu}
       >
-        {'MUSIC LABEL MANAGER'}
+        <Link to='/'>{'MUSIC LABEL MANAGER'}</Link>
       </div>
       <nav className='m-auto'>
         <ul className='mb-10 hidden flex-row gap-12 sm:flex'>
           <li>
-            <Link to=''>{'SIGN IN'}</Link>
+            <Link to='/sign-in'>{'SIGN IN'}</Link>
           </li>
           <li>
-            <Link to=''>{'LOGIN'}</Link>
+            <Link to='/login'>{'LOGIN'}</Link>
           </li>
           <li>
-            <Link to=''>{'PRIVACY POLICY'}</Link>
+            <Link to='/privacy-policy'>{'PRIVACY POLICY'}</Link>
           </li>
         </ul>
       </nav>
