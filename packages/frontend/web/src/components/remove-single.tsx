@@ -1,8 +1,8 @@
-type ButtonProps = {
+type RemoveSingleProps = {
   readonly onClick?: () => void;
 };
 
-function RemoveSingle({ onClick }: ButtonProps) {
+function RemoveSingle({ onClick }: RemoveSingleProps) {
   return (
     <div className='bg-secondary mx-auto flex h-8 w-64 items-center justify-center rounded-sm'>
       <h2 className='mx-11 flex text-center text-xl text-white'>
