@@ -61,7 +61,7 @@ export default function SignIn() {
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
       <Header />
-      <div className='flex flex-1 items-center justify-center pt-8 pr-8 pl-8'>
+      <div className='flex flex-1 items-center justify-center p-8'>
         <div className='relative z-2 w-full max-w-3xl bg-transparent text-white'>
           <div className='flex flex-col items-center gap-4 text-center'>
             <img
@@ -163,7 +163,7 @@ export default function SignIn() {
           </div>
         </div>
         <img
-          className='pointer-events-none absolute right-0 bottom-0 w-md md:w-xl lg:w-2xl'
+          className='pointer-events-none fixed right-0 bottom-0 w-md md:w-xl lg:w-2xl'
           src='/assets/vinyl.png'
           alt='Vinyle'
         />
