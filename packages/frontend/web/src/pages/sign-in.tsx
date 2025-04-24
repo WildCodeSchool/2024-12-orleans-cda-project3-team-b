@@ -16,34 +16,33 @@ export default function SignIn() {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!email) {
-      newErrors.email = 'Email requis';
+      newErrors.email = 'Email is required';
     } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      newErrors.email = 'Email invalide';
+      newErrors.email = 'Email is not valid';
     }
 
     if (!username) {
-      newErrors.username = "Nom d'utilisateur requis";
+      newErrors.username = 'Username is required';
     } else if (username.length < 3 || username.length > 15) {
-      newErrors.username = 'Le nom doit faire entre 3 et 15 caractères.';
+      newErrors.username = 'The username must be between 3 and 15 characters.';
     } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
       newErrors.username =
-        'Caractères non autorisés (lettres, chiffres, _ uniquement).';
+        'The username can only contain letters, numbers, and underscores.';
     }
 
     if (!password) {
-      newErrors.password = 'Mot de passe requis';
+      newErrors.password = 'Password is required';
     } else if (
       !/^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).*$/.test(
         password,
       )
     ) {
       newErrors.password =
-        'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.';
+        'The password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.';
     }
 
     if (!isAcceptpp) {
-      newErrors.isAcceptpp =
-        'Vous devez accepter la politique de confidentialité.';
+      newErrors.isAcceptpp = 'Please accept the Privacy Policy to continue.';
     }
 
     return newErrors;
@@ -70,7 +69,7 @@ export default function SignIn() {
               alt='Logo Label'
             />
             <h1 className='mb-5 text-3xl font-light tracking-wide'>
-              {'INSCRIPTION'}
+              {'SIGN IN'}
             </h1>
             <form className='w-full max-w-xl' onSubmit={handleSubmit}>
               <div className='flex flex-col gap-2'>
