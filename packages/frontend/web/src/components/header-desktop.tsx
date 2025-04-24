@@ -42,7 +42,7 @@ export default function HeaderDesktop() {
         <nav className='flex items-center'>
           <ul className='flex items-center justify-end space-x-4 text-xl font-bold'>
             <li>
-              <Link to=''>{'MyArtists'}</Link>
+              <Link to='/my-artists'>{'MyArtists'}</Link>
             </li>
             <li>
               <Link to=''>{'MyAlbums'}</Link>
