@@ -1,5 +1,7 @@
 import type React from 'react';
 
+// This is a reusable, styled input component that accepts all standard input props, applies consistent form styling, and adds a custom orange focus outline for non-checkbox types.
+
 type InputProps = {
   readonly value?: string;
   readonly className?: string;
