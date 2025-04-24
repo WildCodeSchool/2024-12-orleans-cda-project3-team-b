@@ -11,18 +11,16 @@ export default function ErrorPage() {
     await navigate('/');
   };
 
-  // Détermination du titre et du message selon le type d'erreur
   let title = 'An Error Occurred';
   let message = 'Something went wrong.';
 
   if (isRouteErrorResponse(error)) {
-    // Gestion spécifique des erreurs de routeur
     if (error.status === 404) {
       title = 'Page Not Found - Error 404';
       message = 'The page you are looking for does not exist.';
     }
   } else if (error instanceof Error) {
-    message = error.message; // Affiche le message d'erreur JS standard
+    message = error.message;
   }
 
   return (
