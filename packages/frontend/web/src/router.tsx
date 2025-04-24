@@ -6,6 +6,7 @@ import HireArtist from './pages/hire-artist.tsx';
 import HireStaff from './pages/hire-staff.tsx';
 import Home from './pages/home';
 import MainMenu from './pages/main-menu';
+import MyArtists from './pages/my-artists.tsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: '/hire-staff',
     element: <HireStaff />,
+  },
+  {
+    path: '/my-artists',
+    element: <MyArtists />,
   },
 ]);
 
