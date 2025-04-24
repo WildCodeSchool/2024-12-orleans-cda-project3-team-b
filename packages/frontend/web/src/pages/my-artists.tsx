@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-export default function HireArtist() {
+export default function MyArtists() {
   const navigate = useNavigate();
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
@@ -19,7 +19,7 @@ export default function HireArtist() {
           />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
-          {'HIRE ARTISTS'}
+          {'MyArtists'}
         </h1>
         <div className='h-6 w-6' />
       </div>
@@ -46,27 +46,7 @@ export default function HireArtist() {
               alt=''
             />
           </span>
-          <span className='flex flex-col items-center'>
-            <button
-              type='button'
-              className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-            >
-              {' Hire '}
-              <img
-                className='h-7 w-7'
-                src='/assets/sign.png'
-                alt='contract logo'
-              />
-            </button>
-            <span className='flex items-center'>
-              <h2 className='flex items-center font-bold'>{'50,000'}</h2>
-              <img
-                className='mt-0.5 h-3.5 w-3.5'
-                src='/assets/dollar-icon.png'
-                alt=''
-              />
-            </span>
-          </span>
+          <h2 className='font-bold'> {'National Star'}</h2>
         </div>
       </div>
       <button
