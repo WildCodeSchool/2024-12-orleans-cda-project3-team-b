@@ -1,15 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Rose:wght@300..700&display=swap");
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Rose:wght@300..700&display=swap');
+@import 'tailwindcss';
 
 @theme {
-	--font-red-rose: "Red Rose", "serif";
-	--font-inter: "inter", "sans-serif";
-	--color-orange: #ea7f21;
-	--color-blue: #15414e;
-	--color-primary: #edf4f6;
-	--color-secondary: #15414e;
-	--color-blue-btn: #3facc0;
+  --font-red-rose: 'Red Rose', 'serif';
+  --font-inter: 'inter', 'sans-serif';
+  --color-orange: #ea7f21;
+  --color-blue: #15414e;
+  --color-primary: #edf4f6;
+  --color-secondary: #15414e;
+  --color-blue-btn: #3facc0;
 }
 header {
-	@apply font-red-rose;
+  @apply font-red-rose;
 }
