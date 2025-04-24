@@ -61,7 +61,7 @@ export default function SignIn() {
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
       <Header />
-      <div className='flex flex-1 items-center justify-center px-4 py-8'>
+      <div className='flex flex-1 items-center justify-center pt-8 pr-8 pl-8'>
         <div className='relative z-2 w-full max-w-3xl bg-transparent text-white'>
           <div className='flex flex-col items-center gap-4 text-center'>
             <img
@@ -73,7 +73,7 @@ export default function SignIn() {
               {'INSCRIPTION'}
             </h1>
             <form className='w-full max-w-xl' onSubmit={handleSubmit}>
-              <div className='flex flex-col gap-4'>
+              <div className='flex flex-col gap-2'>
                 <Input
                   type='text'
                   placeholder='Username'
