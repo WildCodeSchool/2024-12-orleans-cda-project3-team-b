@@ -1,5 +1,6 @@
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL;
 type Logo = {
@@ -11,6 +12,8 @@ export default function Logos() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchLogos = async () => {
@@ -24,19 +27,27 @@ export default function Logos() {
 
   const register = async (event: FormEvent) => {
     event.preventDefault();
+    if (!input.trim() || selectedLogo === undefined) {
+      setMessage('All fields are required');
+      return;
+    }
     const res = await fetch(`${API_URL}/games/register`, {
       method: 'POST',
       body: JSON.stringify({
         name: input,
         logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
         budget: 50000,
-        score_xp: 25,
+        scoreXp: 25,
         notoriety: 0,
       }),
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    await res.json();
+    if (res.ok) {
+      await navigate('/main-menu');
+    } else {
+      setMessage('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -103,6 +114,7 @@ export default function Logos() {
           {'register'}
         </button>
       </form>
+      {message ? <p className='text-center'>{message}</p> : null}
     </>
   );
 }

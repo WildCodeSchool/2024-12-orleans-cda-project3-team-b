@@ -12,17 +12,22 @@ type Info = {
 };
 
 postRegisterRouter.post('/register', async (req, res) => {
-  const { name, logosId, budget, scoreXp, notoriety }: Info = req.body;
-
-  const label = await db
-    .insertInto('label')
-    .values({ name, logos_id: logosId, budget, score_xp: scoreXp, notoriety })
-    .execute();
-
-  res.json({
-    message: label,
-    ok: true,
-  });
+  const { name, logosId, budget, scoreXp, notoriety } = req.body as Info;
+  try {
+    await db
+      .insertInto('label')
+      .values({ name, logos_id: logosId, budget, score_xp: scoreXp, notoriety })
+      .execute();
+    res.json({
+      // message: label,
+      ok: true,
+    });
+  } catch (error) {
+    res.json({
+      message: error,
+      ok: true,
+    });
+  }
 });
 
 export default postRegisterRouter;
