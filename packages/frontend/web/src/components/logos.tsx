@@ -30,7 +30,7 @@ export default function Logos() {
         name: input,
         logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
         budget: 50000,
-        score_xp: 0,
+        score_xp: 25,
         notoriety: 0,
       }),
       headers: { 'Content-Type': 'application/json' },
