@@ -24,13 +24,17 @@ export default function MainMenu() {
 
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/create-single'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h2 className='text-secondary pt-1 text-xl'>
                 {'Create a new single'}
               </h2>
             </div>
             <div className='flex flex-col items-center justify-center pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/create-album'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary pt-1 text-xl'>
                 {'Create a new album'}
               </h3>
@@ -41,19 +45,27 @@ export default function MainMenu() {
           <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
             <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-              <AddButton>{'+'}</AddButton>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
               <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
             </div>
           </div>

@@ -3,42 +3,33 @@ import { type Kysely, sql } from 'kysely';
 import type { DB } from '@app/shared';
 
 export async function up(db: Kysely<DB>): Promise<void> {
+  // Migration code that update the database to the desired state.
   await db.transaction().execute(async (trx) => {
     // label
     await sql`
-      ALTER TABLE labels RENAME TO label;
+      RENAME TABLE labels TO label;
+    `.execute(trx);
+    await sql`
+    ALTER TABLE label MODIFY levels_id INT DEFAULT NULL;
     `.execute(trx);
 
-    // user
-    await sql`
-      ALTER TABLE users MODIFY labels_id INT NULL;
-    `.execute(trx);
+    //user
 
     await sql`
-      ALTER TABLE users MODIFY is_first_time BOOLEAN DEFAULT TRUE NOT NULL;
+    ALTER TABLE users MODIFY is_first_time BOOLEAN NOT NULL DEFAULT TRUE;
     `.execute(trx);
 
     await sql`
     ALTER TABLE users CHANGE labels_id label_id INT NULL;
     `.execute(trx);
 
-    await sql`
-    ALTER TABLE users DROP FOREIGN KEY users_ibfk_1;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE users
-    ADD CONSTRAINT label_ibfk_1
-    FOREIGN KEY (label_id) REFERENCES labels(id);
-    `.execute(trx);
-
     // skills
-    await sql` ALTER TABLE skills DROP score`.execute(trx);
+    await sql` ALTER TABLE skills DROP score;`.execute(trx);
 
     //artists_hired
 
     await sql`
-      ALTER TABLE artists_hired change score grade INT NULL;
+    ALTER TABLE artists_hired ADD grade INT NULL;
     `.execute(trx);
 
     // artists_skills
@@ -47,39 +38,26 @@ export async function up(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     await sql`
-      ALTER TABLE artists_skills change score grade INT NULL;
+    ALTER TABLE artists_skills change score grade INT NULL;
     `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills DROP FOREIGN KEY artists_skills_ibfk_1;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills
-    ADD CONSTRAINT artists_id_ibfk_1
-    FOREIGN KEY (artists_id) REFERENCES artists(id);
-  `.execute(trx);
 
     //staff_label
 
     await sql`
-     ALTER TABLE staff_label change labels_id label_id INT NOT NULL;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE staff_label DROP FOREIGN KEY staff_label_ibfk_2;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills
-    ADD CONSTRAINT staff_label_ibfk_2
-    FOREIGN KEY (label_id) REFERENCES label(id);
-    `.execute(trx);
+    ALTER TABLE staff_label RENAME COLUMN labels_id TO label_id;`.execute(trx);
 
     // label_artists
+    await sql`
+    ALTER TABLE label_artists change labels_id label_id INT NOT NULL;
+    `.execute(trx);
+
+    // artists_marketing
+    await sql`
+    RENAME TABLE artists_marketing TO singles_marketing ;
+    `.execute(trx);
 
     await sql`
-      RENAME TABLE artists_marketing TO singles_marketing;
+    ALTER TABLE singles_marketing DROP FOREIGN KEY singles_marketing_ibfk_3;
     `.execute(trx);
   });
 }
@@ -87,61 +65,21 @@ export async function up(db: Kysely<DB>): Promise<void> {
 export async function down(db: Kysely<DB>): Promise<void> {
   // Migration code that reverts the database to the previous state.
   await db.transaction().execute(async (trx) => {
-    //label
-    await sql`
-    RENAME TABLE label TO labels;
-    `.execute(trx);
+    // artists_marketing
 
-    // user
     await sql`
-    ALTER TABLE users MODIFY labels_id INT NOT NULL; 
-    ALTER TABLE is_first_time BOOLEAN NOT NULL DEFAULT TRUE,
+    ALTER TABLE singles_marketing
+    ADD CONSTRAINT singles_marketing_ibfk_3
+    FOREIGN KEY (albums_id) REFERENCES albums(id);
     `.execute(trx);
 
     await sql`
-    ALTER TABLE is_first_time BOOLEAN DEFAULT TRUE NOT NULL ,
+    RENAME TABLE singles_marketing TO artists_marketing;
     `.execute(trx);
 
+    // label_artists
     await sql`
-    ALTER TABLE users CHANGE label_id labels_id INT NULL;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE users DROP FOREIGN KEY users_ibfk_1;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE users
-    ADD CONSTRAINT label_ibfk_1
-    FOREIGN KEY (labels_id) REFERENCES labels(id);
-    `.execute(trx);
-
-    // skills
-    await sql` ALTER TABLE skills CREATE score INT NOT NULL`.execute(trx);
-
-    //artists_hired
-
-    await sql`
-    ALTER TABLE artists_hired change grade score INT NOT NULL;
-    `.execute(trx);
-
-    // artists_skills
-    await sql`
-    ALTER TABLE artists_skills change artists_id artists_hired_id INT NOT NULL;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills change grade score INT NOT NULL;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills DROP FOREIGN KEY artists_skills_ibfk_1;
-    `.execute(trx);
-
-    await sql`
-    ALTER TABLE artists_skills
-    ADD CONSTRAINT artists_skills_ibfk_1
-    FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id);
+    ALTER TABLE label_artists change label_id labels_id INT NOT NULL;
     `.execute(trx);
 
     //staff_label
@@ -150,20 +88,41 @@ export async function down(db: Kysely<DB>): Promise<void> {
     ALTER TABLE staff_label change label_id labels_id INT NOT NULL;
     `.execute(trx);
 
+    // artists_skills
+
     await sql`
-    ALTER TABLE staff_label DROP FOREIGN KEY staff_label_ibfk_2;
+    ALTER TABLE artists_skills change grade score INT NOT NULL;
     `.execute(trx);
 
     await sql`
-    ALTER TABLE artists_skills
-    ADD CONSTRAINT staff_label_ibfk_2
-    FOREIGN KEY (labels_id) REFERENCES labels(id);
+    ALTER TABLE artists_skills change artists_id artists_hired_id INT NOT NULL;
     `.execute(trx);
 
-    // label_artists
+    //artists_hired
 
     await sql`
-    RENAME TABLE singles_marketing TO artists_marketing;
+    ALTER TABLE artists_hired DROP COLUMN grade;
     `.execute(trx);
+
+    // skills
+    await sql` ALTER TABLE skills ADD score INT NOT NULL;`.execute(trx);
+
+    //user
+
+    await sql`
+    ALTER TABLE users MODIFY is_first_time BOOLEAN NOT NULL;
+    `.execute(trx);
+
+    await sql`
+    ALTER TABLE users CHANGE label_id labels_id INT NOT NULL;
+    `.execute(trx);
+
+    // label
+
+    await sql`
+    ALTER TABLE label MODIFY levels_id INT NOT NULL;`.execute(trx);
+
+    await sql`
+    RENAME TABLE label TO labels;`.execute(trx);
   });
 }
