@@ -1,6 +1,5 @@
 import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
 
-import Header from '@/components/header';
 import Input from '@/components/input';
 
 export default function ErrorPage() {
@@ -25,8 +24,6 @@ export default function ErrorPage() {
 
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
-      <Header />
-
       <div className='flex flex-1 items-center justify-center p-8'>
         <div className='relative z-2 w-full max-w-3xl bg-transparent text-white'>
           <div className='flex flex-col items-center gap-4 text-center'>
@@ -43,7 +40,7 @@ export default function ErrorPage() {
                 value='Return to Home'
                 name='submit'
                 onClick={returnHome}
-                className='w-full cursor-pointer self-center !rounded-full !border-0 !bg-[var(--color-blue-btn)] !p-3 text-black transition duration-300 ease-in-out md:w-1/2'
+                className='w-full cursor-pointer self-center !rounded-full !border-0 !bg-[var(--color-blue-btn)] !p-3 text-black transition duration-300 ease-in-out hover:!bg-[var(--color-orange)] hover:text-[var(--color-primary)] md:w-1/2'
               />
             </div>
           </div>
