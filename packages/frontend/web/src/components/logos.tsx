@@ -36,7 +36,7 @@ export default function Logos() {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    const data = await res.json();
+    await res.json();
   };
 
   return (
