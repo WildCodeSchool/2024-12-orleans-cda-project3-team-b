@@ -62,11 +62,6 @@ export default function SignIn() {
     event_.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-
-    // Only submit if no validation errors
-    if (Object.keys(validationErrors).length === 0) {
-      console.log('Form submitted:', { email, password, username, isAcceptpp });
-    }
   };
 
   return (
