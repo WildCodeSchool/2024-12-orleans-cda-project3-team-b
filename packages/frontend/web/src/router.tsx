@@ -1,9 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import CreateAlbum from './pages/create-album.tsx';
+import CreateSingle from './pages/create-single.tsx';
 import FirstPageLogin from './pages/first-page-login.tsx';
 import HireArtist from './pages/hire-artist.tsx';
+import HireStaff from './pages/hire-staff.tsx';
 import Home from './pages/home';
 import MainMenu from './pages/main-menu';
+import MyArtists from './pages/my-artists.tsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +25,22 @@ const router = createBrowserRouter([
   {
     path: '/first-page-login',
     element: <FirstPageLogin />,
+  },
+  {
+    path: '/create-single',
+    element: <CreateSingle />,
+  },
+  {
+    path: '/create-album',
+    element: <CreateAlbum />,
+  },
+  {
+    path: '/hire-staff',
+    element: <HireStaff />,
+  },
+  {
+    path: '/my-artists',
+    element: <MyArtists />,
   },
 ]);
 
