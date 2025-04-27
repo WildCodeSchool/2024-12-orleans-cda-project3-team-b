@@ -19,7 +19,6 @@ postRegisterRouter.post('/register', async (req, res) => {
       .values({ name, logos_id: logosId, budget, score_xp: scoreXp, notoriety })
       .execute();
     res.json({
-      // message: label,
       ok: true,
     });
   } catch (error) {
