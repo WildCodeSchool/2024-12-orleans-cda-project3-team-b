@@ -82,8 +82,5 @@
       "eslint --fix --report-unused-disable-directives",
       "prettier --write"
     ]
-  },
-  "dependencies": {
-    "jose": "^6.0.10"
   }
 }
