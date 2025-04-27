@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-type User = { id: number; email: string };
+type User = { id: number; email: string; is_first_time: number };
 type AuthProviderProps = PropsWithChildren<object>;
 type AuthProviderState = {
   isLoading: boolean;

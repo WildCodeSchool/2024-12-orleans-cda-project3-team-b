@@ -18,7 +18,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
   try {
     const user = await db
       .selectFrom('users')
-      .select(['users.id', 'users.email'])
+      .select(['users.id', 'users.email', 'is_first_time'])
       .where('users.id', '=', userId)
       .executeTakeFirst();
     if (!user) {

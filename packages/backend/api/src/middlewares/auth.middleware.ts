@@ -2,8 +2,8 @@ import type { NextFunction, Request, Response } from 'express';
 import * as jose from 'jose';
 
 const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '';
-const ACCES_TOKEN_SECRET = process.env.ACCES_TOKEN_SECRET;
-const accesTokenSecret = new TextEncoder().encode(ACCES_TOKEN_SECRET);
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = new TextEncoder().encode(ACCESS_TOKEN_SECRET);
 
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const refreshTokenSecret = new TextEncoder().encode(REFRESH_TOKEN_SECRET);
@@ -13,12 +13,12 @@ export default async function authMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  const accesToken = req.signedCookies.accesToken;
+  const accessToken = req.signedCookies.accessToken;
   try {
     // check AT token
     const { payload } = await jose.jwtVerify<{ userId: number }>(
-      accesToken,
-      accesTokenSecret,
+      accessToken,
+      accessTokenSecret,
       {
         audience: FRONTEND_HOST,
         issuer: FRONTEND_HOST,
@@ -40,7 +40,7 @@ export default async function authMiddleware(
         },
       );
       // RT token valide
-      const newAccesToken = await new jose.SignJWT({
+      const newAccessToken = await new jose.SignJWT({
         sub: payload.sub,
         userId: payload.userId,
       })
@@ -51,9 +51,9 @@ export default async function authMiddleware(
         .setIssuer(FRONTEND_HOST)
         .setAudience(FRONTEND_HOST)
         .setExpirationTime('60s')
-        .sign(accesTokenSecret);
+        .sign(accessTokenSecret);
 
-      res.cookie('accesToken', newAccesToken, {
+      res.cookie('accesToken', newAccessToken, {
         httpOnly: true,
         // secure: true,
         // sameSite:'',

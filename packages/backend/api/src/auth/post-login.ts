@@ -33,8 +33,7 @@ postLoginRouter.post('/login', async (req, res) => {
       res.json({ message: 'error 404, password or id incorrect' });
       return;
     }
-
-    const accesToken = await new jose.SignJWT({
+    const accessToken = await new jose.SignJWT({
       sub: email,
       userId: restUser,
     })
@@ -60,7 +59,7 @@ postLoginRouter.post('/login', async (req, res) => {
       .setExpirationTime('7h')
       .sign(refreshTokenSecret);
 
-    res.cookie('accesToken', accesToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       // secure: true,
       // sameSite:'',
