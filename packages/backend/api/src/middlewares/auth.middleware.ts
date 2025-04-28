@@ -15,7 +15,7 @@ export default async function authMiddleware(
 ) {
   const accessToken = req.signedCookies.accessToken;
   try {
-    // check AT token
+    // check accessToken
     const { payload } = await jose.jwtVerify<{ userId: number }>(
       accessToken,
       accessTokenSecret,
@@ -24,11 +24,14 @@ export default async function authMiddleware(
         issuer: FRONTEND_HOST,
       },
     );
-    // AT token valide
+
+    // accessToken valide
+
     req.isAuthenticated = true;
     req.userId = payload.userId;
   } catch (atError) {
-    // AT token invalide check RT token
+    // accessToken invalide check refreshToken
+
     const refreshToken = req.signedCookies.refreshToken;
     try {
       const { payload } = await jose.jwtVerify<{ userId: number }>(
@@ -39,7 +42,9 @@ export default async function authMiddleware(
           issuer: FRONTEND_HOST,
         },
       );
-      // RT token valide
+
+      // refreshToken valide
+
       const newAccessToken = await new jose.SignJWT({
         sub: payload.sub,
         userId: payload.userId,
@@ -62,7 +67,8 @@ export default async function authMiddleware(
       req.isAuthenticated = true;
       req.userId = payload.userId;
     } catch (rtError) {
-      // RT token invalide
+      // refreshToken invalide
+
       req.isAuthenticated = false;
     }
   }

@@ -96,7 +96,7 @@ export interface LabelArtists {
 export interface Labels {
   budget: number;
   id: Generated<number>;
-  levels_id: number | null;
+  levels_id: number;
   logos_id: number;
   name: string;
   notoriety: number;
@@ -172,7 +172,7 @@ export interface Users {
   email: string;
   id: Generated<number>;
   is_first_time: number;
-  labels_id: number | null;
+  labels_id: number;
   password: string;
 }
 

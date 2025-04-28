@@ -17,6 +17,8 @@ export default function Login() {
     event.preventDefault();
     setMessage('');
 
+    // get info in back
+
     const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       body: JSON.stringify({ email, password }),
@@ -25,9 +27,10 @@ export default function Login() {
     });
 
     const data = await res.json();
-
+    // get info if user is connect and info of him
     if (data.key === true) {
       auth?.setIsLoggedIn(true);
+      auth?.setUser(data.user);
       await navigate('/homepage-game');
     } else {
       setMessage('Invalid login or password');

@@ -16,6 +16,8 @@ const postLoginRouter = express.Router();
 postLoginRouter.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
+    // get all information in users
+
     const user = await db
       .selectFrom('users')
       .selectAll()
@@ -25,7 +27,12 @@ postLoginRouter.post('/login', async (req, res) => {
       res.json({ message: 'error 404, password or id incorrct' });
       return;
     }
+
+    // stock all info expect password
+
     const { password: userPassword, ...restUser } = user;
+
+    // verify  input password = user password
 
     const isPasswordOk = await argon2.verify(userPassword, password);
 
@@ -33,9 +40,12 @@ postLoginRouter.post('/login', async (req, res) => {
       res.json({ message: 'error 404, password or id incorrect' });
       return;
     }
+
+    // generate first token
+
     const accessToken = await new jose.SignJWT({
       sub: email,
-      userId: restUser,
+      userId: restUser.id,
     })
       .setProtectedHeader({
         alg: 'HS256',
@@ -45,6 +55,8 @@ postLoginRouter.post('/login', async (req, res) => {
       .setAudience(FRONTEND_HOST)
       .setExpirationTime('60s')
       .sign(accessTokenSecret);
+
+    // generate second token
 
     const refreshToken = await new jose.SignJWT({
       sub: email,
@@ -58,6 +70,8 @@ postLoginRouter.post('/login', async (req, res) => {
       .setAudience(FRONTEND_HOST)
       .setExpirationTime('7h')
       .sign(refreshTokenSecret);
+
+    // generate cookie
 
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
@@ -73,6 +87,7 @@ postLoginRouter.post('/login', async (req, res) => {
     });
     res.json({
       key: true,
+      user: restUser,
     });
   } catch (_error) {
     res.json({
