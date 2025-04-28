@@ -22,7 +22,7 @@ export default function HomeGame() {
         className='rounded-md bg-gray-500 text-center'
         onClick={logout}
       >
-        {'deconnected\r'}
+        {'deconnected'}
       </button>
     </>
   );

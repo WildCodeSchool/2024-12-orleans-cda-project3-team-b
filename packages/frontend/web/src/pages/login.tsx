@@ -64,7 +64,7 @@ export default function Login() {
         placeholder='Password'
       />
       <button type='submit' className='rounded-md bg-gray-500 text-center'>
-        {'Log in\r'}
+        {'Log in'}
       </button>
       {message ? (
         <p className='text-center text-sm text-red-600'>{message}</p>

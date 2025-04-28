@@ -6,10 +6,10 @@ export default function InGame() {
   const auth = useAuth();
   const isLoading = auth?.isLoading;
   const isLoggedIn = auth?.isLoggedIn;
-  if (isLoading) {
+  if (isLoading ?? false) {
     return;
   }
-  if (!isLoggedIn) {
+  if (!(isLoggedIn ?? false)) {
     return <Navigate to='/login' />;
   }
 

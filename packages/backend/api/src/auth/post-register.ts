@@ -29,6 +29,7 @@ postRegisterRouter.post('/register', async (req, res) => {
       .executeTakeFirst();
     res.json({
       message: 'new user registered',
+      ok: true,
     });
   }
 });
