@@ -60,7 +60,7 @@ postLoginRouter.post('/login', async (req, res) => {
 
     const refreshToken = await new jose.SignJWT({
       sub: email,
-      userId: user.id,
+      userId: restUser.id,
     })
       .setProtectedHeader({
         alg: 'HS256',
