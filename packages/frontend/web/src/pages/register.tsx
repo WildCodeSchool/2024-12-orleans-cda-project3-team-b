@@ -20,7 +20,7 @@ export default function Register() {
       const data = await res.json();
 
       if (data.ok === false) {
-        setMessage('email are already using');
+        setMessage('email is already in use');
       } else {
         setMessage('you can login now');
       }
