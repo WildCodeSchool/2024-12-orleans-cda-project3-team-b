@@ -7,7 +7,7 @@ type Artist = {
   lastname: string;
   alias: string;
   image: string;
-  genres_id: number;
+  genre_name: string;
   notoriety: number;
   price: number;
 };
@@ -17,6 +17,8 @@ const publicKey = import.meta.env.VITE_API_URL;
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -40,6 +42,13 @@ export default function HireArtist() {
 
     void fetchArtists();
   }, []);
+
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => prev + 4);
+  };
+  const sortedArtists = [...artists].sort((a, b) =>
+    sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
+  );
 
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
@@ -66,8 +75,8 @@ export default function HireArtist() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='flex flex-col gap-4'>
-        {artists.map((artist) => {
+      <div className='grid grid-cols-2 gap-4'>
+        {sortedArtists.slice(0, visibleCount).map((artist) => {
           console.log(artist);
           return (
             <div
@@ -83,7 +92,7 @@ export default function HireArtist() {
                 <h2 className='ml-2'>
                   {artist.firstname} {artist.lastname} {artist.alias}
                 </h2>
-                <h3>{artist.genres_id}</h3>
+                <h3>{artist.genre_name}</h3>
               </span>
               <span className='flex items-center'>
                 <h2 className='flex items-center font-bold'>
@@ -97,6 +106,7 @@ export default function HireArtist() {
               </span>
               <span className='flex flex-col items-center'>
                 <button
+                  key={artist.id}
                   type='button'
                   className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
                 >
@@ -107,6 +117,7 @@ export default function HireArtist() {
                     alt='contract logo'
                   />
                 </button>
+
                 <span className='flex items-center'>
                   <h2 className='flex items-center font-bold'>
                     {artist.price}
@@ -123,6 +134,7 @@ export default function HireArtist() {
         })}
       </div>
       <button
+        onClick={handleSeeMore}
         type='button'
         className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
       >
