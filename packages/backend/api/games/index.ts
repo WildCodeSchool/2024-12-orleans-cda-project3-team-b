@@ -1,10 +1,10 @@
 import express from 'express';
 
 import getLogosRouter from './get-logos';
-import postRegisterRouter from './register';
+import postRegisterLabelRouter from './register-label';
 
 const gamesRouter = express.Router();
 gamesRouter.use(getLogosRouter);
-gamesRouter.use(postRegisterRouter);
+gamesRouter.use(postRegisterLabelRouter);
 
 export default gamesRouter;

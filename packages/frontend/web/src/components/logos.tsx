@@ -31,14 +31,11 @@ export default function Logos() {
       setMessage('All fields are required');
       return;
     }
-    const res = await fetch(`${API_URL}/games/register`, {
+    const res = await fetch(`${API_URL}/games//register-label`, {
       method: 'POST',
       body: JSON.stringify({
         name: input,
         logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
-        budget: 50000,
-        scoreXp: 25,
-        notoriety: 0,
       }),
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

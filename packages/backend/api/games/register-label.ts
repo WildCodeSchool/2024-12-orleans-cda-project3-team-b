@@ -2,7 +2,7 @@ import express from 'express';
 
 import { db } from '@app/backend-shared';
 
-const postRegisterRouter = express.Router();
+const postRegisterLabelRouter = express.Router();
 type Info = {
   name: string;
   logosId: number;
@@ -11,12 +11,18 @@ type Info = {
   notoriety: number;
 };
 
-postRegisterRouter.post('/register', async (req, res) => {
-  const { name, logosId, budget, scoreXp, notoriety } = req.body as Info;
+postRegisterLabelRouter.post('/register-label', async (req, res) => {
+  const { name, logosId } = req.body as Info;
   try {
     await db
       .insertInto('label')
-      .values({ name, logos_id: logosId, budget, score_xp: scoreXp, notoriety })
+      .values({
+        name,
+        logos_id: logosId,
+        budget: 50000,
+        score_xp: 25,
+        notoriety: 0,
+      })
       .execute();
     res.json({
       ok: true,
@@ -24,9 +30,9 @@ postRegisterRouter.post('/register', async (req, res) => {
   } catch (error) {
     res.json({
       message: error,
-      ok: true,
+      ok: false,
     });
   }
 });
 
-export default postRegisterRouter;
+export default postRegisterLabelRouter;

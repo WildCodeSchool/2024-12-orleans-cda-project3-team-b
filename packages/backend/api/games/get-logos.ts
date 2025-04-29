@@ -8,9 +8,11 @@ getLogosRouter.get('/logos', async (req, res) => {
   try {
     const logos = await db.selectFrom('logos').selectAll().execute();
 
-    res.json(logos);
-  } catch (error) {
-    res.json('pas de logos');
+    res.json({ logo: logos });
+  } catch (_error) {
+    res.json({
+      logo: 'pas de logos',
+    });
   }
 });
 
