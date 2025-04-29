@@ -23,7 +23,7 @@ getMeRouter.get('/me', authGuardMiddleware, async (req: Request, res) => {
       .executeTakeFirst();
     if (!user) {
       res.json({
-        user: false,
+        ok: false,
       });
       return;
     }

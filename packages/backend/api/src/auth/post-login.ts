@@ -24,7 +24,7 @@ postLoginRouter.post('/login', async (req, res) => {
       .where('email', '=', email)
       .executeTakeFirst();
     if (!user) {
-      res.json({ message: 'error 404, password or id incorrct' });
+      res.json({ ok: false });
       return;
     }
 
@@ -37,7 +37,7 @@ postLoginRouter.post('/login', async (req, res) => {
     const isPasswordOk = await argon2.verify(userPassword, password);
 
     if (!isPasswordOk) {
-      res.json({ message: 'error 404, password or id incorrect' });
+      res.json({ ok: false });
       return;
     }
 
@@ -86,7 +86,7 @@ postLoginRouter.post('/login', async (req, res) => {
       signed: true,
     });
     res.json({
-      key: true,
+      ok: true,
       user: restUser,
     });
   } catch (_error) {

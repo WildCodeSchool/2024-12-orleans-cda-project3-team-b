@@ -10,18 +10,22 @@ export default function Register() {
 
   const login = async (event: FormEvent) => {
     event.preventDefault();
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+      const data = await res.json();
 
-    if (data.message === 'user already use') {
-      setMessage('user already use');
-    } else {
-      setMessage('you can log now');
+      if (data.ok === false) {
+        setMessage('email are already using');
+      } else {
+        setMessage('you can login now');
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
