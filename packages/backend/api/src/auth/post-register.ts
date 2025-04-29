@@ -21,7 +21,7 @@ postRegisterRouter.post('/register', async (req, res) => {
 
     if (userExists) {
       res.json({
-        message: 'email already used',
+        message: 'email is already in use',
         ok: false,
       });
     } else {
