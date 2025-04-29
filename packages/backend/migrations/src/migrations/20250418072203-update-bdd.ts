@@ -123,7 +123,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
     // label
 
     await sql`
-    ALTER TABLE label MODIFY levels_id INT NULL;`.execute(trx);
+    ALTER TABLE label MODIFY levels_id INT NOT NULL;`.execute(trx);
 
     await sql`
     RENAME TABLE label TO labels;`.execute(trx);
