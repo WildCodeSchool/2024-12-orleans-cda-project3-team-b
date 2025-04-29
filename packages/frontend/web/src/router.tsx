@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import CreateAlbumMenu from './pages/create-album-menu.tsx';
 import CreateAlbum from './pages/create-album.tsx';
 import CreateSingle from './pages/create-single.tsx';
 import HireArtist from './pages/hire-artist.tsx';
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/create-album',
     element: <CreateAlbum />,
+  },
+  {
+    path: '/create-album-menu',
+    element: <CreateAlbumMenu />,
   },
   {
     path: '/hire-staff',
