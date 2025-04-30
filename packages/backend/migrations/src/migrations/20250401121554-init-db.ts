@@ -226,10 +226,10 @@ export async function down(db: Kysely<DB>): Promise<void> {
       DROP TABLE IF EXISTS crew_members_hired;
     `.execute(trx);
     await sql`
-      DROP TABLE IF EXISTS  artists_skill;
+      DROP TABLE IF EXISTS  artists_skills;
     `.execute(trx);
     await sql`
-      DROP TABLE IF EXISTS artists_hired_skill;
+      DROP TABLE IF EXISTS artists_hired_skills;
     `.execute(trx);
     await sql`
       DROP TABLE IF EXISTS marketing ;
