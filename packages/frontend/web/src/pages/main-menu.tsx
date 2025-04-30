@@ -14,6 +14,7 @@ type ArtistHired = {
   alias: string;
   image: string;
   notoriety: number;
+  genre_name: string;
 };
 
 export default function MainMenu() {
