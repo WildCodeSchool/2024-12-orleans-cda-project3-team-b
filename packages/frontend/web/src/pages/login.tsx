@@ -28,7 +28,7 @@ export default function Login() {
 
     const data = await res.json();
     // get info if user is connect and info of him
-    if (data.key === true) {
+    if (data.ok === true) {
       auth?.setIsLoggedIn(true);
       auth?.setUser(data.user);
       await navigate('/homepage-game');
