@@ -6,6 +6,7 @@ type InputProps = {
   readonly value?: string;
   readonly className?: string;
   readonly onChange?: (event_: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly type?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function Input({
@@ -19,7 +20,6 @@ export default function Input({
       {...props}
       value={value}
       onChange={onChange}
-      /* eslint-disable react/prop-types */
       className={`border-2 border-gray-300 px-3 py-2 text-sm text-black transition ${props.type !== 'checkbox' ? 'focus:outline-2 focus:outline-offset-2 focus:outline-orange-400' : ''} ${className}`}
     />
   );
