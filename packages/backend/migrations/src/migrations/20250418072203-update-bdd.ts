@@ -5,12 +5,19 @@ import type { DB } from '@app/shared';
 export async function up(db: Kysely<DB>): Promise<void> {
   // Migration code that update the database to the desired state.
   await db.transaction().execute(async (trx) => {
-    // label
+    // labels
     await sql`
-      RENAME TABLE labels TO label;
+    ALTER TABLE labels MODIFY levels_id INT DEFAULT NULL;
     `.execute(trx);
+
     await sql`
-    ALTER TABLE label MODIFY levels_id INT DEFAULT NULL;
+    ALTER TABLE labels ADD users_id INT NOT NULL;
+    `.execute(trx);
+
+    await sql`
+    ALTER TABLE labels
+    ADD CONSTRAINT labels_ibfk_3
+    FOREIGN KEY (users_id) REFERENCES users(id);
     `.execute(trx);
 
     //user
@@ -20,7 +27,11 @@ export async function up(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     await sql`
-    ALTER TABLE users CHANGE labels_id label_id INT NULL;
+    ALTER TABLE users DROP FOREIGN KEY users_ibfk_1;
+    `.execute(trx);
+
+    await sql`
+    ALTER TABLE users DROP labels_id;
     `.execute(trx);
 
     // skills
@@ -114,18 +125,26 @@ export async function down(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     await sql`
-    ALTER TABLE users CHANGE label_id labels_id INT NULL;
+    ALTER TABLE users ADD labels_id INT  NOT NULL;
     `.execute(trx);
 
     await sql`
-    ALTER TABLE users MODIFY labels_id INT NOT NULL;
+    ALTER TABLE users
+    ADD CONSTRAINT users_ibfk_1
+    FOREIGN KEY (labels_id) REFERENCES labels(id);
     `.execute(trx);
+
     // label
 
     await sql`
-    ALTER TABLE label MODIFY levels_id INT NOT NULL;`.execute(trx);
+    ALTER TABLE labels DROP FOREIGN KEY labels_ibfk_3;
+    `.execute(trx);
 
     await sql`
-    RENAME TABLE label TO labels;`.execute(trx);
+    ALTER TABLE labels DROP users_id;
+    `.execute(trx);
+
+    await sql`
+    ALTER TABLE labels MODIFY levels_id INT NOT NULL;`.execute(trx);
   });
 }
