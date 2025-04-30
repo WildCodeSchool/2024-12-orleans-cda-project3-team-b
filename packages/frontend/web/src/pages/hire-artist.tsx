@@ -51,57 +51,23 @@ export default function HireArtist() {
   );
 
   const handleHireArtist = async (artistId: number) => {
-    // event.preventDefault()
     try {
-      // Step 1: Fetch existing hired artists
-      const existingResponse = await fetch(`${publicKey}/artists-hired`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const hireResponse = await fetch(`${publicKey}/artists-hired`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artistId }),
       });
 
-      if (!existingResponse.ok) {
-        throw new Error(
-          `Failed to fetch existing hired artists. Status: ${existingResponse.status}`,
-        );
+      if (!hireResponse.ok) {
+        throw new Error(`Hire failed. Status: ${hireResponse.status}`);
       }
 
-      const hiredArtists = await existingResponse.json();
-      console.log('Hired artists:', hiredArtists);
-
-      // Step 2: Check if artist is already hired
-      const isAlreadyHired = hiredArtists.some(
-        (artist: { artists_id: number }) => artist.artists_id === artistId,
+      setArtists((prev) =>
+        prev.filter((artist) => artist.artist_id !== artistId),
       );
-      console.log('Is already hired:', isAlreadyHired);
-
-      if (isAlreadyHired) {
-        alert('This artist is already hired.');
-        console.log('This artist is already hired.');
-        return;
-      } else {
-        const response = await fetch(`${publicKey}/artists-hired`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ artistId }),
-        });
-        console.log(artistId);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        console.log('Hire successful:', result);
-        alert('Artist hired successfully!');
-        return;
-      }
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Failed to hire artist.');
+      alert('Error hiring artist. Please try again.');
     }
   };
 
@@ -132,7 +98,6 @@ export default function HireArtist() {
       </div>
       <div className='grid grid-cols-2 gap-4'>
         {sortedArtists.slice(0, visibleCount).map((artist) => {
-          console.log(artist);
           return (
             <div
               key={artist.artist_id}
@@ -163,7 +128,7 @@ export default function HireArtist() {
                 <button
                   key={artist.artist_id}
                   type='button'
-                  onClick={(event) => handleHireArtist(artist.artist_id)}
+                  onClick={() => handleHireArtist(artist.artist_id)}
                   className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
                 >
                   {' Hire '}

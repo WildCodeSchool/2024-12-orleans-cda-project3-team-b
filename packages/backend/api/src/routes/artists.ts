@@ -5,11 +5,14 @@ import { db } from '@app/backend-shared';
 const artistsRouter = express.Router();
 
 artistsRouter.get('/', async (req, res) => {
+  const { artistsId } = req.body;
   try {
     const artists = await db
+
       .selectFrom('artists')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
+      .leftJoin('artists_hired', 'artists.id', 'artists_hired.artists_id')
       .select([
         'artists.id as artist_id',
         'artists.firstname',
@@ -22,6 +25,7 @@ artistsRouter.get('/', async (req, res) => {
         'milestones.name as milestone_name',
         'artists.exp_value',
       ])
+      .where('artists_hired.artists_id', 'is', null)
       .execute();
 
     res.json(artists);

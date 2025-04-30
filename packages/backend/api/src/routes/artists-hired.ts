@@ -47,7 +47,9 @@ artistsHiredRouter.get('/', async (req, res) => {
       .selectFrom('artists_hired')
       .leftJoin('artists', 'artists_hired.artists_id', 'artists.id')
       .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
+      .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .select([
+        'artists_hired.id as artist_hired_id',
         'artists_hired.artists_id',
         'artists_hired.milestones_id',
         'artists_hired.notoriety',
@@ -57,9 +59,9 @@ artistsHiredRouter.get('/', async (req, res) => {
         'artists.image',
         'artists.notoriety',
         'milestones.name as milestone_name',
+        'genres.name as genre_name',
       ])
       .execute();
-    //
 
     res.json(artistsHired);
     return;
