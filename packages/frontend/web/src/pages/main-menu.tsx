@@ -8,7 +8,7 @@ export default function MainMenu() {
     <>
       <HeaderDesktop />
 
-      <div className='bg-primary mx-auto text-center'>
+      <div className='mx-auto bg-gray-300 text-center'>
         <div className='flex h-70 flex-col items-center justify-center'>
           <h2 className='text-secondary pb-7 text-3xl underline'>
             {'MyARTISTS'}

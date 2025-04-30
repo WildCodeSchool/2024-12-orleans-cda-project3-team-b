@@ -5,7 +5,7 @@ export default function HeaderDesktop() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className='border-b-orange bg-secondary flex h-20 w-full border-b-3 text-white'>
+    <header className='border-b-orange bg-primaryColor flex h-20 w-full border-b-3 text-white'>
       <div className='flex w-full items-center justify-between pr-4'>
         <div className='flex'>
           <div className='slogan flex items-center border-r-4 border-r-white pr-4 text-xl font-bold'>
@@ -18,7 +18,7 @@ export default function HeaderDesktop() {
           </div>
           <div className='flex items-center space-x-4 border-r-4 border-r-white pr-4 pl-4 text-xl'>
             <p className='m-0 pr-1 font-bold'>{'Level'}</p>
-            <span className='bg-primary flex h-5 w-5 items-center rounded-xs font-bold text-orange-500'>
+            <span className='flex h-5 w-5 items-center rounded-xs bg-gray-300 font-bold text-orange-500'>
               <p className='ml-1'>{'2'}</p>
             </span>
             <p className='flex items-center font-bold'>
@@ -62,7 +62,7 @@ export default function HeaderDesktop() {
             onClick={() => {
               setIsOpen(true); // Optionnel, cela fermera le menu quand un élément est cliqué
             }}
-            className={`${isOpen ? 'absolute' : 'hidden'} bg-secondary top-18 right-0 w-45 pl-1 font-bold`}
+            className={`${isOpen ? 'absolute' : 'hidden'} bg-primaryColor top-18 right-0 w-45 pl-1 font-bold`}
           >
             <li>
               <Link to=''>{'Legal Mentions'}</Link>

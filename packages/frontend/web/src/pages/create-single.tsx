@@ -47,7 +47,7 @@ export default function CreateSingle() {
           </h2>
         </span>
         <span className='mt-12 flex items-center justify-between gap-x-16'>
-          <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
+          <VerifyButton color='bg-primaryColor' image='/assets/not-check.png'>
             {'Cancel'}
           </VerifyButton>
           <VerifyButton color='bg-orange-500' image='/assets/check.png'>

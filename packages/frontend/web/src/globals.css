@@ -4,11 +4,7 @@
 @theme {
   --font-red-rose: 'Red Rose', 'serif';
   --font-inter: 'inter', 'sans-serif';
-  --color-orange: #ea7f21;
-  --color-blue: #15414e;
-  --color-primary: #edf4f6;
-  --color-secondary: #15414e;
-  --color-blue-btn: #3facc0;
+  --color-primaryColor: #15414e;
 }
 header {
   @apply font-red-rose;

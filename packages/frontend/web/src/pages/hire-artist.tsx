@@ -28,7 +28,7 @@ export default function HireArtist() {
         {'ARTISTS'}
       </div>
       <div className='flex flex-col gap-4'>
-        <div className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+        <div className='bg-primaryColor flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
           <img
             className='h-16 w-16 rounded-4xl'
             src='/assets/alex-harper.jpeg'
@@ -71,7 +71,7 @@ export default function HireArtist() {
       </div>
       <button
         type='button'
-        className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+        className='bg-primaryColor mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
       >
         {'See More'}
       </button>
