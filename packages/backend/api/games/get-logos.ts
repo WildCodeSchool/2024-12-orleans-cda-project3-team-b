@@ -11,7 +11,7 @@ getLogosRouter.get('/logos', async (req, res) => {
     res.json({ logo: logos });
   } catch (_error) {
     res.json({
-      logo: 'pas de logos',
+      logo: 'Logos not found',
     });
   }
 });
