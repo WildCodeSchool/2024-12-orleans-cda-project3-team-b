@@ -8,7 +8,7 @@ artistsHiredRouter.post('/', async (req, res) => {
   const { artistId } = req.body;
 
   try {
-    if (!artistId) {
+    if (!Number(artistId)) {
       res.status(400).json({ error: 'artistId is required' });
       return;
     }

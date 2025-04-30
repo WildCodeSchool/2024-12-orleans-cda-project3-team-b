@@ -12,10 +12,6 @@ const app = express();
 const HOST = process.env.BACKEND_HOST ?? 'localhost';
 const PORT = process.env.BACKEND_PORT ?? 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 app.use(express.json());
 app.use(cors());
 
