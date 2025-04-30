@@ -49,4 +49,20 @@ artistsRouter.get('/:id', async (req, res) => {
   }
 });
 
+artistsRouter.post('/', async (req, res) => {
+  try {
+    const artists = await db
+      .selectFrom('artists')
+      .selectAll()
+      .where('artists.id', '=', id)
+      .execute();
+
+    res.json(artists);
+    return;
+  } catch (error) {
+    console.error('Error fetching artists:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export default artistsRouter;

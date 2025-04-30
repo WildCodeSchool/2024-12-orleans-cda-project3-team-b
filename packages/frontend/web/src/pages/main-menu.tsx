@@ -1,9 +1,52 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AddButton from '../components/add-button';
 import HeaderDesktop from '../components/header-desktop';
 
+const publicKey = import.meta.env.VITE_API_URL;
+
+type ArtistHired = {
+  artist_id: number;
+  milestones_id: number;
+  firstname: string;
+  lastname: string;
+  alias: string;
+  image: string;
+  notoriety: number;
+};
+
 export default function MainMenu() {
+  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  useEffect(() => {
+    const fetchArtistsHired = async () => {
+      try {
+        const apiUrl = `${publicKey}/artists-hired`;
+
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setArtists(data);
+      } catch (error) {
+        console.error('Error details:', error);
+        setArtists([]); // Reset artists on error
+      }
+    };
+
+    void fetchArtistsHired();
+  }, []);
+
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => prev + 4);
+  };
+
   return (
     <>
       <HeaderDesktop />
@@ -12,6 +55,40 @@ export default function MainMenu() {
         <div className='flex h-70 flex-col items-center justify-center'>
           <h2 className='text-secondary pb-7 text-3xl underline'>
             {'MyARTISTS'}
+
+            <div className='mt-5 grid grid-cols-2 gap-4'>
+              {artists.slice(0, visibleCount).map((artist) => {
+                console.log(artist);
+                return (
+                  <div
+                    key={artist.artist_id}
+                    className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+                  >
+                    <img
+                      className='h-10 w-10 rounded-4xl'
+                      src={`/assets/${artist.image}`}
+                      alt=''
+                    />
+                    <span className='flex flex-col items-center text-sm'>
+                      <h2 className='ml-2'>
+                        {artist.firstname} {artist.lastname} {artist.alias}
+                      </h2>
+                      <h3>{artist.genre_name}</h3>
+                    </span>
+                    <span className='flex items-center text-sm'>
+                      <h2 className='flex items-center font-bold'>
+                        {artist.notoriety}
+                      </h2>
+                      <img
+                        className='mt-0.5 h-4 w-4'
+                        src='/assets/star-sign.png'
+                        alt=''
+                      />
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </h2>
           <Link to='/hire-artist'>
             <AddButton>{'+'}</AddButton>
