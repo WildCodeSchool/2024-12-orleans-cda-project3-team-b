@@ -14,7 +14,7 @@ export default function MyAlbums() {
               await navigate(-1);
             }}
             type='button'
-            className='text-secondary hover:text-orange-500'
+            className='text-secondary mb-18'
           >
             <img
               src='/assets/arrow-left.png'
@@ -29,6 +29,44 @@ export default function MyAlbums() {
             </h1>
           </span>
           <div className='h-6 w-6' />
+        </div>
+        <div className='text-secondary mt-4 mb-8 flex flex-col items-center text-xl font-semibold'>
+          <span className='flex items-center'>
+            <h2> {'Total notoriety gain:'}</h2>
+            <h3 className='ml-2 flex items-center text-xl font-bold'>
+              {'3,2 '}
+            </h3>
+            <img
+              className='mt-0.5 h-6 w-6'
+              src='/assets/star-sign.png'
+              alt=''
+            />
+          </span>
+          <span className='flex items-center'>
+            <h2>{'Total sales:'}</h2>
+            <h3 className='ml-2 flex items-center text-xl font-bold'>
+              {'250,000 '}
+            </h3>
+            <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
+          </span>
+          <span className='flex items-center'>
+            <h2>{'Total earned money:'}</h2>
+            <h3 className='ml-2 flex items-center text-xl font-bold'>
+              {'4,250,000 '}
+            </h3>
+            <img
+              className='mt-0.5 h-4 w-4'
+              src='/assets/dollar-icon.png'
+              alt=''
+            />
+          </span>
+        </div>
+
+        <div className='bg-secondary flex h-46 w-84 flex-col items-center gap-4 rounded-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+          <h2 className='mt-3 font-bold'>{'ALBUMS'}</h2>
+          <h3 className='font-extralight'> {'Doo-Wops & Hooligans'}</h3>
+          <h3 className='font-extralight'> {'Unorthodox Jukebox'}</h3>
+          <h3 className='font-extralight'> {'24K Magic'}</h3>
         </div>
       </div>
     </>
