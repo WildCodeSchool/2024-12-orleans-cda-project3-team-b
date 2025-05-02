@@ -113,7 +113,7 @@ export default function MainMenu() {
 
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center'>
-              <Link to={'/create-single'}>
+              <Link to={'/create-single-menu'}>
                 <AddButton>{'+'}</AddButton>
               </Link>
               <h2 className='text-secondary pt-1 text-xl'>
@@ -121,7 +121,7 @@ export default function MainMenu() {
               </h2>
             </div>
             <div className='flex flex-col items-center justify-center pl-10'>
-              <Link to={'/create-album'}>
+              <Link to={'/create-album-menu'}>
                 <AddButton>{'+'}</AddButton>
               </Link>
               <h3 className='text-secondary pt-1 text-xl'>
