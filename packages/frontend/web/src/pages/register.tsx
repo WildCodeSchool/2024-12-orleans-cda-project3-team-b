@@ -11,7 +11,7 @@ export default function Register() {
   const login = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch(`${API_URL}/register`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },
