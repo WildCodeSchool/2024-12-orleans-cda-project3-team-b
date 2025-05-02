@@ -15,6 +15,7 @@ import Login from './pages/login';
 import MainMenu from './pages/main-menu';
 import MyArtists from './pages/my-artists.tsx';
 import Register from './pages/register';
+import HttpError from './utils/http-error';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,12 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: '*',
+        loader: () => {
+          throw new HttpError('Error 404', 'Not Found', 404);
+        },
       },
     ],
   },
@@ -76,7 +83,7 @@ const router = createBrowserRouter([
       {
         path: '*',
         loader: () => {
-          throw new Error('Page not found');
+          throw new HttpError('Error 404', 'Not Found', 404);
         },
       },
     ],

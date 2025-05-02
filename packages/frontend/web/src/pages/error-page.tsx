@@ -14,12 +14,16 @@ export default function ErrorPage() {
   let message = 'Something went wrong.';
 
   if (isRouteErrorResponse(error)) {
+    console.log('Error:', error);
     if (error.status === 404) {
       title = 'Page Not Found - Error 404';
       message = 'The page you are looking for does not exist.';
     }
   } else if (error instanceof Error) {
+    title = error.title;
     message = error.message;
+  } else {
+    console.error('Unexpected error:', error);
   }
 
   return (
