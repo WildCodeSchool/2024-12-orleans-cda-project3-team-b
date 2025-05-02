@@ -19,10 +19,10 @@ export default function Header() {
       <nav className='m-auto'>
         <ul className='mb-10 hidden flex-row gap-12 sm:flex'>
           <li>
-            <Link to=''>{'SIGN IN'}</Link>
+            <Link to='/register'>{'SIGN IN'}</Link>
           </li>
           <li>
-            <Link to=''>{'LOGIN'}</Link>
+            <Link to='/login'>{'LOGIN'}</Link>
           </li>
           <li>
             <Link to=''>{'PRIVACY POLICY'}</Link>
