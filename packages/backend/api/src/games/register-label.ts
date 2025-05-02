@@ -3,7 +3,7 @@ import express from 'express';
 import { db } from '@app/backend-shared';
 
 const postRegisterLabelRouter = express.Router();
-type Info = {
+type InsertUserInfo = {
   name: string;
   logosId: number;
   budget: number;
@@ -12,10 +12,10 @@ type Info = {
 };
 
 postRegisterLabelRouter.post('/register-label', async (req, res) => {
-  const { name, logosId } = req.body as Info;
+  const { name, logosId } = req.body as InsertUserInfo;
   try {
     await db
-      .insertInto('label')
+      .insertInto('labels')
       .values({
         name,
         logos_id: logosId,
