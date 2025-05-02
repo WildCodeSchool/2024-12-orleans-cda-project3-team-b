@@ -40,11 +40,7 @@ export default function Header() {
         }}
       >
         <img
-          src={
-            isOpen
-              ? '../../public/assets/cross.png'
-              : '../../public/assets/burger-bar.png'
-          }
+          src={isOpen ? '/assets/cross.png' : '/assets/burger-bar.png'}
           alt='menu burger'
         />
       </div>
@@ -54,11 +50,8 @@ export default function Header() {
       >
         <ul onClick={closeMenu} className='text-center'>
           <CustomLink to='/'>{'Home'}</CustomLink>
-          <CustomLink to=''>{'My Album'}</CustomLink>
-          <CustomLink to=''>{'My artists'}</CustomLink>
           <CustomLink to=''>{'Privacy Policy'}</CustomLink>
-          <CustomLink to=''>{'Profil'}</CustomLink>
-          <CustomLink to=''>{'Log out'}</CustomLink>
+          <CustomLink to='/'>{'Sign in'}</CustomLink>
         </ul>
       </nav>
     </header>
