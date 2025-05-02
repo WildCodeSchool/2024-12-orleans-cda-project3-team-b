@@ -24,7 +24,7 @@ artistsHiredRouter.post('/', async (req, res) => {
       return;
     }
 
-    const artists_hired = await db
+    const artistHired = await db
       .insertInto('artists_hired')
       .values({
         artists_id: artistId,
