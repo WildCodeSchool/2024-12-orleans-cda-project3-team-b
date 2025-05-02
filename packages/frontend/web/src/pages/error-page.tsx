@@ -2,6 +2,8 @@ import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
 
 import Input from '@/components/input';
 
+import HttpError from '../utils/http-error';
+
 export default function ErrorPage() {
   const navigate = useNavigate();
   const error = useRouteError();
@@ -14,16 +16,13 @@ export default function ErrorPage() {
   let message = 'Something went wrong.';
 
   if (isRouteErrorResponse(error)) {
-    console.log('Error:', error);
     if (error.status === 404) {
       title = 'Page Not Found - Error 404';
       message = 'The page you are looking for does not exist.';
     }
-  } else if (error instanceof Error) {
+  } else if (error instanceof HttpError) {
     title = error.title;
     message = error.message;
-  } else {
-    console.error('Unexpected error:', error);
   }
 
   return (
@@ -44,7 +43,7 @@ export default function ErrorPage() {
                 value='Return to Home'
                 name='submit'
                 onClick={returnHome}
-                className='w-full cursor-pointer self-center rounded-full border-0 bg-blue-400 p-3 text-black transition duration-300 ease-in-out hover:bg-orange-400 hover:text-gray-300 md:w-1/2'
+                className='w-full cursor-pointer self-center rounded-full border-0 bg-blue-400 p-3 text-black transition duration-300 ease-in-out hover:bg-orange-400 hover:text-gray-300'
               />
             </div>
           </div>
