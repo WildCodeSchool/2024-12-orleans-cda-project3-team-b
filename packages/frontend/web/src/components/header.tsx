@@ -51,7 +51,7 @@ export default function Header() {
         <ul onClick={closeMenu} className='text-center'>
           <CustomLink to='/'>{'Home'}</CustomLink>
           <CustomLink to=''>{'Privacy Policy'}</CustomLink>
-          <CustomLink to=''>{'Profil'}</CustomLink>
+          <CustomLink to=''>{'Profile'}</CustomLink>
           <CustomLink to='/'>{'Sign in'}</CustomLink>
         </ul>
       </nav>
