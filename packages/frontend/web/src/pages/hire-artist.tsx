@@ -23,7 +23,7 @@ export default function HireArtist() {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const apiUrl = `${publicKey}/routes/artists`;
+        const apiUrl = `${publicKey}/artists`;
 
         const response = await fetch(apiUrl);
 

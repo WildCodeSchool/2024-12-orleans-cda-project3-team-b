@@ -1,15 +1,17 @@
 import express from 'express';
 
+import artistsHiredRouter from './artists-hired/artists-hired';
+import artistsRouter from './artists/artists';
 import authRouter from './auth';
 import demoRouter from './demo';
 import authMiddleware from './middlewares/auth.middleware';
-import fetchRouter from './routes';
 
 const router = express.Router();
 
 router.use(authMiddleware);
 router.use('/auth', authRouter);
-router.use('/routes', fetchRouter);
+router.use(artistsHiredRouter);
+router.use(artistsRouter);
 router.use('/demo', demoRouter);
 
 export default router;

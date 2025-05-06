@@ -24,7 +24,7 @@ export default function MainMenu() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `${publicKey}/routes/artists-hired`;
+        const apiUrl = `${publicKey}/artists-hired`;
 
         const response = await fetch(apiUrl);
 
