@@ -6,13 +6,11 @@ const postRegisterLabelRouter = express.Router();
 type InsertUserInfo = {
   name: string;
   logosId: number;
-  budget: number;
-  scoreXp: number;
-  notoriety: number;
+  userId: number;
 };
 
 postRegisterLabelRouter.post('/register-label', async (req, res) => {
-  const { name, logosId } = req.body as InsertUserInfo;
+  const { name, logosId, userId } = req.body as InsertUserInfo;
   try {
     await db
       .insertInto('labels')
@@ -20,8 +18,9 @@ postRegisterLabelRouter.post('/register-label', async (req, res) => {
         name,
         logos_id: logosId,
         budget: 50000,
-        score_xp: 25,
+        score_xp: 0,
         notoriety: 0,
+        users_id: userId,
       })
       .execute();
     res.json({
