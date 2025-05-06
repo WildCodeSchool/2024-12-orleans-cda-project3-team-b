@@ -6,12 +6,12 @@ const getLogosRouter = express.Router();
 
 getLogosRouter.get('/logos', async (req, res) => {
   try {
-    await db.selectFrom('logos').selectAll().execute();
+    const logos = await db.selectFrom('logos').selectAll().execute();
 
-    res.json({ logo: true });
+    res.json({ logos });
   } catch (_error) {
     res.json({
-      logo: false,
+      ok: false,
     });
   }
 });
