@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router';
 
 import AddButton from '@/components/add-button';
 import AddSingle from '@/components/add-single';
-import HeaderDesktop from '@/components/header-desktop';
 import RemoveSingle from '@/components/remove-single';
 import VerifyButton from '@/components/verify-button';
 
