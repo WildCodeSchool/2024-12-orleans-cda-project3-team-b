@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
+import HeaderDesktop from '@/components/header-desktop';
 import { useAuth } from '@/contexts/auth-context';
 
 export default function InGame() {
@@ -13,5 +14,10 @@ export default function InGame() {
     return <Navigate to='/login' />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <HeaderDesktop />
+      <Outlet />
+    </>
+  );
 }
