@@ -87,7 +87,13 @@ export interface Genres {
   name: string;
 }
 
-export interface Label {
+export interface LabelArtists {
+  artists_hired_id: number;
+  id: Generated<number>;
+  labels_id: number;
+}
+
+export interface Labels {
   budget: number;
   id: Generated<number>;
   levels_id: number;
@@ -95,12 +101,6 @@ export interface Label {
   name: string;
   notoriety: number;
   score_xp: number;
-}
-
-export interface LabelArtists {
-  artists_hired_id: number;
-  id: Generated<number>;
-  labels_id: number;
 }
 
 export interface Levels {
@@ -171,8 +171,8 @@ export interface Users {
   creation_date: Generated<Date>;
   email: string;
   id: Generated<number>;
-  is_first_time: Generated<number>;
-  label_id: number | null;
+  is_first_time: number;
+  labels_id: number;
   password: string;
 }
 
@@ -187,8 +187,8 @@ export interface DB {
   crew_members: CrewMembers;
   crew_members_hired: CrewMembersHired;
   genres: Genres;
-  label: Label;
   label_artists: LabelArtists;
+  labels: Labels;
   levels: Levels;
   logos: Logos;
   marketing: Marketing;
