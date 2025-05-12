@@ -2,24 +2,39 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@/contexts/auth-context';
+
 const API_URL = import.meta.env.VITE_API_URL;
 type Logo = {
   id: number;
   logo_img: string;
 };
-
 export default function Logos() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
+  const auth = useAuth();
+
+  useEffect(() => {
+    const isFirstTime = async () => {
+      if (auth?.user?.is_first_time !== 1) {
+        try {
+          await navigate('/main-menu');
+        } catch {
+          return null;
+        }
+      }
+    };
+    void isFirstTime();
+  }, [auth, navigate]);
 
   useEffect(() => {
     const fetchLogos = async () => {
       const res = await fetch(`${API_URL}/games/logos`);
       const data = await res.json();
-      setLogos(data);
+      setLogos(Array.isArray(data) ? data : data.logos);
     };
 
     void fetchLogos();
@@ -31,7 +46,7 @@ export default function Logos() {
       setMessage('All fields are required');
       return;
     }
-    const res = await fetch(`${API_URL}/games//register-label`, {
+    const res = await fetch(`${API_URL}/games/register-label`, {
       method: 'POST',
       body: JSON.stringify({
         name: input,

@@ -37,12 +37,12 @@ const router = createBrowserRouter([
     element: <InGame />,
     children: [
       {
-        path: 'homepage-game',
-        element: <HomeGame />,
+        path: 'first-page-login',
+        element: <FirstPageLogin />,
       },
       {
-        path: '/first-page-login',
-        element: <FirstPageLogin />,
+        path: 'homepage-game',
+        element: <HomeGame />,
       },
       {
         path: '/main-menu',

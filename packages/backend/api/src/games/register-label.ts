@@ -1,16 +1,22 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const postRegisterLabelRouter = express.Router();
+const postRegisterLabelRouter = Router();
 type InsertUserInfo = {
   name: string;
   logosId: number;
-  userId: number;
 };
 
-postRegisterLabelRouter.post('/register-label', async (req, res) => {
-  const { name, logosId, userId } = req.body as InsertUserInfo;
+postRegisterLabelRouter.post('/register-label', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+  const { name, logosId } = req.body as InsertUserInfo;
   try {
     await db
       .insertInto('labels')

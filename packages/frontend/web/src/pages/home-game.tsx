@@ -1,3 +1,4 @@
+import Logos from '@/components/logos';
 import { useAuth } from '@/contexts/auth-context';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -16,7 +17,6 @@ export default function HomeGame() {
   };
   return (
     <>
-      <p>{'home Game'}</p>
       <button
         type='button'
         className='rounded-md bg-gray-500 text-center'
@@ -24,6 +24,7 @@ export default function HomeGame() {
       >
         {'deconnected'}
       </button>
+      <Logos />
     </>
   );
 }
