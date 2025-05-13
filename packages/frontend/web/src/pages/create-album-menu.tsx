@@ -48,28 +48,28 @@ export default function CreateAlbumMenu() {
         />
       </div>
 
-      <span className='mt-12 flex w-full flex-col items-center gap-2'>
+      <div className='mt-12 flex w-full flex-col items-center gap-2'>
         <h2 className='text-secondary mb-2 text-center text-xl'>
           {'Choose 3 singles:'}
         </h2>
         <RemoveSingle />
         <AddSingle />
         <AddSingle />
-      </span>
-      <span className='mt-12 flex w-full flex-col items-center justify-between'>
+      </div>
+      <div className='mt-12 flex w-full flex-col items-center justify-between'>
         <AddButton>{'+'}</AddButton>
         <h2 className='text-secondary mt-1 text-center text-xl'>
           {'MARKETING CAMPAIGN'}
         </h2>
-      </span>
-      <span className='mt-12 flex items-center justify-between gap-x-16'>
+      </div>
+      <div className='mt-12 flex items-center justify-between gap-x-16'>
         <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
           {'Cancel'}
         </VerifyButton>
         <VerifyButton color='bg-orange-500' image='/assets/check.png'>
           {'Confirm'}
         </VerifyButton>
-      </span>
+      </div>
     </div>
   );
 }

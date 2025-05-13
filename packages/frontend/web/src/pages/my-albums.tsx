@@ -18,28 +18,28 @@ export default function MyAlbums() {
             className='W-10 h-10'
           />
         </button>
-        <span className='flex flex-col items-center'>
+        <div className='flex flex-col items-center'>
           <img className='h-22 w-22' src='/assets/album.png' alt='' />
           <h1 className='text-secondary text-center text-2xl font-bold'>
             {'MyAlbums'}
           </h1>
-        </span>
+        </div>
         <div className='h-6 w-6' />
       </div>
       <div className='text-secondary mt-4 mb-8 flex flex-col items-center text-xl font-semibold'>
-        <span className='flex items-center'>
+        <div className='flex items-center'>
           <h2> {'Total notoriety gain:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>{'3,2 '}</h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/star-sign.png' alt='' />
-        </span>
-        <span className='flex items-center'>
+        </div>
+        <div className='flex items-center'>
           <h2>{'Total sales:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
             {'250,000 '}
           </h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
-        </span>
-        <span className='flex items-center'>
+        </div>
+        <div className='flex items-center'>
           <h2>{'Total earned money:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
             {'4,250,000 '}
@@ -49,7 +49,7 @@ export default function MyAlbums() {
             src='/assets/dollar-icon.png'
             alt=''
           />
-        </span>
+        </div>
       </div>
 
       <div className='bg-secondary flex h-46 w-84 flex-col items-center gap-4 rounded-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
