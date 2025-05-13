@@ -5,7 +5,6 @@ import CreateAlbumMenu from './pages/create-album-menu.tsx';
 import CreateAlbum from './pages/create-album.tsx';
 import CreateSingleMenu from './pages/create-single-menu.tsx';
 import CreateSingle from './pages/create-single.tsx';
-import FirstPageLogin from './pages/first-page-login.tsx';
 import HireArtist from './pages/hire-artist.tsx';
 import HireStaff from './pages/hire-staff.tsx';
 import Home from './pages/home';
@@ -36,10 +35,6 @@ const router = createBrowserRouter([
     path: '/',
     element: <InGame />,
     children: [
-      {
-        path: 'first-page-login',
-        element: <FirstPageLogin />,
-      },
       {
         path: 'homepage-game',
         element: <HomeGame />,
