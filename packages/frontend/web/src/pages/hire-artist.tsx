@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
+import { ArrowLeft } from '@/components/arrow-left';
+import SeeMoreButton from '@/components/see-more';
+
 type Artist = {
   artist_id: number;
   firstname: string;
@@ -74,18 +77,8 @@ export default function HireArtist() {
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
-        <button
-          onClick={async () => {
-            await navigate(-1);
-          }}
-          type='button'
-          className='text-secondary hover:text-orange-500'
-        >
-          <img
-            src='/assets/arrow-left.png'
-            alt='arrow left'
-            className='W-10 h-10'
-          />
+        <button type='button'>
+          <ArrowLeft />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
           {'HIRE ARTISTS'}
@@ -154,13 +147,7 @@ export default function HireArtist() {
           );
         })}
       </div>
-      <button
-        onClick={handleSeeMore}
-        type='button'
-        className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-      >
-        {'See More'}
-      </button>
+      <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
     </div>
   );
 }

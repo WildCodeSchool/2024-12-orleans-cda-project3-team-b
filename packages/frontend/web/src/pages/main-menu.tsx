@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AddButton from '../components/add-button';
-import HeaderDesktop from '../components/header-desktop';
 
 const publicKey = import.meta.env.VITE_API_URL;
 
