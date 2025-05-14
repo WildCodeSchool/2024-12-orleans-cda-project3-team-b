@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card-hire';
 import ArtistCardHire from '@/components/artist-card-hire';
-import SeeMoreButton from '@/components/see-more';
+import SeeMoreButton from '@/components/see-more-button';
 
 type Artist = {
   artist_id: number;

@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.use(authMiddleware);
 router.use('/auth', authRouter);
-router.use(artistsHiredRouter);
-router.use(artistsRouter);
+artistsHiredRouter.use(artistsHiredRouter);
+artistsRouter.use(artistsRouter);
 router.use('/demo', demoRouter);
 
 export default router;
