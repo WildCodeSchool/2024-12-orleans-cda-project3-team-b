@@ -9,7 +9,10 @@ type Logo = {
   id: number;
   logo_img: string;
 };
-export default function Logos() {
+type Logos = {
+  logos: Logo[];
+};
+export default function RegisterLabel() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
@@ -33,8 +36,8 @@ export default function Logos() {
   useEffect(() => {
     const fetchLogos = async () => {
       const res = await fetch(`${API_URL}/games/logos`);
-      const data = await res.json();
-      setLogos(Array.isArray(data) ? data : data.logos);
+      const data: Logos = await res.json();
+      setLogos(data.logos);
     };
 
     void fetchLogos();

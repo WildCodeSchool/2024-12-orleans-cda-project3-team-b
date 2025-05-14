@@ -1,4 +1,4 @@
-import Logos from '@/components/logos';
+import RegisterLabel from '@/components/register-label';
 import { useAuth } from '@/contexts/auth-context';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -24,7 +24,7 @@ export default function HomeGame() {
       >
         {'deconnected'}
       </button>
-      <Logos />
+      <RegisterLabel />
     </>
   );
 }
