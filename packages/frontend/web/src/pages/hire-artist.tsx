@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ArrowLeft } from '@/components/arrow-left';
+import ArtistCard from '@/components/artist-card-hire';
+import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more';
 
 type Artist = {
@@ -55,7 +57,7 @@ export default function HireArtist() {
 
   const handleHireArtist = async (artistId: number) => {
     try {
-      const hireResponse = await fetch(`${publicKey}/routes/artists-hired`, {
+      const hireResponse = await fetch(`${publicKey}/artists-hired`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ artistId }),
@@ -90,62 +92,13 @@ export default function HireArtist() {
         {'ARTISTS'}
       </div>
       <div className='grid grid-cols-2 gap-4'>
-        {sortedArtists.slice(0, visibleCount).map((artist) => {
-          return (
-            <div
-              key={artist.artist_id}
-              className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-            >
-              <img
-                className='h-16 w-16 rounded-4xl'
-                src={`/assets/${artist.image}`}
-                alt=''
-              />
-              <span className='flex flex-col items-center'>
-                <h2 className='ml-2'>
-                  {artist.firstname} {artist.lastname} {artist.alias}
-                </h2>
-                <h3>{artist.genre_name}</h3>
-              </span>
-              <span className='flex items-center'>
-                <h2 className='flex items-center font-bold'>
-                  {artist.notoriety}
-                </h2>
-                <img
-                  className='mt-0.5 h-5 w-5'
-                  src='/assets/star-sign.png'
-                  alt=''
-                />
-              </span>
-              <span className='flex flex-col items-center'>
-                <button
-                  key={artist.artist_id}
-                  type='button'
-                  onClick={() => handleHireArtist(artist.artist_id)}
-                  className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-                >
-                  {' Hire '}
-                  <img
-                    className='h-7 w-7'
-                    src='/assets/sign.png'
-                    alt='contract logo'
-                  />
-                </button>
-
-                <span className='flex items-center'>
-                  <h2 className='flex items-center font-bold'>
-                    {artist.price}
-                  </h2>
-                  <img
-                    className='mt-0.5 h-3.5 w-3.5'
-                    src='/assets/dollar-icon.png'
-                    alt=''
-                  />
-                </span>
-              </span>
-            </div>
-          );
-        })}
+        {sortedArtists.slice(0, visibleCount).map((artist) => (
+          <ArtistCardHire
+            key={artist.artist_id}
+            artist={artist}
+            onHire={handleHireArtist}
+          />
+        ))}
       </div>
       <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
     </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import ArtistCard from '@/components/artist-card';
+
 import AddButton from '../components/add-button';
 
 const publicKey = import.meta.env.VITE_API_URL;
@@ -56,34 +58,7 @@ export default function MainMenu() {
 
         <div className='mt-5 grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => {
-            return (
-              <div
-                key={artist.artist_id}
-                className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-              >
-                <img
-                  className='h-10 w-10 rounded-4xl'
-                  src={`/assets/${artist.image}`}
-                  alt=''
-                />
-                <span className='flex flex-col items-center text-sm'>
-                  <h2 className='ml-2'>
-                    {artist.firstname} {artist.lastname} {artist.alias}
-                  </h2>
-                  <h3>{artist.genre_name}</h3>
-                </span>
-                <span className='flex items-center text-sm'>
-                  <h2 className='flex items-center font-bold'>
-                    {artist.notoriety}
-                  </h2>
-                  <img
-                    className='mt-0.5 h-4 w-4'
-                    src='/assets/star-sign.png'
-                    alt=''
-                  />
-                </span>
-              </div>
-            );
+            return <ArtistCard key={artist.artist_id} artist={artist} />;
           })}
         </div>
         <Link to='/my-artists'>
