@@ -72,11 +72,11 @@ const router = createBrowserRouter([
         path: '/my-artists',
         element: <MyArtists />,
       },
+      {
+        path: '/my-albums',
+        element: <MyAlbums />,
+      },
     ],
-  },
-  {
-    path: '/my-albums',
-    element: <MyAlbums />,
   },
 ]);
 
