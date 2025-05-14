@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/auth-context';
 
+import type { Logo } from './label';
+import Label from './label';
+
 const API_URL = import.meta.env.VITE_API_URL;
-type Logo = {
-  id: number;
-  logo_img: string;
-};
+
 type Logos = {
   logos: Logo[];
 };
@@ -21,7 +21,7 @@ export default function RegisterLabel() {
   const auth = useAuth();
 
   useEffect(() => {
-    const isFirstTime = async () => {
+    const firstLogin = async () => {
       if (auth?.user?.is_first_time !== 1) {
         try {
           await navigate('/main-menu');
@@ -30,7 +30,7 @@ export default function RegisterLabel() {
         }
       }
     };
-    void isFirstTime();
+    void firstLogin();
   }, [auth, navigate]);
 
   useEffect(() => {
@@ -68,10 +68,9 @@ export default function RegisterLabel() {
   return (
     <>
       <h1 className='mb-20 text-center'>{'CONGRATULATIONS'}</h1>
-      <div className='mb-20 text-center'>
-        <p>{'on creating your new music label! '}</p>
-        <br />
-        <p>
+      <div className='mb-10 text-center'>
+        <p className='m-4'>{'on creating your new music label! '}</p>
+        <p className='m-4'>
           {
             'Are you ready to reach the heights of success? Will you live up to it? To take the first step towards success, define a name for your label!'
           }
@@ -83,45 +82,13 @@ export default function RegisterLabel() {
           await register(event);
         }}
       >
-        <label htmlFor='label'>{'Choose your name of label : '}</label>
-        <input
-          type='text'
-          id='label'
-          placeholder='max 32 characters'
-          className='w-52 border-2 border-gray-600'
-          value={input}
-          onChange={(event) => {
-            setInput(event.target.value);
-          }}
+        <Label
+          input={input}
+          setInput={setInput}
+          logos={logos}
+          selectedLogo={selectedLogo}
+          setSelectedLogo={setSelectedLogo}
         />
-        <div className='flex'>
-          {logos.map((logo) => (
-            <label
-              key={logo.id}
-              className={`m-2 cursor-pointer rounded border p-2 ${
-                selectedLogo === logo.id
-                  ? 'border-blue-500'
-                  : 'border-transparent'
-              }`}
-            >
-              <img
-                src={`/assets/${logo.logo_img}`}
-                alt={`Logo ${logo.id}`}
-                className='m-auto w-10'
-              />
-              <input
-                type='radio'
-                name='gameLogo'
-                value={logo.id}
-                checked={selectedLogo === logo.id}
-                onChange={() => {
-                  setSelectedLogo(logo.id);
-                }}
-                className='hidden'
-              />
-            </label>
-          ))}
-        </div>
         <button
           type='submit'
           className='rounded border-2 border-gray-500 bg-gray-500'
