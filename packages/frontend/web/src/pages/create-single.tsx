@@ -18,7 +18,7 @@ export default function CreateSingle() {
           <img
             src='/assets/arrow-left.png'
             alt='arrow left'
-            className='W-10 h-10'
+            className='h-10 w-10'
           />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold'>
