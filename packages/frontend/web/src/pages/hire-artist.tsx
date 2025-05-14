@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCard from '@/components/artist-card-hire';
 import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
@@ -21,7 +19,6 @@ const publicKey = import.meta.env.VITE_API_URL;
 
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
-  const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
