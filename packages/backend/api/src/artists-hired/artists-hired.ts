@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const artistsHiredRouter = express.Router();
 
-artistsHiredRouter.post('/artists-hired', async (req, res) => {
+artistsHiredRouter.post('/', async (req, res) => {
   const { artistId } = req.body;
 
   try {
@@ -41,7 +41,7 @@ artistsHiredRouter.post('/artists-hired', async (req, res) => {
   }
 });
 
-artistsHiredRouter.get('/artists-hired', async (req, res) => {
+artistsHiredRouter.get('/', async (req, res) => {
   try {
     const artistsHired = await db
       .selectFrom('artists_hired')

@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const artistsRouter = express.Router();
 
-artistsRouter.get('/artists', async (req, res) => {
+artistsRouter.get('/', async (req, res) => {
   try {
     const artists = await db
 
@@ -35,7 +35,7 @@ artistsRouter.get('/artists', async (req, res) => {
   }
 });
 
-artistsRouter.get('/artists/:id', async (req, res) => {
+artistsRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const artists = await db
