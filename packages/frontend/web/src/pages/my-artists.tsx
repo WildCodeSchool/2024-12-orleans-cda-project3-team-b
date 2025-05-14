@@ -1,9 +1,56 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+
+import ArtistCard from '@/components/artist-card';
+import SeeMoreButton from '@/components/see-more';
 
 import { ArrowLeft } from '../components/arrow-left';
 
+const publicKey = import.meta.env.VITE_API_URL;
+
+type ArtistHired = {
+  artist_id: number;
+  milestones_id: number;
+  firstname: string;
+  lastname: string;
+  alias: string;
+  image: string;
+  notoriety: number;
+  genre_name: string;
+};
+
 export default function MyArtists() {
   const navigate = useNavigate();
+  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  useEffect(() => {
+    const fetchArtistsHired = async () => {
+      try {
+        const apiUrl = `${publicKey}/artists-hired`;
+
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        setArtists(data);
+      } catch (error) {
+        console.error('Error details:', error);
+        setArtists([]); // Reset artists on error
+      }
+    };
+
+    void fetchArtistsHired();
+  }, []);
+
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => prev + 4);
+  };
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
@@ -19,34 +66,12 @@ export default function MyArtists() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='flex flex-col gap-4'>
-        <div className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
-          <img
-            className='h-16 w-16 rounded-4xl'
-            src='/assets/alex-harper.jpeg'
-            alt=''
-          />
-          <span className='flex flex-col items-center'>
-            <h2 className='ml-2'>{' Alex Harper'}</h2>
-            <h3>{' Rock'}</h3>
-          </span>
-          <span className='flex items-center'>
-            <h2 className='flex items-center font-bold'>{'3,2 '}</h2>
-            <img
-              className='mt-0.5 h-5 w-5'
-              src='/assets/star-sign.png'
-              alt=''
-            />
-          </span>
-          <h2 className='font-bold'> {'National Star'}</h2>
-        </div>
+      <div className='mt-5 grid grid-cols-2 gap-4'>
+        {artists.slice(0, visibleCount).map((artist) => {
+          return <ArtistCard key={artist.artist_id} artist={artist} />;
+        })}
       </div>
-      <button
-        type='button'
-        className='bg-secondary mt-5 flex h-8 w-25 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-      >
-        {'See More'}
-      </button>
+      <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
     </div>
   );
 }
