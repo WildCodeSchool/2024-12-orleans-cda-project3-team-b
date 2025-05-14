@@ -6,22 +6,20 @@ export type Logo = {
 };
 
 type LabelProps = {
-  readonly input: string;
-  readonly setInput: (value: string) => void;
+  readonly setValue: (value: string) => void;
   readonly logos: Logo[];
   readonly selectedLogo: number | undefined;
   readonly setSelectedLogo: (id: number) => void;
 };
 
 export default function Label({
-  input,
-  setInput,
+  setValue,
   logos,
   selectedLogo,
   setSelectedLogo,
 }: LabelProps) {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
+    setValue(event.target.value);
   };
 
   const handleLogoSelection = (logoId: number) => {
@@ -36,7 +34,6 @@ export default function Label({
         id='label'
         placeholder='max 32 characters'
         className='w-52 border-2 border-gray-600'
-        value={input}
         onChange={handleInputChange}
       />
       <div className='mt-4 flex'>

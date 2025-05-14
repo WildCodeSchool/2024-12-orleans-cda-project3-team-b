@@ -84,8 +84,7 @@ export default function RegisterLabel() {
         }}
       >
         <Label
-          input={input}
-          setInput={setInput}
+          setValue={setInput}
           logos={logos}
           selectedLogo={selectedLogo}
           setSelectedLogo={setSelectedLogo}
