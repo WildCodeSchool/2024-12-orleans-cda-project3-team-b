@@ -58,7 +58,8 @@ export default function RegisterLabel() {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     });
-    if (res.ok) {
+    const data = res;
+    if (data.ok) {
       await navigate('/main-menu');
     } else {
       setMessage('Something went wrong. Please try again.');
