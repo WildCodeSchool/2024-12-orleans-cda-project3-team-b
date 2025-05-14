@@ -1,28 +1,16 @@
-import { useNavigate } from 'react-router';
-
 import AddButton from '@/components/add-button';
 import AddSingle from '@/components/add-single';
+import { ArrowLeft } from '@/components/arrow-left';
 import ChooseName from '@/components/choose-name';
 import RemoveSingle from '@/components/remove-single';
 import VerifyButton from '@/components/verify-button';
 
 export default function CreateAlbum() {
-  const navigate = useNavigate();
   return (
     <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
-        <button
-          type='button'
-          className='text-secondary hover:text-orange-500'
-          onClick={async () => {
-            await navigate(-1);
-          }}
-        >
-          <img
-            src='/assets/arrow-left.png'
-            alt='arrow left'
-            className='W-10 h-10'
-          />
+        <button type='button'>
+          <ArrowLeft />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold'>
           {'RECORDING A NEW ALBUM'}
