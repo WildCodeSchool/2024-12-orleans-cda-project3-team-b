@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 
 import AddButton from '@/components/add-button';
+import ChooseName from '@/components/choose-name';
 import VerifyButton from '@/components/verify-button';
 
 export default function CreateSingle() {
@@ -28,13 +29,9 @@ export default function CreateSingle() {
       </div>
       <img className='h-18 w-18' src='/assets/music-note.png' alt='' />
       <div className='flex flex-col items-center justify-center'>
-        <h2 className='text-secondary mt-8 text-center text-xl'>
-          {"Choose your single's name:"}
-        </h2>
-        <input
-          className='mt-3 w-full max-w-md rounded-lg border border-gray-200 bg-white px-4 py-2 text-gray-700 shadow-[1px_4px_6px_rgba(0,0,0,0.30)]'
-          type='text'
-          placeholder="Single's name"
+        <ChooseName
+          name={"Choose your single's Name"}
+          placeholder={"single's Name"}
         />
       </div>
       <div className='mt-12 flex w-full flex-col items-center justify-between'>

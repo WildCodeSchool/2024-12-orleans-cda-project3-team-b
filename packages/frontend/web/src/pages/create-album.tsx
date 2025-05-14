@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 
 import AddButton from '@/components/add-button';
 import AddSingle from '@/components/add-single';
+import ChooseName from '@/components/choose-name';
 import RemoveSingle from '@/components/remove-single';
 import VerifyButton from '@/components/verify-button';
 
@@ -30,34 +31,30 @@ export default function CreateAlbum() {
       </div>
       <img className='h-22 w-22' src='/assets/album.png' alt='' />
       <div className='flex flex-col items-center justify-center'>
-        <h2 className='text-secondary mt-8 text-center text-xl'>
-          {"Choose your album's name:"}
-        </h2>
-        <input
-          className='mt-3 w-full max-w-md rounded-lg border border-gray-200 bg-white px-4 py-2 text-gray-700 shadow-[1px_4px_6px_rgba(0,0,0,0.30)]'
-          type='text'
-          placeholder="Album's name"
+        <ChooseName
+          name={"Choose your album's name"}
+          placeholder={"Album's name"}
         />
       </div>
-      <span className='mt-12 flex w-full flex-col items-center gap-2'>
+      <div className='mt-12 flex w-full flex-col items-center gap-2'>
         <RemoveSingle />
         <AddSingle />
         <AddSingle />
-      </span>
-      <span className='mt-12 flex w-full flex-col items-center justify-between'>
+      </div>
+      <div className='mt-12 flex w-full flex-col items-center justify-between'>
         <AddButton>{'+'}</AddButton>
         <h2 className='text-secondary mt-1 text-center text-xl'>
           {'MARKETING CAMPAIGN'}
         </h2>
-      </span>
-      <span className='mt-12 flex items-center justify-between gap-x-16'>
+      </div>
+      <div className='mt-12 flex items-center justify-between gap-x-16'>
         <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
           {'Cancel'}
         </VerifyButton>
         <VerifyButton color='bg-orange-500' image='/assets/check.png'>
           {'Confirm'}
         </VerifyButton>
-      </span>
+      </div>
     </div>
   );
 }
