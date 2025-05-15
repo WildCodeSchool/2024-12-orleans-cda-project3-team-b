@@ -1,7 +1,7 @@
 export default function StatusSection() {
   return (
-    <div className='mr-20 flex-col items-center space-x-4 border-r-white pr-4 pl-4 text-sm sm:border-r-4 sm:text-xl'>
-      <div className='flex-col-reverse sm:flex'>
+    <div className='mr-20 border-r-white pr-4 text-sm sm:border-r-4 sm:text-xl'>
+      <div className='sm:flex'>
         <p className='flex items-center font-bold'>
           {'3,2'}
           <img

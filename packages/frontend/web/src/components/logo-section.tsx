@@ -6,7 +6,7 @@ export default function LogoSection() {
         src='/assets/orange.png'
         alt="Label's logo"
       />
-      <div className='flex flex-col text-sm sm:text-xl'>
+      <div className='text-sm sm:flex sm:text-xl'>
         <p className='mr-2'>{'dykhounphypheth'}</p>
         <div className='flex items-center'>
           <p className='font-bold'>{'Level:'}</p>
