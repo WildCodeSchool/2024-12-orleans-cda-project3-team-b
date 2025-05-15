@@ -2,8 +2,6 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@/contexts/auth-context';
-
 import type { Logo } from './label';
 import Label from './label';
 
@@ -12,26 +10,46 @@ const API_URL = import.meta.env.VITE_API_URL;
 type Logos = {
   logos: Logo[];
 };
+
+type Labels = {
+  budget: number;
+  id: number;
+  levels_id: number;
+  logos_id: number;
+  name: string;
+  notoriety: number;
+  score_xp: number;
+};
 export default function RegisterLabel() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
-  const auth = useAuth();
+  const [labels, setLabels] = useState<Labels[]>([]);
 
   useEffect(() => {
-    const firstLogin = async () => {
-      if (auth?.user?.is_first_time !== 1) {
-        try {
-          await navigate('/main-menu');
-        } catch {
-          return null;
-        }
+    const fetchLabels = async () => {
+      try {
+        const apiUrl = `${API_URL}/games/labels`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        setLabels(data);
+      } catch (error) {
+        console.error('Error details:', error);
+        setLabels([]);
       }
     };
-    void firstLogin();
-  }, [auth, navigate]);
+
+    void fetchLabels();
+  }, []);
+
+  useEffect(() => {
+    if (labels.length === 0) {
+      void navigate('/main-menu');
+    }
+  }, [labels, navigate]);
 
   useEffect(() => {
     const fetchLogos = async () => {
