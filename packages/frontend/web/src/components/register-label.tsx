@@ -42,7 +42,19 @@ export default function RegisterLabel() {
       }
     };
 
+    const fetchLogos = async () => {
+      try {
+        const res = await fetch(`${API_URL}/games/logos`);
+        const data: Logos = await res.json();
+        setLogos(data.logos);
+      } catch (error) {
+        console.error('Error details:', error);
+        setLogos([]);
+      }
+    };
+
     void fetchLabels();
+    void fetchLogos();
   }, []);
 
   useEffect(() => {
@@ -50,16 +62,6 @@ export default function RegisterLabel() {
       void navigate('/main-menu');
     }
   }, [labels, navigate]);
-
-  useEffect(() => {
-    const fetchLogos = async () => {
-      const res = await fetch(`${API_URL}/games/logos`);
-      const data: Logos = await res.json();
-      setLogos(data.logos);
-    };
-
-    void fetchLogos();
-  }, []);
 
   const register = async (event: FormEvent) => {
     event.preventDefault();
