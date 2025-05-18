@@ -1,9 +1,22 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useAuth } from '@/contexts/auth-context';
+
+const API_URL = import.meta.env.VITE_API_URL;
 export default function HeaderDesktop() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const auth = useAuth();
+  const logout = async () => {
+    const res = await fetch(`${API_URL}/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    const data = (await res.json()) as { ok: boolean };
+    if (data.ok) {
+      auth?.setIsLoggedIn(false);
+    }
+  };
   return (
     <header className='border-b-orange bg-secondary flex h-20 w-full border-b-3 text-white'>
       <div className='flex w-full items-center justify-between pr-4'>
@@ -73,15 +86,13 @@ export default function HeaderDesktop() {
             <li>
               <Link to=''>{'Profile'}</Link>
             </li>
-            <li className='flex items-center'>
-              <Link to=''>
-                <img
-                  className='w-8'
-                  src='/assets/log-out.png'
-                  alt='log out logo'
-                />
-              </Link>
-              <Link to=''>{'Log out '}</Link>
+            <li className='items- flex cursor-pointer' onClick={logout}>
+              <img
+                className='w-8'
+                src='/assets/log-out.png'
+                alt='log out logo'
+              />
+              {'Log out '}
             </li>
           </ul>
         </nav>
