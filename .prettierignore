@@ -11,3 +11,5 @@ packages/frontend/mobile/ios
 packages/frontend/mobile/android
 deployment/mysql/data
 **/types/database.ts
+
+**/*.rollup.cache
