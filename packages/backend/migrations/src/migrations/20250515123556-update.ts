@@ -7,7 +7,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
   await db.transaction().execute(async (trx) => {
     // labels
     await sql`
-    ALTER TABLE labels MODIFY levels_id INT DEFAULT NULL;
+    ALTER TABLE labels MODIFY levels_id INT DEFAULT 1;
     `.execute(trx);
 
     await sql`
@@ -42,6 +42,10 @@ export async function up(db: Kysely<DB>): Promise<void> {
     await sql`
     ALTER TABLE artists_hired ADD grade INT NULL;
     `.execute(trx);
+
+    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT NULL`.execute(
+      trx,
+    );
 
     // artists_skills
     await sql`
@@ -110,6 +114,9 @@ export async function down(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     //artists_hired
+    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT DEFAULT NOT NULL`.execute(
+      trx,
+    );
 
     await sql`
     ALTER TABLE artists_hired DROP COLUMN grade;
