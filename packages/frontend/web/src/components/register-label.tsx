@@ -35,7 +35,7 @@ export default function RegisterLabel() {
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        setLabels(data.labels);
+        setLabels(data);
       } catch (error) {
         console.error('Error details:', error);
         setLabels([]);
@@ -58,7 +58,7 @@ export default function RegisterLabel() {
   }, []);
 
   useEffect(() => {
-    if (labels.length !== 0) {
+    if (labels.length === 0) {
       void navigate('/main-menu');
     }
   }, [labels, navigate]);
