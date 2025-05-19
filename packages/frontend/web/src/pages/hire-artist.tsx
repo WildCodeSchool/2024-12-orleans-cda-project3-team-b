@@ -15,8 +15,6 @@ type Artist = {
   price: number;
 };
 
-const publicKey = import.meta.env.VITE_API_URL;
-
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -25,7 +23,7 @@ export default function HireArtist() {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const apiUrl = `${publicKey}/artists`;
+        const apiUrl = `/api/artists`;
 
         const response = await fetch(apiUrl);
 
@@ -54,7 +52,7 @@ export default function HireArtist() {
 
   const handleHireArtist = async (artistId: number) => {
     try {
-      const hireResponse = await fetch(`${publicKey}/artists-hired`, {
+      const hireResponse = await fetch(`/api/artists-hired`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ artistId }),
