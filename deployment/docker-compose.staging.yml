@@ -43,7 +43,6 @@ services:
       condition: service_healthy
   migrations:
     image: taketomi001/migrations-staging:latest
-    restart: never
     env_file:
       - ./.env
     depends_on:
@@ -52,7 +51,6 @@ services:
 
   web:
     image: taketomi001/client-staging:latest
-    restart: never
     volumes:
       - web-client-build:/app
 volumes:
