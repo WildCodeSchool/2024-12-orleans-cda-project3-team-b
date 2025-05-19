@@ -4,7 +4,7 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
-type Artist = {
+export type Artist = {
   artist_id: number;
   firstname: string;
   lastname: string;

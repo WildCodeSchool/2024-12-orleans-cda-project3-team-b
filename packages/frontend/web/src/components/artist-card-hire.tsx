@@ -1,3 +1,5 @@
+import type { Artist } from '@/pages/hire-artist';
+
 type ArtistCardHireProps = {
   readonly artist: Artist;
   readonly onHire: (artistId: number) => void;
