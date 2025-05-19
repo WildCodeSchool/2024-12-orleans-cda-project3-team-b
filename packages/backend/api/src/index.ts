@@ -15,12 +15,6 @@ const PORT = process.env.BACKEND_PORT ?? 3000;
 const COOKIE_SECRET = process.env.COOKIE_SECRET ?? 'secret';
 app.use(cookieParser(COOKIE_SECRET));
 app.use(express.json());
-app.use(
-  cors({
-    origin: `http://${process.env.FRONTEND_HOST}:${process.env.FRONTEND_PORT}`,
-    credentials: true,
-  }),
-);
 
 app.use('/api', router);
 
