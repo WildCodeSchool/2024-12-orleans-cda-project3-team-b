@@ -36,6 +36,7 @@ export default function MainMenu() {
         const data = await response.json();
 
         setArtists(data);
+        console.log(artists);
       } catch (error) {
         console.error('Error details:', error);
         setArtists([]); // Reset artists on error

@@ -27,7 +27,6 @@ export default function RegisterLabel() {
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [labels, setLabels] = useState<Labels[]>([]);
-  const [isVerify, setIsVerify] = useState(true);
 
   useEffect(() => {
     const fetchLabels = async () => {
@@ -40,8 +39,6 @@ export default function RegisterLabel() {
       } catch (error) {
         console.error('Error details:', error);
         setLabels([]);
-      } finally {
-        setIsVerify(true);
       }
     };
 
@@ -61,10 +58,10 @@ export default function RegisterLabel() {
   }, []);
 
   useEffect(() => {
-    if (isVerify && labels.length !== 0) {
+    if (labels.length !== 0) {
       void navigate('/main-menu');
     }
-  }, [isVerify, labels, navigate]);
+  }, [labels, navigate]);
 
   const register = async (event: FormEvent) => {
     event.preventDefault();

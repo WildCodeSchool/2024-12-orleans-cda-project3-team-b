@@ -58,6 +58,7 @@ CREATE TABLE milestones (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );`.execute(trx);
+
     await sql`CREATE TABLE artists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(255) DEFAULT NULL,

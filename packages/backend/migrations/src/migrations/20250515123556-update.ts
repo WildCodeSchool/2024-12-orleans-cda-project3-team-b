@@ -59,7 +59,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
     //staff_label
 
     await sql`
-    ALTER TABLE staff_label RENAME COLUMN labels_id TO label_id;`.execute(trx);
+    ALTER TABLE staff_label MODIFY labels_id INT NULL;`.execute(trx);
 
     // label_artists
     await sql`
@@ -100,8 +100,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
     //staff_label
 
     await sql`
-    ALTER TABLE staff_label change label_id labels_id INT NOT NULL;
-    `.execute(trx);
+    ALTER TABLE staff_label MODIFY labels_id INT NOT NULL;`.execute(trx);
 
     // artists_skills
 
@@ -114,7 +113,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     //artists_hired
-    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT DEFAULT NOT NULL`.execute(
+    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT NOT NULL`.execute(
       trx,
     );
 

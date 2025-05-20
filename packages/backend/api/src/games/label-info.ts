@@ -9,16 +9,24 @@ getXpRouter.get('/label', async (_req, res) => {
     const xpData = await db
       .selectFrom('labels')
       .innerJoin('logos', 'logos.id', 'labels.logos_id')
-      .leftJoin('staff_label', 'staff_label.label_id', 'labels.id')
-      .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
+      .innerJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+      .innerJoin('staff', 'staff.id', 'staff_label.staff_id')
+      .innerJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .innerJoin(
+        'artists_hired',
+        'artists_hired.id',
+        'label_artists.artists_hired_id',
+      )
+      .innerJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .select([
         'labels.id',
         'labels.name',
         'labels.score_xp',
         'logos.logo_img',
-        'notoriety',
+        'labels.notoriety',
         'budget',
-        db.fn.sum('staff.exp_value').as('extra_xp'),
+        db.fn.sum('staff.exp_value').as('staff_xp'),
+        db.fn.sum('artists.exp_value').as('artists_xp'),
       ])
       .groupBy('labels.id')
       .execute();
@@ -26,7 +34,10 @@ getXpRouter.get('/label', async (_req, res) => {
     const result = [];
 
     for (const label of xpData) {
-      const totalScore = Number(label.score_xp) + Number(label.extra_xp);
+      const totalScore =
+        Number(label.score_xp) +
+        Number(label.staff_xp) +
+        Number(label.artists_xp);
 
       const level = await db
         .selectFrom('levels')
