@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import AddArtist from '@/components/add-artist';
-import AddButton from '@/components/add-button';
+import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
+import MarketingCard from '@/components/marketing-card';
+import type { Marketing } from '@/components/modal-marketing';
+import ModalMarketing from '@/components/modal-marketing';
 import ModalMyArtists from '@/components/modal-my-artists';
 import VerifyButton from '@/components/verify-button';
 
@@ -15,7 +18,11 @@ const publicKey = import.meta.env.VITE_API_URL;
 export default function CreateSingleMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+    null,
+  );
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
@@ -29,7 +36,7 @@ export default function CreateSingleMenu() {
 
         const data: ArtistHired[] = await response.json();
 
-        if (selectedArtistId) {
+        if (selectedArtistId != null) {
           const selected = data.find(
             (artist) => artist.artists_id === selectedArtistId,
           );
@@ -43,10 +50,41 @@ export default function CreateSingleMenu() {
       }
     };
 
-    if (selectedArtistId) {
+    if (selectedArtistId != null) {
       void fetchArtistsHired();
     }
   }, [selectedArtistId]);
+
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
+        const apiUrl = `${publicKey}/marketing`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: Marketing[] = await response.json();
+
+        if (selectedMarketingId != null) {
+          const selected = data.find(
+            (marketing) => marketing.id === selectedMarketingId,
+          );
+          setMarketing(selected ? [selected] : []);
+        } else {
+          setMarketing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
+
+    if (selectedMarketingId != null) {
+      void fetchMarketing();
+    }
+  }, [selectedMarketingId]);
 
   return (
     <form action='' method='post'>
@@ -72,7 +110,9 @@ export default function CreateSingleMenu() {
               <ArtistCard key={artist.artists_id} artist={artist} />
             ))
           ) : (
-            <p className='text-secondary text-sm'>{'No artist selected.'}</p>
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No artist selected'}
+            </p>
           )}
           <AddArtist
             onArtistSelected={(id) => {
@@ -90,11 +130,28 @@ export default function CreateSingleMenu() {
         </div>
 
         {/* Marketing Section */}
-        <div className='mt-12 flex w-full flex-col items-center justify-between'>
-          <AddButton>{'+'}</AddButton>
-          <h2 className='text-secondary mt-1 text-center text-xl'>
-            {'MARKETING CAMPAIGN'}
-          </h2>
+        <div className='mt-6'>
+          {marketing.length > 0 ? (
+            marketing.map((marketing) => (
+              <MarketingCard
+                key={marketing.id}
+                id={marketing.id}
+                name={marketing.name}
+                bonus={marketing.bonus}
+                price={marketing.price}
+                image={marketing.image}
+              />
+            ))
+          ) : (
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No Marketing Campaign selected'}
+            </p>
+          )}
+          <AddMarketing
+            onMarketingSelected={(id) => {
+              setSelectedMarketingId(id);
+            }}
+          />
         </div>
 
         {/* Footer Buttons */}
@@ -107,17 +164,6 @@ export default function CreateSingleMenu() {
           </VerifyButton>
         </div>
       </div>
-
-      <ModalMyArtists
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false);
-        }}
-        onSelectArtist={(id) => {
-          setSelectedArtistId(id);
-          setModalOpen(false);
-        }}
-      />
     </form>
   );
 }

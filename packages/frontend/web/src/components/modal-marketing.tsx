@@ -1,42 +1,49 @@
 import { useEffect, useState } from 'react';
 
-import ArtistCard from '@/components/artist-card';
-import type { ArtistHired } from '@/pages/main-menu';
+import MarketingCard from './marketing-card';
 
 const publicKey = import.meta.env.VITE_API_URL;
 
-export type ModalMyArtistsProps = {
-  readonly isOpen: boolean;
-  readonly onClose: () => void;
-  readonly onSelectArtist: (artistId: number) => void;
+export type Marketing = {
+  id: number;
+  name: number;
+  bonus: string;
+  price: string;
+  image: string;
 };
 
-export default function ModalMyArtists({
+export type ModalMarketingProps = {
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onSelectMarketing: (marketingId: number) => void;
+};
+
+export default function ModalMarketing({
   isOpen,
   onClose,
-  onSelectArtist,
-}: ModalMyArtistsProps) {
-  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  onSelectMarketing,
+}: ModalMarketingProps) {
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const fetchArtists = async () => {
+    const fetchMarketing = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${publicKey}/artists-hired`);
+        const res = await fetch(`${publicKey}/marketing`);
         const data = await res.json();
-        setArtists(data);
+        setMarketing(data);
       } catch (error) {
         console.error('Error loading artists:', error);
-        setArtists([]);
+        setMarketing([]);
       } finally {
         setIsLoading(false);
       }
     };
 
-    void fetchArtists();
+    void fetchMarketing();
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -50,7 +57,7 @@ export default function ModalMyArtists({
       <div className='bg-primary relative z-10 w-full max-w-3xl rounded-2xl p-6 shadow-xl'>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-secondary w-full text-center text-xl font-bold'>
-            {'My Artists'}
+            {'Marketing'}
           </h2>
           <button
             type='button'
@@ -65,16 +72,22 @@ export default function ModalMyArtists({
           <p className='text-secondary text-center'>{'Loading...'}</p>
         ) : (
           <div className='grid grid-cols-2 gap-4'>
-            {artists.map((artist) => (
+            {marketing.map((marketing) => (
               <div
-                key={artist.artists_id}
+                key={marketing.id}
                 onClick={() => {
-                  onSelectArtist(artist.artists_id);
+                  onSelectMarketing(marketing.id);
                   onClose();
                 }}
                 className='cursor-pointer transition-transform hover:scale-105'
               >
-                <ArtistCard artist={artist} />
+                <MarketingCard
+                  id={marketing.id}
+                  name={marketing.name}
+                  bonus={marketing.bonus}
+                  price={marketing.price}
+                  image={marketing.image}
+                />
               </div>
             ))}
           </div>

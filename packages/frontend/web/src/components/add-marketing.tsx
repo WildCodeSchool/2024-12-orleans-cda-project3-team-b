@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
 import AddButton from './add-button';
-import ModalMyArtists from './modal-my-artists';
+import ModalMarketing from './modal-marketing';
 
 type Props = {
-  readonly onArtistSelected: (id: number) => void;
+  readonly onMarketingSelected: (id: number) => void;
 };
 
-export default function AddArtist({ onArtistSelected }: Props) {
+export default function AddMarketing({ onMarketingSelected }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -21,15 +21,15 @@ export default function AddArtist({ onArtistSelected }: Props) {
         <AddButton>{'+'}</AddButton>
       </button>
 
-      <h2 className='text-secondary pt-1 text-xl'>{'Choose an artist'}</h2>
+      <h2 className='text-secondary pt-1 text-xl'>{'Marketing Campaign'}</h2>
 
-      <ModalMyArtists
+      <ModalMarketing
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
         }}
-        onSelectArtist={(id) => {
-          onArtistSelected(id);
+        onSelectMarketing={(id) => {
+          onMarketingSelected(id);
           setIsModalOpen(false);
         }}
       />
