@@ -5,8 +5,6 @@ import ArtistCard from '@/components/artist-card';
 
 import AddButton from '../components/add-button';
 
-const publicKey = import.meta.env.VITE_API_URL;
-
 type ArtistHired = {
   artist_id: number;
   milestones_id: number;
@@ -25,7 +23,7 @@ export default function MainMenu() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `${publicKey}/artists-hired`;
+        const apiUrl = `/api/artists-hired`;
 
         const response = await fetch(apiUrl);
 
@@ -36,7 +34,6 @@ export default function MainMenu() {
         const data = await response.json();
 
         setArtists(data);
-        console.log(artists);
       } catch (error) {
         console.error('Error details:', error);
         setArtists([]); // Reset artists on error
