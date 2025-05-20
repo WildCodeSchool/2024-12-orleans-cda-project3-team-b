@@ -5,9 +5,7 @@ import ArtistCard from '@/components/artist-card';
 
 import AddButton from '../components/add-button';
 
-const publicKey = import.meta.env.VITE_API_URL;
-
-export type ArtistHired = {
+type ArtistHired = {
   artists_id: number;
   milestones_id: number;
   firstname: string;
@@ -25,7 +23,7 @@ export default function MainMenu() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `${publicKey}/artists-hired`;
+        const apiUrl = `/api/artists-hired`;
 
         const response = await fetch(apiUrl);
 

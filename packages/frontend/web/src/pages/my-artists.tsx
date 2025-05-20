@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
+import { ArrowLeft } from '../components/arrow-left';
 
-const publicKey = import.meta.env.VITE_API_URL;
 
 type ArtistHired = {
   artists_id: number;
@@ -24,7 +24,9 @@ export default function MyArtists() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `${publicKey}/artists-hired`;
+
+        const apiUrl = `/api/artists-hired`;
+
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
