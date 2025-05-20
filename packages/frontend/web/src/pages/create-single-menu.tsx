@@ -7,8 +7,6 @@ import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
 import type { Marketing } from '@/components/modal-marketing';
-import ModalMarketing from '@/components/modal-marketing';
-import ModalMyArtists from '@/components/modal-my-artists';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from './main-menu';
@@ -18,7 +16,6 @@ const publicKey = import.meta.env.VITE_API_URL;
 export default function CreateSingleMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
   );

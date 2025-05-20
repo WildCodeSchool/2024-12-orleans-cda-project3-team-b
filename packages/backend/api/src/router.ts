@@ -4,8 +4,8 @@ import artistsHiredRouter from './artists-hired/artists-hired';
 import artistsRouter from './artists/artists';
 import authRouter from './auth';
 import demoRouter from './demo';
-import marketingRouter from './marketing/get-marketing';
 import gamesRouter from './games';
+import marketingRouter from './marketing/get-marketing';
 import authMiddleware from './middlewares/auth.middleware';
 
 const router = express.Router();

@@ -5,7 +5,7 @@ import ArtistCard from '@/components/artist-card';
 
 import AddButton from '../components/add-button';
 
-type ArtistHired = {
+export type ArtistHired = {
   artists_id: number;
   milestones_id: number;
   firstname: string;
@@ -42,10 +42,6 @@ export default function MainMenu() {
 
     void fetchArtistsHired();
   }, []);
-
-  const handleSeeMore = () => {
-    setVisibleCount((prev) => prev + 4);
-  };
 
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
