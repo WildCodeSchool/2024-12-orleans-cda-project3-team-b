@@ -53,7 +53,7 @@ export default function MyArtists() {
           <ArrowLeft />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
-          {' My Artists'}
+          {'My Artists'}
         </h1>
         <div className='h-6 w-6' />
       </div>

@@ -7,7 +7,6 @@ const marketingRouter = express.Router();
 marketingRouter.get('/', async (req, res) => {
   try {
     const marketing = await db
-
       .selectFrom('marketing')
       .select([
         'marketing.id',

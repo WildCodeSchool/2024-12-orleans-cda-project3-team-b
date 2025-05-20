@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 
 import MarketingCard from './marketing-card';
 
-const publicKey = import.meta.env.VITE_API_URL;
-
 export type Marketing = {
   id: number;
   name: number;
@@ -30,7 +28,7 @@ export default function ModalMarketing({
 
     const fetchMarketing = async () => {
       try {
-        const res = await fetch(`${publicKey}/marketing`);
+        const res = await fetch(`/api/marketing`);
         const data = await res.json();
         setMarketing(data);
       } catch (error) {

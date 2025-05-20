@@ -35,14 +35,14 @@ export default function MyAlbums() {
         <div className='flex items-center'>
           <h2>{'Total sales:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {'250,000 '}
+            {'250,000'}
           </h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
         </div>
         <div className='flex items-center'>
           <h2>{'Total earned money:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {'4,250,000 '}
+            {'4,250,000'}
           </h3>
           <img
             className='mt-0.5 h-4 w-4'

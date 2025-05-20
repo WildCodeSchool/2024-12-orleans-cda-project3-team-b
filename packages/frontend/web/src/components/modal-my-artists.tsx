@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import ArtistCard from '@/components/artist-card';
 import type { ArtistHired } from '@/pages/main-menu';
 
-const publicKey = import.meta.env.VITE_API_URL;
-
 export type ModalMyArtistsProps = {
   readonly isOpen: boolean;
   readonly onClose: () => void;
@@ -23,7 +21,7 @@ export default function ModalMyArtists({
 
     const fetchArtists = async () => {
       try {
-        const res = await fetch(`${publicKey}/artists-hired`);
+        const res = await fetch(`/api/artists-hired`);
         const data = await res.json();
         setArtists(data);
       } catch (error) {
