@@ -26,7 +26,6 @@ export default function LogoSection() {
 
     void fetchLabels();
   }, []);
-  console.log(labelInfo);
 
   return (
     <div className='flex flex-wrap gap-4'>
