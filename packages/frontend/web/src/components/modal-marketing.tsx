@@ -24,13 +24,11 @@ export default function ModalMarketing({
   onSelectMarketing,
 }: ModalMarketingProps) {
   const [marketing, setMarketing] = useState<Marketing[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const fetchMarketing = async () => {
-      setIsLoading(true);
       try {
         const res = await fetch(`${publicKey}/marketing`);
         const data = await res.json();
@@ -38,8 +36,6 @@ export default function ModalMarketing({
       } catch (error) {
         console.error('Error loading artists:', error);
         setMarketing([]);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -68,30 +64,26 @@ export default function ModalMarketing({
           </button>
         </div>
 
-        {isLoading ? (
-          <p className='text-secondary text-center'>{'Loading...'}</p>
-        ) : (
-          <div className='grid grid-cols-2 gap-4'>
-            {marketing.map((marketing) => (
-              <div
-                key={marketing.id}
-                onClick={() => {
-                  onSelectMarketing(marketing.id);
-                  onClose();
-                }}
-                className='cursor-pointer transition-transform hover:scale-105'
-              >
-                <MarketingCard
-                  id={marketing.id}
-                  name={marketing.name}
-                  bonus={marketing.bonus}
-                  price={marketing.price}
-                  image={marketing.image}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className='grid grid-cols-2 gap-4'>
+          {marketing.map((marketing) => (
+            <div
+              key={marketing.id}
+              onClick={() => {
+                onSelectMarketing(marketing.id);
+                onClose();
+              }}
+              className='cursor-pointer transition-transform hover:scale-105'
+            >
+              <MarketingCard
+                id={marketing.id}
+                name={marketing.name}
+                bonus={marketing.bonus}
+                price={marketing.price}
+                image={marketing.image}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

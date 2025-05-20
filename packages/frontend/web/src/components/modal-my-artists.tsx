@@ -17,13 +17,11 @@ export default function ModalMyArtists({
   onSelectArtist,
 }: ModalMyArtistsProps) {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
 
     const fetchArtists = async () => {
-      setIsLoading(true);
       try {
         const res = await fetch(`${publicKey}/artists-hired`);
         const data = await res.json();
@@ -31,8 +29,6 @@ export default function ModalMyArtists({
       } catch (error) {
         console.error('Error loading artists:', error);
         setArtists([]);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -61,24 +57,20 @@ export default function ModalMyArtists({
           </button>
         </div>
 
-        {isLoading ? (
-          <p className='text-secondary text-center'>{'Loading...'}</p>
-        ) : (
-          <div className='grid grid-cols-2 gap-4'>
-            {artists.map((artist) => (
-              <div
-                key={artist.artists_id}
-                onClick={() => {
-                  onSelectArtist(artist.artists_id);
-                  onClose();
-                }}
-                className='cursor-pointer transition-transform hover:scale-105'
-              >
-                <ArtistCard artist={artist} />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className='grid grid-cols-2 gap-4'>
+          {artists.map((artist) => (
+            <div
+              key={artist.artists_id}
+              onClick={() => {
+                onSelectArtist(artist.artists_id);
+                onClose();
+              }}
+              className='cursor-pointer transition-transform hover:scale-105'
+            >
+              <ArtistCard artist={artist} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
