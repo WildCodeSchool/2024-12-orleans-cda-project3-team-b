@@ -71,4 +71,36 @@ artistsHiredRouter.get('/', async (req, res) => {
   }
 });
 
+artistsHiredRouter.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const artistsHired = await db
+      .selectFrom('artists_hired')
+      .leftJoin('artists', 'artists_hired.artists_id', 'artists.id')
+      .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
+      .leftJoin('genres', 'artists.genres_id', 'genres.id')
+      .select([
+        'artists_hired.id',
+        'artists_hired.artists_id',
+        'artists_hired.milestones_id',
+        'artists_hired.notoriety',
+        'artists.firstname',
+        'artists.lastname',
+        'artists.alias',
+        'artists.image',
+        'artists.notoriety',
+        'milestones.name as milestone_name',
+        'genres.name as genre_name',
+      ])
+      .where('artists_hired.id', '=', id)
+      .execute();
+
+    res.json(artistsHired);
+    return;
+  } catch (error) {
+    console.error('Error fetching artists:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export default artistsHiredRouter;

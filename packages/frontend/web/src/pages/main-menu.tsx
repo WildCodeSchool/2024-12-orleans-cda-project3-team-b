@@ -43,10 +43,6 @@ export default function MainMenu() {
     void fetchArtistsHired();
   }, []);
 
-  const handleSeeMore = () => {
-    setVisibleCount((prev) => prev + 4);
-  };
-
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
       <div className='flex h-70 flex-col items-center justify-center'>

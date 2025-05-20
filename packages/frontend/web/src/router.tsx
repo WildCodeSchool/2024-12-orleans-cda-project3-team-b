@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './pages/app.tsx';
+import ArtistProfilePage from './pages/artist-profile-page.tsx';
 import CreateAlbumMenu from './pages/create-album-menu.tsx';
 import CreateAlbum from './pages/create-album.tsx';
 import CreateSingleMenu from './pages/create-single-menu.tsx';
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
       {
         path: '/my-artists',
         element: <MyArtists />,
+      },
+      {
+        path: '/artist/:id',
+        element: <ArtistProfilePage />,
       },
     ],
   },
