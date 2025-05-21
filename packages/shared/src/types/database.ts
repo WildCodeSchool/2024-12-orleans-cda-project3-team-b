@@ -41,24 +41,29 @@ export interface Artists {
 
 export interface ArtistsHired {
   artists_id: number;
-  grade: number | null;
   id: Generated<number>;
-  milestones_id: number | null;
+  milestones_id: number;
   notoriety: number;
-  skills_id: number | null;
 }
 
 export interface ArtistsHiredSkills {
   artists_hired_id: number;
-  grade: number | null;
   id: Generated<number>;
+  score: number;
   skills_id: number;
 }
 
-export interface ArtistsSkills {
-  artists_id: number;
-  grade: number | null;
+export interface ArtistsMarketing {
+  albums_id: number;
   id: Generated<number>;
+  marketing_id: number;
+  singles_id: number;
+}
+
+export interface ArtistsSkills {
+  artists_hired_id: number;
+  id: Generated<number>;
+  score: number;
   skills_id: number;
 }
 
@@ -85,18 +90,17 @@ export interface Genres {
 export interface LabelArtists {
   artists_hired_id: number;
   id: Generated<number>;
-  label_id: number;
+  labels_id: number;
 }
 
 export interface Labels {
   budget: number;
   id: Generated<number>;
-  levels_id: Generated<number | null>;
+  levels_id: number;
   logos_id: number;
   name: string;
   notoriety: number;
   score_xp: number;
-  users_id: number;
 }
 
 export interface Levels {
@@ -141,16 +145,11 @@ export interface SinglesAlbums {
   singles_id: number;
 }
 
-export interface SinglesMarketing {
-  id: Generated<number>;
-  marketing_id: number;
-  singles_id: number;
-}
-
 export interface Skills {
   exp_value: number;
   id: Generated<number>;
   name: string;
+  score: number;
 }
 
 export interface Staff {
@@ -164,7 +163,7 @@ export interface Staff {
 
 export interface StaffLabel {
   id: Generated<number>;
-  labels_id: number | null;
+  labels_id: number;
   staff_id: number;
 }
 
@@ -172,7 +171,8 @@ export interface Users {
   creation_date: Generated<Date>;
   email: string;
   id: Generated<number>;
-  is_first_time: Generated<number>;
+  is_first_time: number;
+  labels_id: number;
   password: string;
 }
 
@@ -182,6 +182,7 @@ export interface DB {
   artists: Artists;
   artists_hired: ArtistsHired;
   artists_hired_skills: ArtistsHiredSkills;
+  artists_marketing: ArtistsMarketing;
   artists_skills: ArtistsSkills;
   crew_members: CrewMembers;
   crew_members_hired: CrewMembersHired;
@@ -194,7 +195,6 @@ export interface DB {
   milestones: Milestones;
   singles: Singles;
   singles_albums: SinglesAlbums;
-  singles_marketing: SinglesMarketing;
   skills: Skills;
   staff: Staff;
   staff_label: StaffLabel;
