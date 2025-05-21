@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 type Info = {
   id: number;
   logo_img: string;
@@ -13,7 +11,7 @@ export default function LogoSection() {
   useEffect(() => {
     const fetchLabels = async () => {
       try {
-        const apiUrl = `${API_URL}/games/label`;
+        const apiUrl = '/api/games/label';
         const response = await fetch(apiUrl);
         const data = await response.json();
 
@@ -26,6 +24,7 @@ export default function LogoSection() {
 
     void fetchLabels();
   }, []);
+  console.log(labelInfo);
 
   return (
     <div className='flex flex-wrap gap-4'>
