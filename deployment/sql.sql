@@ -67,9 +67,10 @@ VALUES
 ('Finesse',1,5,80,3000000,1000000,600),
 ('Grenade',1,5,76,2000000,800000,500);
 
-INSERT INTO albums (name,score,sales,money_earned,genres_id,exp_value ,artists_id)
+INSERT INTO albums (name,score,sales,money_earned,genres_id,exp_value ,artists_id, notoriety_gain)
 VALUES 
-('24K',88,5000000,15000000,5,1000,1);
+('24K',88,5000000,15000000,5,1000,1,3),
+('YoYo',58,300000,2000000,3,1000,2,3);
 
 INSERT INTO staff (job,bonus,price,image,exp_value)
 VALUES 
