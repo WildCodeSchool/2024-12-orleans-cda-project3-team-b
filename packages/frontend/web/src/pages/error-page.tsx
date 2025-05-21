@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
 
 import Input from '@/components/input';
+import Vinyl from '@/components/vinyl';
 
 import HttpError from '../utils/http-error';
 
@@ -48,11 +49,7 @@ export default function ErrorPage() {
             </div>
           </div>
         </div>
-        <img
-          className='pointer-events-none fixed right-0 bottom-0 w-md md:w-xl lg:w-2xl'
-          src='/assets/vinyl.png'
-          alt='Vinyle'
-        />
+        <Vinyl />
       </div>
     </div>
   );
