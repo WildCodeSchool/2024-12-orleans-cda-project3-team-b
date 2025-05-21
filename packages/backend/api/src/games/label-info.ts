@@ -1,14 +1,24 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const getXpRouter = express.Router();
+const getXpRouter = Router();
 
-getXpRouter.get('/label', async (_req, res) => {
+getXpRouter.get('/label', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
   try {
     const xpData = await db
-      .selectFrom('labels')
-      .innerJoin('logos', 'logos.id', 'labels.logos_id')
+      .selectFrom('users')
+      .where('users.id', '=', Number(userId))
+      .leftJoin('labels', 'labels.users_id', 'users.id')
+      .leftJoin('logos', 'logos.id', 'labels.logos_id')
       .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
       .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
       .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
@@ -47,10 +57,9 @@ getXpRouter.get('/label', async (_req, res) => {
       .select([
         'labels.id',
         'labels.name',
-        'labels.score_xp',
         'logos.logo_img',
         'labels.notoriety',
-        'budget',
+        'labels.budget',
         db.fn.sum('staff.exp_value').as('staff_xp'),
         db.fn.sum('artists.exp_value').as('artists_xp'),
         db.fn.sum('crew_members.exp_value').as('crew_xp'),
@@ -60,42 +69,40 @@ getXpRouter.get('/label', async (_req, res) => {
         db.fn.sum('skills.exp_value').as('skills_xp'),
       ])
       .groupBy('labels.id')
-      .execute();
+      .executeTakeFirst();
 
-    const result = [];
-
-    for (const label of xpData) {
-      const totalScore =
-        Number(label.staff_xp) +
-        Number(label.artists_xp) +
-        Number(label.crew_xp) +
-        Number(label.albums_xp) +
-        Number(label.marketing_xp) +
-        Number(label.singles_xp) +
-        Number(label.skills_xp);
-      const level = await db
-        .selectFrom('levels')
-        .select(['levels.id', 'levels.value'])
-        .where('levels.value', '<=', totalScore)
-        .orderBy('levels.value', 'desc')
-        .limit(1)
-        .executeTakeFirst();
-
-      result.push({
-        id: label.id,
-        name: label.name,
-        logo_img: label.logo_img,
-        total_xp: totalScore,
-        level: level?.id,
-        notoriety: label.notoriety,
-        budget: label.budget,
-      });
+    if (!xpData) {
+      return;
     }
 
-    res.json({ result });
+    const totalScore =
+      Number(xpData.staff_xp) +
+      Number(xpData.artists_xp) +
+      Number(xpData.crew_xp) +
+      Number(xpData.albums_xp) +
+      Number(xpData.marketing_xp) +
+      Number(xpData.singles_xp) +
+      Number(xpData.skills_xp);
+
+    const level = await db
+      .selectFrom('levels')
+      .select(['levels.id', 'levels.value'])
+      .where('levels.value', '<=', totalScore)
+      .orderBy('levels.value', 'desc')
+      .limit(1)
+      .executeTakeFirst();
+
+    res.json({
+      name: xpData.name,
+      logo_img: xpData.logo_img,
+      total_xp: totalScore,
+      level: level?.id,
+      notoriety: xpData.notoriety,
+      budget: xpData.budget,
+    });
   } catch (error) {
     console.error('Error:', error);
-    res.json({ ok: false });
+    res.status(500).json({ ok: false, error: 'Internal server error' });
   }
 });
 
