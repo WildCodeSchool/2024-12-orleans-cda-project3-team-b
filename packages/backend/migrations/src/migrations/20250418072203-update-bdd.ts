@@ -93,10 +93,9 @@ export async function up(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     // albums
-await sql`
+    await sql`
 ALTER TABLE albums ADD notoriety_gain INT NOT NULL DEFAULT 0;
 `.execute(trx);
-
   });
 }
 
@@ -105,11 +104,9 @@ export async function down(db: Kysely<DB>): Promise<void> {
   await db.transaction().execute(async (trx) => {
     //
 
-
     await sql`
 ALTER TABLE albums DROP COLUMN notoriety_gain;
 `.execute(trx);
-
 
     await sql`
     ALTER TABLE singles_marketing ADD albums_id INT NOT NULL;
