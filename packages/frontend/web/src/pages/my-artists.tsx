@@ -6,8 +6,6 @@ import SeeMoreButton from '@/components/see-more-button';
 
 import { ArrowLeft } from '../components/arrow-left';
 
-const publicKey = import.meta.env.VITE_API_URL;
-
 type ArtistHired = {
   artist_id: number;
   milestones_id: number;
@@ -27,7 +25,7 @@ export default function MyArtists() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `${publicKey}/artists-hired`;
+        const apiUrl = '/api/artists-hired';
 
         const response = await fetch(apiUrl);
 

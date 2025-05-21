@@ -13,7 +13,7 @@ export default function StatusSection() {
   useEffect(() => {
     const fetchLabels = async () => {
       try {
-        const apiUrl = 'api/games/label';
+        const apiUrl = '/api/games/label';
         const response = await fetch(apiUrl);
         const data = await response.json();
 

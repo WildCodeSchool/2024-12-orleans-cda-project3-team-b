@@ -1,8 +1,6 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +9,7 @@ export default function Register() {
   const login = async (event: FormEvent) => {
     event.preventDefault();
     try {
-      const res = await fetch(`${API_URL}/auth/register`, {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },
