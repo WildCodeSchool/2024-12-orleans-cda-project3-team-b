@@ -1,4 +1,4 @@
-import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import express from 'express';
 
 import { env } from '@app/shared';
@@ -11,9 +11,9 @@ const app = express();
 
 const HOST = process.env.BACKEND_HOST ?? 'localhost';
 const PORT = process.env.BACKEND_PORT ?? 3000;
-
+const COOKIE_SECRET = process.env.COOKIE_SECRET ?? 'secret';
+app.use(cookieParser(COOKIE_SECRET));
 app.use(express.json());
-app.use(cors());
 
 app.use('/api', router);
 
@@ -23,3 +23,11 @@ app.listen(PORT, () => {
 });
 
 export default app;
+
+declare module 'Express' {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+  interface Request {
+    isAuthenticated?: boolean;
+    userId?: number;
+  }
+}
