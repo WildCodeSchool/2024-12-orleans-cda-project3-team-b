@@ -53,11 +53,10 @@ export async function up(db: Kysely<DB>): Promise<void> {
 
     // artists_skills
 
-    
     await sql`
     ALTER TABLE artists_skills change score grade INT NULL;
     `.execute(trx);
-    
+
     await sql`
       ALTER TABLE artists_skills DROP FOREIGN KEY artists_skills_ibfk_1;
     `.execute(trx);
@@ -71,8 +70,6 @@ export async function up(db: Kysely<DB>): Promise<void> {
       ADD CONSTRAINT artists_skills_ibfk_1
       FOREIGN KEY (artists_id) REFERENCES artists(id);
     `.execute(trx);
-
-
 
     //artists_hired_skills
     await sql`
@@ -152,20 +149,19 @@ ALTER TABLE albums DROP COLUMN notoriety_gain;
     ALTER TABLE artists_skills change grade score INT NOT NULL;
     `.execute(trx);
 
-  await sql`
+    await sql`
   ALTER TABLE artists_skills DROP FOREIGN KEY artists_skills_ibfk_1;
 `.execute(trx);
 
-await sql`
+    await sql`
   ALTER TABLE artists_skills CHANGE artists_id artists_hired_id INT NOT NULL;
 `.execute(trx);
 
-await sql`
+    await sql`
   ALTER TABLE artists_skills
   ADD CONSTRAINT artists_skills_ibfk_1
   FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id);
 `.execute(trx);
-
 
     //artists_hired
     await sql`ALTER TABLE artists_hired MODIFY milestones_id INT NOT NULL`.execute(
