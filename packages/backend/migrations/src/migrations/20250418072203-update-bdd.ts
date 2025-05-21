@@ -7,7 +7,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
   await db.transaction().execute(async (trx) => {
     // labels
     await sql`
-    ALTER TABLE labels MODIFY levels_id INT DEFAULT NULL;
+    ALTER TABLE labels MODIFY levels_id INT DEFAULT 1;
     `.execute(trx);
 
     await sql`
@@ -43,6 +43,14 @@ export async function up(db: Kysely<DB>): Promise<void> {
     ALTER TABLE artists_hired ADD grade INT NULL;
     `.execute(trx);
 
+    await sql`
+    ALTER TABLE artists_hired ADD skills_id INT NULL;
+    `.execute(trx);
+
+    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT NULL`.execute(
+      trx,
+    );
+
     // artists_skills
     await sql`
     ALTER TABLE artists_skills change artists_hired_id artists_id INT NOT NULL;
@@ -55,7 +63,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
     //staff_label
 
     await sql`
-    ALTER TABLE staff_label RENAME COLUMN labels_id TO label_id;`.execute(trx);
+    ALTER TABLE staff_label MODIFY labels_id INT NULL;`.execute(trx);
 
     // label_artists
     await sql`
@@ -70,13 +78,21 @@ export async function up(db: Kysely<DB>): Promise<void> {
     await sql`
     ALTER TABLE singles_marketing DROP FOREIGN KEY singles_marketing_ibfk_3;
     `.execute(trx);
+
+    await sql`
+    ALTER TABLE singles_marketing DROP albums_id;
+    `.execute(trx);
   });
 }
 
 export async function down(db: Kysely<DB>): Promise<void> {
   // Migration code that reverts the database to the previous state.
   await db.transaction().execute(async (trx) => {
-    // artists_marketing
+    //
+
+    await sql`
+    ALTER TABLE singles_marketing ADD albums_id INT NOT NULL;
+    `.execute(trx);
 
     await sql`
     ALTER TABLE singles_marketing
@@ -96,8 +112,7 @@ export async function down(db: Kysely<DB>): Promise<void> {
     //staff_label
 
     await sql`
-    ALTER TABLE staff_label change label_id labels_id INT NOT NULL;
-    `.execute(trx);
+    ALTER TABLE staff_label MODIFY labels_id INT NOT NULL;`.execute(trx);
 
     // artists_skills
 
@@ -110,6 +125,13 @@ export async function down(db: Kysely<DB>): Promise<void> {
     `.execute(trx);
 
     //artists_hired
+    await sql`ALTER TABLE artists_hired MODIFY milestones_id INT NOT NULL`.execute(
+      trx,
+    );
+
+    await sql`
+    ALTER TABLE artists_hired DROP COLUMN skills_id;
+    `.execute(trx);
 
     await sql`
     ALTER TABLE artists_hired DROP COLUMN grade;
