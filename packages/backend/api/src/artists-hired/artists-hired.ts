@@ -5,7 +5,7 @@ import { db } from '@app/backend-shared';
 const artistsHiredRouter = express.Router();
 
 artistsHiredRouter.post('/', async (req, res) => {
-  const { artistId } = req.body;
+  const { artistId, labelId } = req.body;
 
   try {
     if (!Number(artistId)) {
@@ -31,10 +31,17 @@ artistsHiredRouter.post('/', async (req, res) => {
         milestones_id: artist.milestones_id,
         notoriety: artist.notoriety,
       })
-
       .execute();
 
     res.status(201).json({ message: 'Artist hired successfully' });
+
+    await db
+      .insertInto('label_artists')
+      .values({
+        label_id: labelId,
+        artists_hired_id: artistId,
+      })
+      .execute();
   } catch (error) {
     console.error('Error hiring artist:', error);
     res.status(500).json({ error: 'Internal server error' });

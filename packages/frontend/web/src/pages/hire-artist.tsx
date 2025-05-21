@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
+import { useAuth } from '@/contexts/auth-context';
 
 type Artist = {
   artist_id: number;
@@ -15,10 +16,20 @@ type Artist = {
   price: number;
 };
 
+export type InfoLabel = {
+  label: number;
+  budget: number;
+};
+
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
+  const [messageBudget, setMessageBudget] = useState('');
+  const auth = useAuth();
+  const labelId = infoLabel?.label;
+  const budget = infoLabel?.budget ?? 0;
 
   useEffect(() => {
     const fetchArtists = async () => {
@@ -40,7 +51,17 @@ export default function HireArtist() {
       }
     };
 
+    const fetchBudget = async () => {
+      try {
+        const res = await fetch('/api/games/label');
+        const data = await res.json();
+        setInfoLabel(data);
+      } catch (err) {
+        console.error('Error fetching budget:', err);
+      }
+    };
     void fetchArtists();
+    void fetchBudget();
   }, []);
 
   const handleSeeMore = () => {
@@ -50,12 +71,17 @@ export default function HireArtist() {
     sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
   );
 
-  const handleHireArtist = async (artistId: number) => {
+  const handleHireArtist = async (
+    artistId: number,
+    price: number,
+    labelId: number,
+    budget: number,
+  ) => {
     try {
       const hireResponse = await fetch(`/api/artists-hired`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artistId }),
+        body: JSON.stringify({ artistId, cost: price, labelId, budget }),
       });
 
       if (!hireResponse.ok) {
@@ -65,6 +91,23 @@ export default function HireArtist() {
       setArtists((prev) =>
         prev.filter((artist) => artist.artist_id !== artistId),
       );
+
+      const userId = auth?.user?.id;
+
+      const updateBudget = await fetch(`/api/games/buying`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ cost: price, userId }),
+      });
+      setInfoLabel((prev) =>
+        prev && typeof prev.budget === 'number'
+          ? { ...prev, budget: prev.budget - price }
+          : prev,
+      );
+      if (!updateBudget.ok) {
+        throw new Error(`Hire failed. Status: ${updateBudget.status}`);
+      }
     } catch (error) {
       console.error('Error hiring artist:', error);
       alert('Error hiring artist. Please try again.');
@@ -91,11 +134,29 @@ export default function HireArtist() {
           <ArtistCardHire
             key={artist.artist_id}
             artist={artist}
-            onHire={handleHireArtist}
+            onHire={() => {
+              if (labelId === undefined) {
+                setMessageBudget('Label or budget info not loaded yet.');
+                return;
+              }
+              void handleHireArtist(
+                artist.artist_id,
+                artist.price,
+                labelId,
+                budget,
+              );
+            }}
+            budget={budget}
           />
         ))}
       </div>
       <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
+
+      {messageBudget ? (
+        <div className='mb-4 text-sm font-medium text-red-600'>
+          {messageBudget}
+        </div>
+      ) : null}
     </div>
   );
 }

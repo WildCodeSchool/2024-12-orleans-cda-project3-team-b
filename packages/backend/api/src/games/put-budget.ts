@@ -4,9 +4,13 @@ import { db } from '@app/backend-shared';
 
 const postBuySomethinglRouter = Router();
 
+type BuyingRequestBody = {
+  cost: number;
+};
+
 postBuySomethinglRouter.put('/buying', async (req: Request, res) => {
+  const { cost } = req.body as BuyingRequestBody;
   const userId = req.userId;
-  const cost = req.body.cost;
   if (userId === undefined) {
     res.json({
       ok: false,
@@ -14,13 +18,25 @@ postBuySomethinglRouter.put('/buying', async (req: Request, res) => {
     return;
   }
   try {
+    const current = await db
+      .selectFrom('labels')
+      .select('budget')
+      .where('labels.users_id', '=', userId)
+      .executeTakeFirst();
+
+    if (current?.budget === undefined || cost < current.budget) {
+      return;
+    }
+
+    const newBudget = current.budget - cost;
+
     await db
       .updateTable('labels')
       .set({
-        budget: cost,
+        budget: newBudget,
       })
       .where('labels.users_id', '=', userId)
-      .executeTakeFirst();
+      .execute();
     res.json({
       ok: true,
     });

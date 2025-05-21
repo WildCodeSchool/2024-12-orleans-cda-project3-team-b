@@ -1,12 +1,16 @@
 type ArtistCardHireProps = {
   readonly artist: Artist;
   readonly onHire: (artistId: number) => void;
+  readonly budget: number;
 };
 
 export default function ArtistCardHire({
   artist,
   onHire,
+  budget,
 }: ArtistCardHireProps) {
+  const isDisabled = budget < artist.price;
+
   return (
     <div
       key={artist.artist_id}
@@ -37,7 +41,10 @@ export default function ArtistCardHire({
           onClick={() => {
             onHire(artist.artist_id);
           }}
-          className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+          disabled={isDisabled}
+          className={`flex h-8 w-18 items-center justify-center rounded-sm pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] ${
+            isDisabled ? 'cursor-not-allowed bg-gray-400' : 'bg-orange-500'
+          }`}
         >
           {'Hire'}
           <img className='h-7 w-7' src='/assets/sign.png' alt='contract logo' />
@@ -50,6 +57,9 @@ export default function ArtistCardHire({
             alt='dollar icon'
           />
         </div>
+        {isDisabled ? (
+          <p className='mt-1 text-xs text-red-200'>{'Not enough budget'}</p>
+        ) : null}
       </div>
     </div>
   );
