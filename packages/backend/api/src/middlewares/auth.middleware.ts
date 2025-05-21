@@ -1,6 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
 import * as jose from 'jose';
 
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
 const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '';
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const accessTokenSecret = new TextEncoder().encode(ACCESS_TOKEN_SECRET);
@@ -60,9 +62,10 @@ export default async function authMiddleware(
 
       res.cookie('accesToken', newAccessToken, {
         httpOnly: true,
-        // secure: true,
-        // sameSite:'',
+        secure: IS_PRODUCTION,
+        sameSite: 'strict',
         signed: true,
+        maxAge: 60 * 60 * 24 * 7 * 1000,
       });
       req.isAuthenticated = true;
       req.userId = payload.userId;
