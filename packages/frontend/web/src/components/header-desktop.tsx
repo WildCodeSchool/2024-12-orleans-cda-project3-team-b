@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/auth-context';
 
-const API_URL = import.meta.env.VITE_API_URL;
 export default function HeaderDesktop() {
   const [isOpen, setIsOpen] = useState(false);
   const auth = useAuth();
   const logout = async () => {
-    const res = await fetch(`${API_URL}/auth/logout`, {
+    const res = await fetch('/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     });
