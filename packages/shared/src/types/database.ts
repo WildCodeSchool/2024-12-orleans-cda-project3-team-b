@@ -50,8 +50,8 @@ export interface ArtistsHired {
 
 export interface ArtistsHiredSkills {
   artists_hired_id: number;
+  grade: number | null;
   id: Generated<number>;
-  score: number;
   skills_id: number;
 }
 

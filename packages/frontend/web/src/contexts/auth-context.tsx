@@ -13,7 +13,6 @@ type AuthProviderState = {
 const authProviderContext = createContext<AuthProviderState | undefined>(
   undefined,
 );
-const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AuthContext({ children, ...props }: AuthProviderProps) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,7 +21,7 @@ export default function AuthContext({ children, ...props }: AuthProviderProps) {
 
   useEffect(() => {
     const go = async () => {
-      const res = await fetch(`${API_URL}/auth/me`, { credentials: 'include' });
+      const res = await fetch(`/api/auth/me`, { credentials: 'include' });
       const data = (await res.json()) as { ok: boolean; user: User };
       if (data.ok) {
         setIsLoggedIn(true);
