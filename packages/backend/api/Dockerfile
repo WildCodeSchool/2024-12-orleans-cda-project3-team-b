@@ -20,7 +20,7 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY package/backend/api/package.production.json /app/package.json
+COPY packages/backend/api/package.production.json /app/package.json
 
 RUN npm i --ignore-scripts
 
