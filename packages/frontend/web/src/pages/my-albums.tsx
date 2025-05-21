@@ -1,22 +1,56 @@
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+
+import { ArrowLeft } from '@/components/arrow-left';
+
+export type Albums = {
+  id: number;
+  name: string;
+  sales: number;
+  money_earned: number;
+  genre_name: string;
+  artist_firstname: string;
+  artist_lastname: string;
+  artist_alias: string;
+  exp_value: number;
+  notoriety_gain: number;
+};
 
 export default function MyAlbums() {
-  const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [albums, setAlbums] = useState<Albums[]>([]);
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      try {
+        const apiUrl = `/api/albums`;
+        const response = await fetch(apiUrl);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setAlbums(data);
+      } catch (error) {
+        console.error('Error details:', error);
+        setAlbums([]);
+      }
+    };
+    void fetchAlbums();
+  }, []);
+
+  const totalSales = albums.reduce((sum, album) => sum + album.sales, 0);
+  const totalMoney = albums.reduce((sum, album) => sum + album.money_earned, 0);
+  const averageNotoriety =
+    albums.length > 0
+      ? Math.round(
+          albums.reduce((sum, album) => sum + album.notoriety_gain, 0) /
+            albums.length,
+        )
+      : 0;
+
   return (
     <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
-        <button
-          onClick={async () => {
-            await navigate(-1);
-          }}
-          type='button'
-          className='text-secondary mb-18'
-        >
-          <img
-            src='/assets/arrow-left.png'
-            alt='arrow left'
-            className='W-10 h-10'
-          />
+        <button type='button'>
+          <ArrowLeft />
         </button>
         <div className='flex flex-col items-center'>
           <img className='h-22 w-22' src='/assets/album.png' alt='' />
@@ -26,23 +60,26 @@ export default function MyAlbums() {
         </div>
         <div className='h-6 w-6' />
       </div>
+
       <div className='text-secondary mt-4 mb-8 flex flex-col items-center text-xl font-semibold'>
         <div className='flex items-center'>
-          <h2> {'Total notoriety gain:'}</h2>
-          <h3 className='ml-2 flex items-center text-xl font-bold'>{'3,2 '}</h3>
+          <h2>{'Total notoriety gain:'}</h2>
+          <h3 className='ml-2 flex items-center text-xl font-bold'>
+            {averageNotoriety}
+          </h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/star-sign.png' alt='' />
         </div>
         <div className='flex items-center'>
           <h2>{'Total sales:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {'250,000'}
+            {totalSales}
           </h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
         </div>
         <div className='flex items-center'>
           <h2>{'Total earned money:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {'4,250,000'}
+            {totalMoney.toLocaleString()}
           </h3>
           <img
             className='mt-0.5 h-4 w-4'
@@ -52,11 +89,19 @@ export default function MyAlbums() {
         </div>
       </div>
 
-      <div className='bg-secondary flex h-46 w-84 flex-col items-center gap-4 rounded-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
-        <h2 className='mt-3 font-bold'>{'ALBUMS'}</h2>
-        <h3 className='font-extralight'> {'Doo-Wops & Hooligans'}</h3>
-        <h3 className='font-extralight'> {'Unorthodox Jukebox'}</h3>
-        <h3 className='font-extralight'> {'24K Magic'}</h3>
+      <div className='bg-secondary flex w-84 flex-col items-center gap-4 rounded-xl p-4 text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+        <h2 className='font-bold'>{'ALBUMS'}</h2>
+        {albums.slice(0, visibleCount).map((album) => (
+          <div key={album.id} className='text-center'>
+            <h3 className='font-semibold'>{album.name}</h3>
+            <p className='text-sm font-light'>
+              {'by'}{' '}
+              {album.artist_alias
+                ? album.artist_alias
+                : `${album.artist_firstname} ${album.artist_lastname}`}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

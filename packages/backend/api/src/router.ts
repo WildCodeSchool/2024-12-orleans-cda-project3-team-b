@@ -1,5 +1,6 @@
 import express from 'express';
 
+import albumsRouter from './albums/albums';
 import artistsHiredRouter from './artists-hired/artists-hired';
 import artistsRouter from './artists/artists';
 import authRouter from './auth';
@@ -16,6 +17,7 @@ router.use('/games', gamesRouter);
 router.use('/artists-hired', artistsHiredRouter);
 router.use('/artists', artistsRouter);
 router.use('/marketing', marketingRouter);
+router.use('/albums', albumsRouter);
 router.use('/demo', demoRouter);
 
 export default router;

@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './pages/app.tsx';
-import CreateAlbumMenu from './pages/create-album-menu.tsx';
+import CreateAlbumMenu from './pages/create-album.tsx';
 import CreateAlbum from './pages/create-album.tsx';
-import CreateSingleMenu from './pages/create-single-menu.tsx';
+import CreateSingleMenu from './pages/create-single.tsx';
 import CreateSingle from './pages/create-single.tsx';
 import HireArtist from './pages/hire-artist.tsx';
 import HireStaff from './pages/hire-staff.tsx';
