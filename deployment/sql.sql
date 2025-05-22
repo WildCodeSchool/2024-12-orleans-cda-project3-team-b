@@ -53,9 +53,14 @@ VALUES
 ('Mayley','Cyprus',null,4,5,4,800000,"mayley-cyprus.jpeg",480),
 ('Taylor','Switch',null,4.6,5,4,1000000,"taylo-switch.jpeg",480),
 (NULL,NULL,'Droke',4.7,6,4,1100000,"droke.jpeg",490),
-('Kris','Browne',null,4.5,5,4,9750000,"kris-browne.jpeg",480),
-('Ed','Sheern',null,4,6,4,1000000,"ed-sheern.jpeg",500)
-;
+('Kris','Browne',null,4.5,5,4,97500000,"kris-browne.jpeg",480),
+('Ed','Sheern',null,4,5,4,1000000,"ed-sheern.jpeg",500),
+('Al','Hassane',null,0.1,2,1,10000,"al-hassane.jpg",10),
+('Kairo','Blackwale',null,1,1,1,30000,"kairo-blackwale.png",25),
+(NULL,Null,'Milo',0.8,6,1,20000,"milo.png",15),
+('Nova','Khaos',null,0.6,7,1,15000,"nova-khaos.jpg",15),
+('Yuna','Voltage',null,2,3,2,60000,"yuna-voltage.png",40),
+(null,null,'Zaria',0.7,4,1,15000,"zaria.jpg",15)
 
 
 
