@@ -10,16 +10,13 @@ export default function Register() {
   const [isAcceptpp, setIsAcceptpp] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
-
   const validate = () => {
     const newErrors: Record<string, string> = {};
-
     if (!email) {
       newErrors.email = 'Email is required';
     } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       newErrors.email = 'Email is not valid';
     }
-
     if (!password) {
       newErrors.password = 'Password is required';
     } else if (
@@ -30,19 +27,15 @@ export default function Register() {
       newErrors.password =
         'The password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.';
     }
-
     if (!isAcceptpp) {
       newErrors.isAcceptpp = 'Please accept the Privacy Policy to continue.';
     }
-
     return newErrors;
   };
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
-
     if (Object.keys(validationErrors).length === 0) {
       try {
         const res = await fetch(`/api/auth/register`, {
@@ -52,7 +45,6 @@ export default function Register() {
           credentials: 'include',
         });
         const data = await res.json();
-
         if (data.ok === false) {
           setMessage('Email is already in use');
         } else {
@@ -63,7 +55,6 @@ export default function Register() {
       }
     }
   };
-
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
       <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
@@ -90,7 +81,6 @@ export default function Register() {
                   className='bg-primary w-full'
                 />
                 {errors.email ? <ErrorForm error={errors.email} /> : null}
-
                 <Input
                   type='password'
                   placeholder='Password'
@@ -102,7 +92,6 @@ export default function Register() {
                   className='bg-primary w-full'
                 />
                 {errors.password ? <ErrorForm error={errors.password} /> : null}
-
                 <div className='flex items-center gap-2'>
                   <Input
                     id='acceptpp'
@@ -128,7 +117,6 @@ export default function Register() {
                 {errors.isAcceptpp ? (
                   <ErrorForm error={errors.isAcceptpp} />
                 ) : null}
-
                 <Input
                   type='submit'
                   value='Register'
@@ -162,66 +150,3 @@ export default function Register() {
     </div>
   );
 }
-
-// import type { FormEvent } from "react";
-// import { useState } from "react";
-
-// export default function Register() {
-// 	const [email, setEmail] = useState("");
-// 	const [password, setPassword] = useState("");
-// 	const [message, setMessage] = useState("");
-
-// 	const login = async (event: FormEvent) => {
-// 		event.preventDefault();
-// 		try {
-// 			const res = await fetch(`/api/auth/register`, {
-// 				method: "POST",
-// 				body: JSON.stringify({ email, password }),
-// 				headers: { "Content-Type": "application/json" },
-// 				credentials: "include",
-// 			});
-// 			const data = await res.json();
-
-// 			if (data.ok === false) {
-// 				setMessage("email is already in use");
-// 			} else {
-// 				setMessage("you can login now");
-// 			}
-// 		} catch (error) {
-// 			console.error(error);
-// 		}
-// 	};
-
-// 	return (
-// 		<form
-// 			onSubmit={async (event) => {
-// 				await login(event);
-// 			}}
-// 		>
-// 			<label htmlFor="email" />
-// 			<input
-// 				type="email"
-// 				value={email}
-// 				onChange={(event) => {
-// 					setEmail(event.target.value);
-// 				}}
-// 				className="bg-amber-300"
-// 				placeholder="Email"
-// 			/>
-// 			<label htmlFor="" />
-// 			<input
-// 				type="password"
-// 				value={password}
-// 				onChange={(event) => {
-// 					setPassword(event.target.value);
-// 				}}
-// 				className="bg-amber-300"
-// 				placeholder="Password"
-// 			/>
-// 			<button type="submit" className="rounded-md bg-gray-500 text-center">
-// 				{"Register\r"}
-// 			</button>
-// 			{message ? <p>{message}</p> : null}
-// 		</form>
-// 	);
-// }
