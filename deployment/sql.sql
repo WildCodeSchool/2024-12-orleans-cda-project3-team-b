@@ -53,7 +53,7 @@ VALUES
 ('Mayley','Cyprus',null,4,5,4,800000,"mayley-cyprus.jpeg",480),
 ('Taylor','Switch',null,4.6,5,4,1000000,"taylo-switch.jpeg",480),
 (NULL,NULL,'Droke',4.7,6,4,1100000,"droke.jpeg",490),
-('Kris','Browne',null,4.5,5,4,97500000,"kris-browne.jpeg",480),
+('Kris','Browne',null,4.5,5,4,9750000,"kris-browne.jpeg",480),
 ('Ed','Sheern',null,4,6,4,1000000,"ed-sheern.jpeg",500)
 ;
 
