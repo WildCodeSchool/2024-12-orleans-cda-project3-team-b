@@ -16,11 +16,11 @@ VALUES
 
 INSERT INTO milestones (name, value)
 VALUES
-  ('Amateur', 1),
-  ('Regional Artist', 2),
-  ('National Star', 3),
-  ('International Star', 4),
-  ('Icon', 5);
+  ('Amateur', 0.1),
+  ('Regional Artist', 0.2),
+  ('National Star', 0.3),
+  ('International Star', 0.4),
+  ('Icon', 0);
 
 
 INSERT INTO skills (name,exp_value )
