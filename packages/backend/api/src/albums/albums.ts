@@ -1,29 +1,46 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const albumsRouter = express.Router();
+const albumsRouter = Router();
 
-albumsRouter.get('/', async (req, res) => {
+albumsRouter.get('/:id', async (req: Request, res) => {
+  const artistId = Number(req.params.id);
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
   try {
     const albums = await db
-
-      .selectFrom('albums')
-      .leftJoin('genres', 'albums.genres_id', 'genres.id')
-      .leftJoin('artists', 'albums.artists_id', 'artists.id')
+      .selectFrom('users')
+      .where('users.id', '=', userId)
+      .leftJoin('labels', 'labels.users_id', 'users.id')
+      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .leftJoin(
+        'artists_hired',
+        'artists_hired.id',
+        'label_artists.artists_hired_id',
+      )
+      .leftJoin('albums', 'albums.artists_id', 'artists_hired.id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .where('artists_hired.artists_id', '=', artistId)
       .select([
-        'albums.id',
+        'albums.artists_id',
         'albums.name',
         'albums.sales',
         'albums.money_earned',
-        'genres.name as genre_name',
-        'albums.artists_id as artists_id',
         'artists.firstname as artist_firstname',
         'artists.lastname as artist_lastname',
         'artists.alias as artist_alias',
-        'albums.exp_value',
         'albums.notoriety_gain',
+        'albums.score',
       ])
+      .where('artists.id', '=', artistId)
+      .where('labels.users_id', '=', userId)
       .execute();
 
     res.json(albums);

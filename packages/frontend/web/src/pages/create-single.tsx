@@ -84,7 +84,6 @@ export default function CreateSingleMenu() {
   return (
     <form action='' method='post'>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
-        {/* Header */}
         <div className='mb-4 flex w-full items-center justify-between'>
           <button type='button'>
             <ArrowLeft />
@@ -152,10 +151,10 @@ export default function CreateSingleMenu() {
         {/* Footer Buttons */}
         <div className='mt-12 flex items-center justify-between gap-x-16'>
           <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
-            {' Cancel'}
+            {'Cancel'}
           </VerifyButton>
           <VerifyButton color='bg-orange-500' image='/assets/check.png'>
-            {' Confirm'}
+            {'Confirm'}
           </VerifyButton>
         </div>
       </div>

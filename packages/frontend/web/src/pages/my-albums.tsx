@@ -95,7 +95,7 @@ export default function MyAlbums() {
           <div key={album.id} className='text-center'>
             <h3 className='font-semibold'>{album.name}</h3>
             <p className='text-sm font-light'>
-              {'by'}{' '}
+              {'by '}
               {album.artist_alias
                 ? album.artist_alias
                 : `${album.artist_firstname} ${album.artist_lastname}`}

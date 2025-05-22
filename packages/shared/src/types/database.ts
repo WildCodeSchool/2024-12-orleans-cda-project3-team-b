@@ -16,6 +16,7 @@ export interface Albums {
   id: Generated<number>;
   money_earned: number;
   name: string;
+  notoriety_gain: Generated<number>;
   sales: number;
   score: number;
 }
@@ -43,8 +44,9 @@ export interface ArtistsHired {
   artists_id: number;
   grade: number | null;
   id: Generated<number>;
-  milestones_id: number;
+  milestones_id: number | null;
   notoriety: number;
+  skills_id: number | null;
 }
 
 export interface ArtistsHiredSkills {
@@ -90,7 +92,7 @@ export interface LabelArtists {
 export interface Labels {
   budget: number;
   id: Generated<number>;
-  levels_id: number | null;
+  levels_id: Generated<number | null>;
   logos_id: number;
   name: string;
   notoriety: number;
@@ -141,7 +143,6 @@ export interface SinglesAlbums {
 }
 
 export interface SinglesMarketing {
-  albums_id: number;
   id: Generated<number>;
   marketing_id: number;
   singles_id: number;
@@ -164,7 +165,7 @@ export interface Staff {
 
 export interface StaffLabel {
   id: Generated<number>;
-  label_id: number;
+  labels_id: number | null;
   staff_id: number;
 }
 
