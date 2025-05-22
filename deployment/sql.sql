@@ -57,19 +57,7 @@ VALUES
 ('Ed','Sheern',null,4,6,4,1000000,"ed-sheern.jpeg",500)
 ;
 
-INSERT INTO artists_hired (artists_id,notoriety,milestones_id)
-VALUES 
-(1,4.6,4);
 
-INSERT INTO singles (name,artists_hired_id,genres_id,score,listeners,money_earned,exp_value)
-VALUES 
-('24k',1,5,87,4000000,1300000,700),
-('Finesse',1,5,80,3000000,1000000,600),
-('Grenade',1,5,76,2000000,800000,500);
-
-INSERT INTO albums (name,score,sales,money_earned,genres_id,exp_value ,artists_id)
-VALUES 
-('24K',88,5000000,15000000,5,1000,1);
 
 INSERT INTO staff (job,bonus,price,image,exp_value)
 VALUES 
@@ -99,3 +87,28 @@ VALUES
 ('Music producer',7,70000,'music-producer.png',60),
 ('Advertsise on a billboard',8,85000,'billboard.jpg',80),
 ('Advertise on TV',10,100000,'tv.jpg',100);
+
+INSERT INTO artists_skills (artists_id, skills_id, grade)
+VALUES 
+(1, 1, 23),
+(1, 2, 23),
+(1, 3, 23),
+(1, 4, 23),
+(2, 1, 23),
+(2, 2, 23),
+(2, 3, 23),
+(2, 4, 23),
+(3, 1, 23),
+(3, 2, 23),
+(3, 3, 23),
+(3, 4, 23),
+(4, 1, 23),
+(4, 2, 23),
+(4, 3, 23),
+(4, 4, 23),
+(5, 1, 23),
+(5, 2, 23),
+(5, 3, 23),
+(5, 4, 23);
+
+
