@@ -84,7 +84,6 @@ VALUES
 ('Post on social medias',2,30000,'socialmedia.jpg',15),
 ('Post on Utube ',3,40000,'utube.jpg',30),
 ('Post on MusicLoud',5,60000,'musicloud.jpg',45),
-('Music producer',7,70000,'music-producer.png',60),
 ('Advertsise on a billboard',8,85000,'billboard.jpg',80),
 ('Advertise on TV',10,100000,'tv.jpg',100);
 
