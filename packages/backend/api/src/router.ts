@@ -1,6 +1,8 @@
 import express from 'express';
 
+import artistsHiredSkillsRouter from './artists-hired-skills/artsists-hired-skills';
 import artistsHiredRouter from './artists-hired/artists-hired';
+import artistsSkillsRouter from './artists-skills.ts/artists-skills';
 import artistsRouter from './artists/artists';
 import authRouter from './auth';
 import demoRouter from './demo';
@@ -14,6 +16,8 @@ router.use('/auth', authRouter);
 router.use('/games', gamesRouter);
 router.use('/artists-hired', artistsHiredRouter);
 router.use('/artists', artistsRouter);
+router.use('/artists-hired-skills', artistsHiredSkillsRouter);
+router.use('/artists-skills', artistsSkillsRouter);
 router.use('/demo', demoRouter);
 
 export default router;

@@ -4,8 +4,8 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
-type Artist = {
-  artist_id: number;
+export type Artist = {
+  artists_id: number;
   firstname: string;
   lastname: string;
   alias: string;
@@ -63,7 +63,7 @@ export default function HireArtist() {
       }
 
       setArtists((prev) =>
-        prev.filter((artist) => artist.artist_id !== artistId),
+        prev.filter((artist) => artist.artists_id !== artistId),
       );
     } catch (error) {
       console.error('Error hiring artist:', error);
@@ -89,7 +89,7 @@ export default function HireArtist() {
       <div className='grid grid-cols-2 gap-4'>
         {sortedArtists.slice(0, visibleCount).map((artist) => (
           <ArtistCardHire
-            key={artist.artist_id}
+            key={artist.artists_id}
             artist={artist}
             onHire={handleHireArtist}
           />
