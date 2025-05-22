@@ -25,11 +25,11 @@ albumsRouter.get('/:id', async (req: Request, res) => {
         'artists_hired.id',
         'label_artists.artists_hired_id',
       )
-      .leftJoin('albums', 'albums.artists_id', 'artists_hired.id')
+      .leftJoin('albums', 'albums.artists_hired_id', 'artists_hired.id')
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .where('artists_hired.artists_id', '=', artistId)
+      .where('artists_hired.id', '=', artistId)
       .select([
-        'albums.artists_id',
+        'albums.artists_hired_id',
         'albums.name',
         'albums.sales',
         'albums.money_earned',
@@ -39,7 +39,7 @@ albumsRouter.get('/:id', async (req: Request, res) => {
         'albums.notoriety_gain',
         'albums.score',
       ])
-      .where('artists.id', '=', artistId)
+      .where('artists_hired.id', '=', artistId)
       .where('labels.users_id', '=', userId)
       .execute();
 

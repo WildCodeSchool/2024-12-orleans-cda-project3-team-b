@@ -103,6 +103,21 @@ export async function up(db: Kysely<DB>): Promise<void> {
     await sql`
 ALTER TABLE albums ADD notoriety_gain INT NOT NULL DEFAULT 0;
 `.execute(trx);
+
+    await sql`
+  ALTER TABLE albums
+  DROP FOREIGN KEY albums_ibfk_2;
+`.execute(trx);
+
+    await sql`
+    ALTER TABLE albums change artists_id artists_hired_id INT NOT NULL;
+    `.execute(trx);
+
+    await sql`
+  ALTER TABLE albums
+  ADD CONSTRAINT albums_ibfk_2
+  FOREIGN KEY (artists_hired_id) REFERENCES artists_hired(id);
+`.execute(trx);
   });
 }
 
