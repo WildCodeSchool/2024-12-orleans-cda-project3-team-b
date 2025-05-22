@@ -100,11 +100,7 @@ export default function HireArtist() {
         credentials: 'include',
         body: JSON.stringify({ cost: price, userId }),
       });
-      setInfoLabel((prev) =>
-        prev && typeof prev.budget === 'number'
-          ? { ...prev, budget: prev.budget - price }
-          : prev,
-      );
+
       if (!updateBudget.ok) {
         throw new Error(`Hire failed. Status: ${updateBudget.status}`);
       }
