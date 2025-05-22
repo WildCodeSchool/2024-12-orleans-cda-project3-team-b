@@ -5,6 +5,7 @@ import CreateAlbumMenu from './pages/create-album.tsx';
 import CreateAlbum from './pages/create-album.tsx';
 import CreateSingleMenu from './pages/create-single.tsx';
 import CreateSingle from './pages/create-single.tsx';
+import ErrorPage from './pages/error-page.tsx';
 import HireArtist from './pages/hire-artist.tsx';
 import HireStaff from './pages/hire-staff.tsx';
 import Home from './pages/home';
@@ -15,11 +16,13 @@ import MainMenu from './pages/main-menu';
 import MyAlbums from './pages/my-albums.tsx';
 import MyArtists from './pages/my-artists.tsx';
 import Register from './pages/register';
+import HttpError from './utils/http-error.ts';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       { path: '/', element: <Home /> },
       {
@@ -29,6 +32,12 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: '*',
+        loader: () => {
+          throw new HttpError('Error 404', 'Not Found', 404);
+        },
       },
     ],
   },

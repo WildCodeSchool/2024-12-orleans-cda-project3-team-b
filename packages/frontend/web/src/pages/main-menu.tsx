@@ -14,6 +14,7 @@ export type ArtistHired = {
   image: string;
   notoriety: number;
   genre_name: string;
+  milestone_name: string;
 };
 
 export default function MainMenu() {

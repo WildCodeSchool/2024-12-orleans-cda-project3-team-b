@@ -24,9 +24,9 @@ export default function RegisterLabel() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
-  const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [labels, setLabels] = useState<Labels[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLabels = async () => {
