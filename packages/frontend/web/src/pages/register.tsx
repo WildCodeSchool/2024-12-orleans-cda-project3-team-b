@@ -7,7 +7,7 @@ export default function Register() {
   const [message, setMessage] = useState('');
 
   const regex = {
-    minLength: password.length >= 15,
+    minLength: password.length >= 1,
     lowercase: /[a-z]/.test(password),
     uppercase: /[A-Z]/.test(password),
     number: /[0-9]/.test(password),
@@ -35,7 +35,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch(`/api/auth/register`, {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: { 'Content-Type': 'application/json' },

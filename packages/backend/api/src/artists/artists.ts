@@ -41,7 +41,7 @@ artistsRouter.get('/:id', async (req, res) => {
     const artists = await db
       .selectFrom('artists')
       .selectAll()
-      .where('artists.id', '=', id)
+      .where('artists.id', '=', Number(id))
       .execute();
 
     res.json(artists);

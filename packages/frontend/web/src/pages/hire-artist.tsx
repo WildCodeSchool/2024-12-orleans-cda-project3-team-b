@@ -34,7 +34,7 @@ export default function HireArtist() {
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const apiUrl = `/api/artists`;
+        const apiUrl = '/api/artists';
 
         const response = await fetch(apiUrl);
 
@@ -78,7 +78,7 @@ export default function HireArtist() {
     budget: number,
   ) => {
     try {
-      const hireResponse = await fetch(`/api/artists-hired`, {
+      const hireResponse = await fetch('/api/artists-hired', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ artistId, cost: price, labelId, budget }),
@@ -94,7 +94,7 @@ export default function HireArtist() {
 
       const userId = auth?.user?.id;
 
-      const updateBudget = await fetch(`/api/games/buying`, {
+      const updateBudget = await fetch('/api/artists_hired', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

@@ -1,11 +1,22 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const artistsHiredRouter = express.Router();
+const artistsHiredRouter = Router();
+type BuyingRequestBody = {
+  cost: number;
+};
 
-artistsHiredRouter.post('/', async (req, res) => {
+artistsHiredRouter.post('/', async (req: Request, res) => {
   const { artistId, labelId } = req.body;
+  const { cost } = req.body as BuyingRequestBody;
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
 
   try {
     if (!Number(artistId)) {
@@ -42,6 +53,20 @@ artistsHiredRouter.post('/', async (req, res) => {
         artists_hired_id: artistId,
       })
       .execute();
+
+    const result = await db
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '-', cost),
+      }))
+      .where('labels.users_id', '=', userId)
+      .where('budget', '>=', cost)
+      .execute();
+
+    res.json({
+      ok: true,
+      result,
+    });
   } catch (error) {
     console.error('Error hiring artist:', error);
     res.status(500).json({ error: 'Internal server error' });
