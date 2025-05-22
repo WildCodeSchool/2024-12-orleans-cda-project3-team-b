@@ -4,7 +4,7 @@ type Info = {
   id: number;
   logo_img: string;
   name: string;
-  level: number;
+  level: number | null;
 };
 export default function LogoSection() {
   const [labelInfo, setLabelInfo] = useState<Info>();
@@ -40,7 +40,7 @@ export default function LogoSection() {
           <div className='flex items-center'>
             <p className='font-bold'>{'Level:'}</p>
             <p className='bg-primary mx-2 h-6 w-6 rounded-xs text-center font-bold text-orange-500'>
-              {labelInfo?.level}
+              {labelInfo?.level ?? 1}
             </p>
           </div>
         </div>

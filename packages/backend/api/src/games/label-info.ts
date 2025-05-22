@@ -2,9 +2,9 @@ import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const getXpRouter = Router();
+const getLabelInfoRouter = Router();
 
-getXpRouter.get('/label', async (req: Request, res) => {
+getLabelInfoRouter.get('/label', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -106,4 +106,4 @@ getXpRouter.get('/label', async (req: Request, res) => {
   }
 });
 
-export default getXpRouter;
+export default getLabelInfoRouter;

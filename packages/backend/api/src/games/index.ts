@@ -9,7 +9,6 @@ const gamesRouter = express.Router();
 gamesRouter.use(getLogosRouter);
 gamesRouter.use(postRegisterLabelRouter);
 gamesRouter.use(getLabelRouter);
-gamesRouter.use(getLabelRouter);
 gamesRouter.use(getLabelInfoRouter);
 
 export default gamesRouter;
