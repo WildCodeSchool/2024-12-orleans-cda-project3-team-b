@@ -9,14 +9,13 @@ COPY packages/backend/api     /app/packages/backend/api
 
 RUN npm ci --ignore-scripts
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 RUN npm run build:backend:api
 
 FROM node:22.14.0-alpine3.21
 
 ENV NODE_ENV=production
-
 
 WORKDIR /app
 
