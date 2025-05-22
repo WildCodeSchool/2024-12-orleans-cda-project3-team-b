@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ErrorForm from '@/components/errors-form';
-import Header from '@/components/header';
 import Input from '@/components/input';
 
 export default function Register() {
@@ -67,10 +66,9 @@ export default function Register() {
 
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
-      <Header />
-      <div className='flex flex-1 items-center justify-center p-8'>
-        <div className='text-primary relative z-2 w-full max-w-3xl bg-transparent'>
-          <div className='flex flex-col items-center gap-4 text-center'>
+      <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
+        <div className='text-primary top-0 z-2 w-full max-w-3xl self-start bg-transparent'>
+          <div className='relative top-0 flex flex-col items-center gap-4 text-center'>
             <img
               className='h-32 w-auto md:h-42'
               src='/assets/logo-label.png'
@@ -156,7 +154,7 @@ export default function Register() {
           </div>
         </div>
         <img
-          className='pointer-events-none fixed right-0 bottom-0 w-md md:w-xl lg:w-2xl'
+          className='lg:w-1xl pointer-events-none fixed right-0 bottom-0 w-md md:w-xl'
           src='/assets/vinyl.png'
           alt='Vinyle'
         />
