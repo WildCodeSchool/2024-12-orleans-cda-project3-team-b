@@ -3,13 +3,9 @@ import { type Request, Router } from 'express';
 import { db } from '@app/backend-shared';
 
 const artistsHiredRouter = Router();
-type BuyingRequestBody = {
-  cost: number;
-};
 
 artistsHiredRouter.post('/', async (req: Request, res) => {
-  const { artistId, labelId } = req.body;
-  const { cost } = req.body as BuyingRequestBody;
+  const { artistId, labelId, cost } = req.body;
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -19,11 +15,6 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
   }
 
   try {
-    if (!Number(artistId)) {
-      res.status(400).json({ error: 'artistId is required' });
-      return;
-    }
-
     const artist = await db
       .selectFrom('artists')
       .select(['milestones_id', 'notoriety'])
@@ -44,28 +35,49 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
-    res.status(201).json({ message: 'Artist hired successfully' });
+    const artistsHiredId = await db
+      .selectFrom('artists_hired')
+      .select('id')
+      .where('artists_hired.artists_id', '=', artistId)
+      .limit(1)
+      .executeTakeFirst();
+
+    if (!artistsHiredId) {
+      res
+        .status(500)
+        .json({ error: 'Failed to retrieve hired artist_hired ID' });
+      return;
+    }
 
     await db
       .insertInto('label_artists')
       .values({
         label_id: labelId,
-        artists_hired_id: artistId,
+        artists_hired_id: Number(artistsHiredId.id),
       })
       .execute();
 
-    const result = await db
+    const current = await db
+      .selectFrom('labels')
+      .select('budget')
+      .where('users_id', '=', userId)
+      .executeTakeFirst();
+
+    if (current?.budget === undefined) {
+      return;
+    }
+
+    const newBudget = current.budget - cost;
+
+    await db
       .updateTable('labels')
-      .set((eb) => ({
-        budget: eb('budget', '-', cost),
-      }))
-      .where('labels.users_id', '=', userId)
-      .where('budget', '>=', cost)
+      .set({ budget: newBudget })
+      .where('users_id', '=', userId)
       .execute();
 
-    res.json({
+    res.status(201).json({
       ok: true,
-      result,
+      message: 'Artist hired successfully',
     });
   } catch (error) {
     console.error('Error hiring artist:', error);

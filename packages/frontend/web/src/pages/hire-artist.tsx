@@ -51,17 +51,17 @@ export default function HireArtist() {
       }
     };
 
-    const fetchBudget = async () => {
+    const fetchInfoLabel = async () => {
       try {
         const res = await fetch('/api/games/label');
         const data = await res.json();
         setInfoLabel(data);
-      } catch (err) {
-        console.error('Error fetching budget:', err);
+      } catch (error) {
+        console.error('Error fetching budget:', error);
       }
     };
     void fetchArtists();
-    void fetchBudget();
+    void fetchInfoLabel();
   }, []);
 
   const handleSeeMore = () => {
@@ -78,10 +78,17 @@ export default function HireArtist() {
     budget: number,
   ) => {
     try {
+      const userId = auth?.user?.id;
       const hireResponse = await fetch('/api/artists-hired', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artistId, cost: price, labelId, budget }),
+        body: JSON.stringify({
+          artistId,
+          cost: price,
+          labelId,
+          budget,
+          userId,
+        }),
       });
 
       if (!hireResponse.ok) {
@@ -91,19 +98,6 @@ export default function HireArtist() {
       setArtists((prev) =>
         prev.filter((artist) => artist.artist_id !== artistId),
       );
-
-      const userId = auth?.user?.id;
-
-      const updateBudget = await fetch('/api/artists_hired', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ cost: price, userId }),
-      });
-
-      if (!updateBudget.ok) {
-        throw new Error(`Hire failed. Status: ${updateBudget.status}`);
-      }
     } catch (error) {
       console.error('Error hiring artist:', error);
       alert('Error hiring artist. Please try again.');
