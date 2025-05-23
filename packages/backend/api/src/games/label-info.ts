@@ -71,9 +71,9 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
       .groupBy('labels.id')
       .executeTakeFirst();
 
-    if (!xpData) {
-      return;
-    }
+    res.status(404).json({
+      xpData: 'xpData inconnu',
+    });
 
     const totalScore =
       Number(xpData.staff_xp) +
