@@ -57,21 +57,11 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
-    const current = await db
-      .selectFrom('labels')
-      .select('budget')
-      .where('users_id', '=', userId)
-      .executeTakeFirst();
-
-    if (current?.budget === undefined) {
-      return;
-    }
-
-    const newBudget = current.budget - cost;
-
     await db
       .updateTable('labels')
-      .set({ budget: newBudget })
+      .set((eb) => ({
+        budget: eb('budget', '-', cost),
+      }))
       .where('users_id', '=', userId)
       .execute();
 
