@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
@@ -27,6 +28,7 @@ export default function HireArtist() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageBudget, setMessageBudget] = useState('');
+  const navigate = useNavigate();
   const auth = useAuth();
   const labelId = infoLabel?.label;
   const budget = infoLabel?.budget ?? 0;
@@ -124,17 +126,23 @@ export default function HireArtist() {
           <ArtistCardHire
             key={artist.artist_id}
             artist={artist}
-            onHire={() => {
+            onHire={async () => {
               if (labelId === undefined) {
                 setMessageBudget('Label or budget info not loaded yet.');
                 return;
               }
-              void handleHireArtist(
-                artist.artist_id,
-                artist.price,
-                labelId,
-                budget,
-              );
+
+              try {
+                await handleHireArtist(
+                  artist.artist_id,
+                  artist.price,
+                  labelId,
+                  budget,
+                );
+                await navigate('/main-menu'); // only after successful hire
+              } catch {
+                setMessageBudget('redirection not working');
+              }
             }}
             budget={budget}
           />

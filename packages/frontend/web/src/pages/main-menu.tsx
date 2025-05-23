@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ArtistCard from '@/components/artist-card';
+import StaffLabelsCard from '@/components/staff-labels-card';
 
 import AddButton from '../components/add-button';
 
@@ -15,38 +16,73 @@ type ArtistHired = {
   notoriety: number;
   genre_name: string;
 };
+type StaffHired = {
+  id: number;
+  job: string;
+  bonus: number;
+  price: number;
+  image: string;
+};
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [staff, setStaff] = useState<StaffHired[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
-
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
+        const response = await fetch('/api/artists-hired');
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
-
         setArtists(data);
       } catch (error) {
-        console.error('Error details:', error);
-        setArtists([]); // Reset artists on error
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
+
+    const fetchStaff = async () => {
+      try {
+        const response = await fetch('/api/games/staff-labels');
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        const cleanedStaff = Array.isArray(data.staffLabels)
+          ? data.staffLabels.filter(
+              (item: {
+                id: null;
+                job: null;
+                bonus: null;
+                price: null;
+                image: null;
+              }) => {
+                return (
+                  item &&
+                  item.id !== null &&
+                  item.job !== null &&
+                  item.bonus !== null &&
+                  item.price !== null &&
+                  item.image !== null
+                );
+              },
+            )
+          : [];
+        setStaff(cleanedStaff);
+      } catch (error) {
+        console.error('Error fetching staff:', error);
+        setStaff([]);
       }
     };
 
     void fetchArtistsHired();
+    void fetchStaff();
   }, []);
 
   const handleSeeMore = () => {
     setVisibleCount((prev) => prev + 4);
   };
-
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
       <div className='flex h-70 flex-col items-center justify-center'>
@@ -96,34 +132,28 @@ export default function MainMenu() {
           </div>
         </div>
       </div>
+
       <div className='h-70 pt-7'>
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
-        <div className='flex h-50 items-center justify-center'>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
+
+        <div className='mt-5 flex items-center justify-center gap-4'>
+          {staff.slice(0, visibleCount).map((staf) => (
+            <StaffLabelsCard key={staf.id} staf={staf} />
+          ))}
         </div>
+
+        {staff.length <= 3 ? (
+          <div className='flex h-50 items-center justify-center'>
+            <div className='flex flex-col items-center justify-center pr-2 pl-2'>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
+            </div>
+          </div>
+        ) : (
+          <p>{'staff is max'}</p>
+        )}
       </div>
     </div>
   );
