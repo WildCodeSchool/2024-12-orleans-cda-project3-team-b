@@ -38,7 +38,7 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
         'crew_members.id',
         'crew_members_hired.crew_members_id',
       )
-      .leftJoin('albums', 'albums.artists_id', 'artists_hired.id')
+      .leftJoin('albums', 'albums.artists_hired_id', 'artists_hired.id')
       .leftJoin('albums_marketing', 'albums_marketing.albums_id', 'albums.id')
       .leftJoin('marketing', 'marketing.id', 'albums_marketing.marketing_id')
       .leftJoin(

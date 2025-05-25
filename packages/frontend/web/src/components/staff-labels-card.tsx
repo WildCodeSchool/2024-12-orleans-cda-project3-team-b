@@ -17,19 +17,17 @@ export default function StaffLabelsCard({ staf }: StaffCardProps) {
   };
 
   return (
-    <div className='flex flex-col'>
-      <div className='bg-secondary flex w-20 items-center justify-center rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
-        <img
-          className='h-10 w-10 rounded-4xl'
-          src={`/assets/${staf.image}`}
-          alt=''
-        />
-        <div className='flex flex-col items-center text-sm'>
-          <h3>{`${staf.bonus} %`}</h3>
-        </div>
+    <div className='bg-secondary flex w-30 items-center justify-around rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+      <img
+        className='h-10 w-10 rounded-4xl'
+        src={`/assets/${staf.image}`}
+        alt=''
+      />
+      <div className='flex-col items-center text-sm'>
         <button type='button' onClick={handleClick}>
           {'delete'}
         </button>
+        <h3>{`${staf.bonus} %`}</h3>
       </div>
     </div>
   );

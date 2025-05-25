@@ -136,7 +136,7 @@ export default function MainMenu() {
       <div className='h-70 pt-7'>
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
 
-        <div className='mt-5 flex items-center justify-center gap-4'>
+        <div className='mt-5 flex flex-wrap justify-center gap-2'>
           {staff.slice(0, visibleCount).map((staf) => (
             <StaffLabelsCard key={staf.id} staf={staf} />
           ))}
