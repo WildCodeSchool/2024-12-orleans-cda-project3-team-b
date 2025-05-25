@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useAuth } from '@/contexts/auth-context';
+
 import type { Info } from './status-section';
 
 type DesktopNavProps = {
@@ -25,6 +27,18 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
 
     void fetchLabels();
   }, []);
+
+  const auth = useAuth();
+  const logout = async () => {
+    const res = await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+    const data = (await res.json()) as { ok: boolean };
+    if (data.ok) {
+      auth?.setIsLoggedIn(false);
+    }
+  };
   return (
     <nav className='hidden items-center md:flex'>
       <ul className='flex items-center justify-end space-x-4 text-xl font-bold'>
@@ -64,10 +78,10 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
           <Link to=''>{'Profile'}</Link>
         </li>
         <li className='flex items-center'>
-          <Link to=''>
+          <Link to='' onClick={logout}>
             <img className='w-8' src='/assets/log-out.png' alt='log out logo' />
+            {'Log out'}
           </Link>
-          <Link to=''>{'Log out'}</Link>
         </li>
       </ul>
     </nav>
