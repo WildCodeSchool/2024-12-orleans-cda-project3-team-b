@@ -24,7 +24,6 @@ export default function StatusSection() {
 
     void fetchLabels();
   }, []);
-  console.log(labelInfo);
 
   return (
     <div>
