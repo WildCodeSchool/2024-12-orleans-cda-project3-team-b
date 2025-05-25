@@ -38,7 +38,7 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
         'crew_members.id',
         'crew_members_hired.crew_members_id',
       )
-      .leftJoin('albums', 'albums.artists_id', 'artists_hired.id')
+      .leftJoin('albums', 'albums.artists_hired_id', 'artists_hired.id')
       .leftJoin('albums_marketing', 'albums_marketing.albums_id', 'albums.id')
       .leftJoin('marketing', 'marketing.id', 'albums_marketing.marketing_id')
       .leftJoin(
@@ -71,18 +71,20 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
       .groupBy('labels.id')
       .executeTakeFirst();
 
-    res.status(404).json({
-      xpData: 'xpData inconnu',
-    });
+    if (!xpData) {
+      res.status(404).json({
+        error: 'xpData inconnu',
+      });
+    }
 
     const totalScore =
-      Number(xpData.staff_xp) +
-      Number(xpData.artists_xp) +
-      Number(xpData.crew_xp) +
-      Number(xpData.albums_xp) +
-      Number(xpData.marketing_xp) +
-      Number(xpData.singles_xp) +
-      Number(xpData.skills_xp);
+      Number(xpData?.staff_xp) +
+      Number(xpData?.artists_xp) +
+      Number(xpData?.crew_xp) +
+      Number(xpData?.albums_xp) +
+      Number(xpData?.marketing_xp) +
+      Number(xpData?.singles_xp) +
+      Number(xpData?.skills_xp);
 
     const level = await db
       .selectFrom('levels')
@@ -93,12 +95,12 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
       .executeTakeFirst();
 
     res.json({
-      name: xpData.name,
-      logo_img: xpData.logo_img,
+      name: xpData?.name,
+      logo_img: xpData?.logo_img,
       total_xp: totalScore,
       level: level?.id,
-      notoriety: xpData.notoriety,
-      budget: xpData.budget,
+      notoriety: xpData?.notoriety,
+      budget: xpData?.budget,
     });
   } catch (error) {
     console.error('Error:', error);

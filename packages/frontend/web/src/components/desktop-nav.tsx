@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import type { Info } from './status-section';
 
 type DesktopNavProps = {
   readonly isOpen: boolean;
@@ -6,15 +9,33 @@ type DesktopNavProps = {
 };
 
 export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
+  const [labelInfo, setLabelInfo] = useState<Info>();
+  useEffect(() => {
+    const fetchLabels = async () => {
+      try {
+        const apiUrl = '/api/games/label';
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        setLabelInfo(data);
+      } catch (error) {
+        console.error('Error details:', error);
+      }
+    };
+
+    void fetchLabels();
+  }, []);
   return (
     <nav className='hidden items-center md:flex'>
       <ul className='flex items-center justify-end space-x-4 text-xl font-bold'>
-        <li>
-          <Link to='/my-artists'>{'MyArtists'}</Link>
-        </li>
-        <li>
-          <Link to=''>{'MyAlbums'}</Link>
-        </li>
+        <div className={labelInfo?.id != null ? 'hidden' : 'flex gap-4'}>
+          <li>
+            <Link to='/my-artists'>{'MyArtists'}</Link>
+          </li>
+          <li>
+            <Link to=''>{'MyAlbums'}</Link>
+          </li>
+        </div>
         <li>
           <img
             className='w-10 cursor-pointer'

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import Logo from '../../public/assets/logo.png';
+import WhiteBarre from './white-barre';
+
 type Info = {
   id: number;
   logo_img: string;
@@ -26,24 +29,28 @@ export default function LogoSection() {
 
   return (
     <div className='flex flex-wrap gap-4'>
-      <div
-        className='flex items-center border-r-white pr-4 text-xl sm:border-r-4'
-        key={labelInfo?.id}
-      >
+      <div className='flex items-center' key={labelInfo?.id}>
         <img
-          className='max-m-16 mr-2 max-h-16 min-h-10 min-w-10'
-          src={`/assets/${labelInfo?.logo_img}`}
+          className='max-m-16 mr- ml-2 max-h-16 min-h-10 min-w-10'
+          src={
+            labelInfo?.logo_img != null ? `/assets/${labelInfo.logo_img}` : Logo
+          }
           alt="Label's logo"
         />
         <div className='text-sm sm:flex sm:text-xl'>
           <p className='mr-2'>{labelInfo?.name}</p>
-          <div className='flex items-center'>
+          <div
+            className={
+              labelInfo?.logo_img != null ? 'flex items-center' : 'hidden'
+            }
+          >
             <p className='font-bold'>{'Level:'}</p>
             <p className='bg-primary mx-2 h-6 w-6 rounded-xs text-center font-bold text-orange-500'>
               {labelInfo?.level}
             </p>
           </div>
         </div>
+        <WhiteBarre />
       </div>
     </div>
   );

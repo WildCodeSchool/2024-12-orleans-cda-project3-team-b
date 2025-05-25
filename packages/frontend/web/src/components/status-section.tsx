@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 
-type Info = {
+import WhiteBarre from './white-barre';
+
+export type Info = {
   id: number;
   notoriety: number;
   budget: number;
@@ -22,11 +24,12 @@ export default function StatusSection() {
 
     void fetchLabels();
   }, []);
+  console.log(labelInfo);
 
   return (
     <div>
       <div
-        className='mr-20 border-r-white pr-4 text-sm sm:border-r-4 sm:text-xl'
+        className={labelInfo?.id != null ? 'hidden' : 'mr-20 sm:text-xl'}
         key={labelInfo?.id}
       >
         <div className='sm:flex'>
@@ -46,6 +49,7 @@ export default function StatusSection() {
               alt='dollar sign'
             />
           </p>
+          <WhiteBarre />
         </div>
       </div>
     </div>
