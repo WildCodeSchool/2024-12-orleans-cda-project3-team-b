@@ -49,27 +49,7 @@ export default function MainMenu() {
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        const cleanedStaff = Array.isArray(data.staffLabels)
-          ? data.staffLabels.filter(
-              (item: {
-                id: null;
-                job: null;
-                bonus: null;
-                price: null;
-                image: null;
-              }) => {
-                return (
-                  item &&
-                  item.id !== null &&
-                  item.job !== null &&
-                  item.bonus !== null &&
-                  item.price !== null &&
-                  item.image !== null
-                );
-              },
-            )
-          : [];
-        setStaff(cleanedStaff);
+        setStaff(data.staffLabels);
       } catch (error) {
         console.error('Error fetching staff:', error);
         setStaff([]);
@@ -83,6 +63,7 @@ export default function MainMenu() {
   const handleSeeMore = () => {
     setVisibleCount((prev) => prev + 4);
   };
+
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
       <div className='flex h-70 flex-col items-center justify-center'>

@@ -20,7 +20,9 @@ staffLabelsRouter.get('/staff-labels', async (req: Request, res) => {
       .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
       .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
       .select(['staff.image', 'staff.bonus', 'staff.job', 'staff_label.id'])
+      .where('staff_label.id', 'is not', null)
       .execute();
+
     res.json({ staffLabels });
   } catch (error) {
     console.error('Error hiring staff:', error);
