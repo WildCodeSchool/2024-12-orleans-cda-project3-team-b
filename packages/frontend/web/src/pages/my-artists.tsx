@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import ArtistCard from '@/components/artist-card';
+import ArtistCard from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
 import { ArrowLeft } from '../components/arrow-left';

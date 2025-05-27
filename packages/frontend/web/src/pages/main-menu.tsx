@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import ArtistCard from '@/components/artist-card';
+import ArtistCard from '@/components/artist-card-hire';
 
 import AddButton from '../components/add-button';
 

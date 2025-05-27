@@ -17,20 +17,23 @@ type ArtistHired = {
   skills: [{ name: string; grade: number }];
   artistsHiredId: number;
   skillId: number;
+  grade: number;
 };
 
-export default function ArtistPage() {
+export default function ArtistHirePage() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
-  const { id } = useParams<{ id?: string }>();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const response = await fetch(`/api/artists/${id}`);
+        const response = await fetch(`/api/artists-hired/${id}`);
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setArtistsHired(data.artists);
+        console.log(data);
+
+        setArtistsHired(data);
       } catch (error) {
         console.error('Error fetching artists:', error);
         setArtistsHired([]);
@@ -38,7 +41,7 @@ export default function ArtistPage() {
     };
 
     void fetchArtistsHired();
-  }, [id]);
+  }, []);
   console.log(artistsHired);
 
   return (
@@ -56,6 +59,7 @@ export default function ArtistPage() {
           skills={artist.skills}
           artistsHiredId={artist.artistsHiredId}
           skillId={artist.skillId}
+          isAddButton
         />
       ))}
     </div>

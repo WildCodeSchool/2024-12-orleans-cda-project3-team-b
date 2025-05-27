@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCardHire from '@/components/artist-card-hire';
+import ArtistCardHire from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 
 export type Artist = {

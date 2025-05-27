@@ -1,4 +1,5 @@
 import express from 'express';
+import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
 import { db } from '@app/backend-shared';
 
@@ -40,11 +41,28 @@ artistsRouter.get('/:id', async (req, res) => {
   try {
     const artists = await db
       .selectFrom('artists')
-      .selectAll()
-      .where('artists.id', '=', id)
+      .leftJoin('genres', 'genres.id', 'artists.genres_id')
+      .select((eb) => [
+        jsonArrayFrom(
+          eb
+            .selectFrom('artists_skills')
+            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
+            .select(['skills.name', 'skills.grade'])
+            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
+        ).as('skills'),
+        'artists.id',
+        'artists.firstname',
+        'artists.lastname',
+        'genres.name',
+        'artists.image',
+        'artists.milestones_id',
+        'artists.notoriety',
+        'artists.price',
+      ])
+      .where('artists.id', '=', Number(id))
       .execute();
 
-    res.json(artists);
+    res.json({ artists });
     return;
   } catch (error) {
     console.error('Error fetching artists:', error);

@@ -1,4 +1,5 @@
 import express from 'express';
+import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
 import { db } from '@app/backend-shared';
 
@@ -76,27 +77,34 @@ artistsHiredRouter.get('/:id', async (req, res) => {
   try {
     const artistsHired = await db
       .selectFrom('artists_hired')
-      .leftJoin('artists', 'artists_hired.artists_id', 'artists.id')
-      .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
-      .select([
-        'artists_hired.id',
-        'artists_hired.artists_id',
-        'artists_hired.milestones_id',
-        'artists_hired.notoriety',
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .leftJoin('genres', 'genres.id', 'artists.genres_id')
+      .select((eb) => [
+        'artists.id',
         'artists.firstname',
         'artists.lastname',
-        'artists.alias',
+        'genres.name',
         'artists.image',
+        'artists.milestones_id',
         'artists.notoriety',
-        'milestones.name as milestone_name',
-        'genres.name as genre_name',
+        'artists.price',
+
+        jsonArrayFrom(
+          eb
+            .selectFrom('artists_hired_skills')
+            .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
+            .select(['skills.name', 'artists_hired_skills.grade'])
+            .whereRef(
+              'artists_hired_skills.artists_hired_id',
+              '=',
+              'artists_hired.id',
+            ),
+        ).as('skills'),
       ])
-      .where('artists_hired.id', '=', id)
+      .where('artists_hired.id', '=', Number(id))
       .execute();
 
     res.json(artistsHired);
-    return;
   } catch (error) {
     console.error('Error fetching artists:', error);
     res.status(500).json({ error: 'Internal Server Error' });

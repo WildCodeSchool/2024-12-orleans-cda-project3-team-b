@@ -1,56 +1,34 @@
-type ArtistCardHireProps = {
+import { Link } from 'react-router-dom';
+
+import type { Artist } from '../pages/hire-artist';
+
+type ArtistCardProps = {
   readonly artist: Artist;
-  readonly onHire: (artistId: number) => void;
 };
 
-export default function ArtistCardHire({
-  artist,
-  onHire,
-}: ArtistCardHireProps) {
+export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
-    <div
-      key={artist.artist_id}
-      className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-    >
-      <img
-        className='h-16 w-16 rounded-4xl'
-        src={`/assets/${artist.image}`}
-        alt={`Portrait of ${artist.firstname} ${artist.lastname}`}
-      />
-      <div className='flex flex-col items-center'>
-        <h2 className='ml-2'>
-          {artist.firstname} {artist.lastname} {artist.alias}
-        </h2>
-        <h3>{artist.genre_name}</h3>
-      </div>
-      <div className='flex items-center'>
-        <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>
+    <Link to={`/artists-hired/${artist.artists_id}`}>
+      <div
+        key={artist.artists_id}
+        className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+      >
         <img
-          className='mt-0.5 h-5 w-5'
-          src='/assets/star-sign.png'
-          alt='star icon'
+          className='h-10 w-10 rounded-4xl'
+          src={`/assets/${artist.image}`}
+          alt=''
         />
-      </div>
-      <div className='flex flex-col items-center'>
-        <button
-          type='button'
-          onClick={() => {
-            onHire(artist.artist_id);
-          }}
-          className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-        >
-          {'Hire'}
-          <img className='h-7 w-7' src='/assets/sign.png' alt='contract logo' />
-        </button>
-        <div className='flex items-center'>
-          <h2 className='flex items-center font-bold'>{artist.price}</h2>
-          <img
-            className='mt-0.5 h-3.5 w-3.5'
-            src='/assets/dollar-icon.png'
-            alt='dollar icon'
-          />
+        <div className='flex flex-col items-center text-sm'>
+          <h2 className='ml-2'>
+            {artist.firstname} {artist.lastname} {artist.alias}
+          </h2>
+          <h3>{artist.genre_name}</h3>
+        </div>
+        <div className='flex items-center text-sm'>
+          <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>
+          <img className='mt-0.5 h-4 w-4' src='/assets/star-sign.png' alt='' />
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
