@@ -42,7 +42,7 @@ export default function ArtistHirePage() {
 
     void fetchArtistsHired();
   }, []);
-  console.log(artistsHired);
+  // console.log(artistsHired);
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>

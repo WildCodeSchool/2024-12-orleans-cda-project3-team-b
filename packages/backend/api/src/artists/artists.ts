@@ -39,17 +39,10 @@ artistsRouter.get('/', async (req, res) => {
 artistsRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const artists = await db
+    const artist = await db
       .selectFrom('artists')
       .leftJoin('genres', 'genres.id', 'artists.genres_id')
       .select((eb) => [
-        jsonArrayFrom(
-          eb
-            .selectFrom('artists_skills')
-            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
-            .select(['skills.name', 'skills.grade'])
-            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
-        ).as('skills'),
         'artists.id',
         'artists.firstname',
         'artists.lastname',
@@ -58,11 +51,18 @@ artistsRouter.get('/:id', async (req, res) => {
         'artists.milestones_id',
         'artists.notoriety',
         'artists.price',
+        jsonArrayFrom(
+          eb
+            .selectFrom('artists_skills')
+            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
+            .select(['skills.name', 'skills.grade'])
+            .whereRef('artists_skills.artists_id', '=', 'skills.id'),
+        ).as('skills'),
       ])
       .where('artists.id', '=', Number(id))
       .execute();
 
-    res.json({ artists });
+    res.json({ artist });
     return;
   } catch (error) {
     console.error('Error fetching artists:', error);

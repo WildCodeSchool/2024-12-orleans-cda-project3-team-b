@@ -20,7 +20,7 @@ type ArtistHired = {
 };
 
 export default function ArtistPage() {
-  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
+  const [artists, setArtists] = useState<ArtistHired[]>([]);
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
@@ -30,20 +30,20 @@ export default function ArtistPage() {
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setArtistsHired(data.artists);
+        setArtists(data.artist);
       } catch (error) {
         console.error('Error fetching artists:', error);
-        setArtistsHired([]);
+        setArtists([]);
       }
     };
 
     void fetchArtistsHired();
   }, [id]);
-  console.log(artistsHired);
+  console.log(artists);
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
-      {artistsHired.map((artist) => (
+      {artists.map((artist) => (
         <ArtistProfileCard
           key={artist.artists_id}
           firstname={artist.firstname}

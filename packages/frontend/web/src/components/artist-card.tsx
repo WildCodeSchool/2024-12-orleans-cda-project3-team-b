@@ -12,10 +12,9 @@ export default function ArtistCardHire({
   onHire,
 }: ArtistCardHireProps) {
   return (
-    <Link to={`/artists/${artist.artists_id}`}>
-      {' '}
+    <Link to={`/artists/${artist.artist_id}`}>
       <div
-        key={artist.artists_id}
+        key={artist.artist_id}
         className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
       >
         <img
@@ -41,7 +40,7 @@ export default function ArtistCardHire({
           <button
             type='button'
             onClick={() => {
-              onHire(artist.artists_id);
+              onHire(artist.artist_id);
             }}
             className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
           >

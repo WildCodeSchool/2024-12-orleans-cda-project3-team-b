@@ -7,6 +7,7 @@ import AddButton from '../components/add-button';
 
 type ArtistHired = {
   artist_id: number;
+  artists_id: number;
   milestones_id: number;
   firstname: string;
   lastname: string;
@@ -14,6 +15,7 @@ type ArtistHired = {
   image: string;
   notoriety: number;
   genre_name: string;
+  price: number;
 };
 
 export default function MainMenu() {
