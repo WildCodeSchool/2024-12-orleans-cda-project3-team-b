@@ -10,10 +10,17 @@ type ArtistHired = {
   readonly notoriety: number;
   readonly genre_name: string;
   readonly milestone_name: string;
-  readonly skills: [{ name: string; grade: number }];
+  readonly skills: [
+    {
+      skills_id: number;
+      name: string;
+      grade: number;
+      artistsHiredSkillsId: number;
+    },
+  ];
   readonly isAddButton?: boolean;
+  readonly key: number;
   readonly artistsHiredId: number;
-  readonly skillId: number;
 };
 
 export default function ArtistProfileCard({
@@ -27,15 +34,15 @@ export default function ArtistProfileCard({
   skills,
   isAddButton = false,
   artistsHiredId,
-  skillId,
+  key,
 }: ArtistHired) {
   const [point, setPoint] = useState<number | null>(null);
 
-  async function addPoint() {
+  async function addPoint(artistsHiredSkillsId: number, skills_id: number) {
     try {
       const response = await fetch(`/api/games/point`, {
         method: 'POST',
-        body: JSON.stringify({ artistsHiredId, skillId }),
+        body: JSON.stringify({ artistsHiredSkillsId, skills_id }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
@@ -47,9 +54,13 @@ export default function ArtistProfileCard({
       console.error('Failed to fetch points:', error);
     }
   }
+  console.log(skills);
 
   return (
-    <div className='bg-secondary h-80 w-120 rounded-xl border shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
+    <div
+      className='bg-secondary h-80 w-120 rounded-xl border shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+      key={key}
+    >
       <div className='mt-5 flex justify-center'>
         <img
           className='h-30 w-30 rounded-full'
@@ -73,14 +84,28 @@ export default function ArtistProfileCard({
       <div className='flex flex-col items-center'>
         <ul className='text-primary flex flex-col'>
           {skills.map((competence) => (
-            <div key={competence.name} className='item-center flex flex-row'>
+            <div
+              key={competence.skills_id}
+              className='item-center flex flex-row'
+            >
               <li className='flex items-center gap-4'>
                 {competence.name}
                 {' :'}
                 {competence.grade}
                 {' /25'}
                 {isAddButton ? (
-                  <AddButton onClick={void addPoint()}>{'+'}</AddButton>
+                  <AddButton
+                    key={competence.artistsHiredSkillsId}
+                    onClick={() =>
+                      addPoint(
+                        competence.artistsHiredSkillsId,
+                        competence.skills_id,
+                      )
+                    }
+                    disabled={competence.grade >= 25}
+                  >
+                    {'+'}
+                  </AddButton>
                 ) : (
                   ''
                 )}

@@ -5,7 +5,8 @@ import ArtistCard from '@/components/artist-card-hire';
 
 import AddButton from '../components/add-button';
 
-type ArtistHired = {
+export type ArtistHired = {
+  artist_hired_id: number;
   artist_id: number;
   artists_id: number;
   milestones_id: number;
@@ -44,6 +45,7 @@ export default function MainMenu() {
 
     void fetchArtistsHired();
   }, []);
+  console.log(artists);
 
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
@@ -54,7 +56,7 @@ export default function MainMenu() {
 
         <div className='mt-5 grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => {
-            return <ArtistCard key={artist.artist_id} artist={artist} />;
+            return <ArtistCard key={artist.artist_hired_id} artist={artist} />;
           })}
         </div>
         <Link to='/my-artists'>

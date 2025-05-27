@@ -14,9 +14,8 @@ type ArtistHired = {
   notoriety: number;
   genre_name: string;
   milestone_name: string;
-  skills: [{ name: string; grade: number }];
+  skills: [{ name: string; grade: number; skills_id: number }];
   artistsHiredId: number;
-  skillId: number;
 };
 
 export default function ArtistPage() {
@@ -55,7 +54,6 @@ export default function ArtistPage() {
           milestone_name={artist.milestone_name}
           skills={artist.skills}
           artistsHiredId={artist.artistsHiredId}
-          skillId={artist.skillId}
         />
       ))}
     </div>

@@ -14,9 +14,15 @@ type ArtistHired = {
   notoriety: number;
   genre_name: string;
   milestone_name: string;
-  skills: [{ name: string; grade: number }];
+  skills: [
+    {
+      name: string;
+      grade: number;
+      skills_id: number;
+      artistsHiredSkillsId: number;
+    },
+  ];
   artistsHiredId: number;
-  skillId: number;
   grade: number;
 };
 
@@ -42,7 +48,7 @@ export default function ArtistHirePage() {
 
     void fetchArtistsHired();
   }, []);
-  // console.log(artistsHired);
+  console.log(artistsHired);
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
@@ -57,8 +63,7 @@ export default function ArtistHirePage() {
           genre_name={artist.genre_name}
           milestone_name={artist.milestone_name}
           skills={artist.skills}
-          artistsHiredId={artist.artistsHiredId}
-          skillId={artist.skillId}
+          artistsHiredId={artist.artists_id}
           isAddButton
         />
       ))}

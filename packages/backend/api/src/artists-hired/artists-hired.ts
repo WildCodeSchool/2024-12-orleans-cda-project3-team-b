@@ -80,7 +80,7 @@ artistsHiredRouter.get('/:id', async (req, res) => {
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .leftJoin('genres', 'genres.id', 'artists.genres_id')
       .select((eb) => [
-        'artists.id',
+        'artists.id as artistId',
         'artists.firstname',
         'artists.lastname',
         'genres.name',
@@ -93,7 +93,12 @@ artistsHiredRouter.get('/:id', async (req, res) => {
           eb
             .selectFrom('artists_hired_skills')
             .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
-            .select(['skills.name', 'artists_hired_skills.grade'])
+            .select([
+              'skills.name',
+              'artists_hired_skills.grade',
+              'artists_hired_skills.skills_id as skills_id',
+              'artists_hired_skills.id as artistsHiredSkillsId',
+            ])
             .whereRef(
               'artists_hired_skills.artists_hired_id',
               '=',

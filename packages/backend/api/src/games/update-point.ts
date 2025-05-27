@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const pointRouter = express.Router();
 pointRouter.post('/point', async (req, res) => {
-  const { artistId, skillId } = req.body;
+  const { artistsHiredSkillsId, skills_id } = req.body;
 
   try {
     const addPoint = await db
@@ -12,9 +12,10 @@ pointRouter.post('/point', async (req, res) => {
       .set((eb) => ({
         grade: eb('grade', '+', 1),
       }))
-      .where('artists_hired_id', '=', artistId)
-      .where('skills_id', '=', skillId)
+      .where('artists_hired_skills.id', '=', artistsHiredSkillsId)
+      .where('artists_hired_skills.skills_id', '=', skills_id)
       .execute();
+    console.log(artistsHiredSkillsId, skills_id);
 
     res.status(200).json({
       message: 'Point ajouté avec succès',

@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom';
 
-import type { Artist } from '../pages/hire-artist';
+import type { ArtistHired } from '@/pages/main-menu';
 
 type ArtistCardProps = {
-  readonly artist: Artist;
+  readonly artist: ArtistHired;
 };
 
 export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
-    <Link to={`/artists-hired/${artist.artists_id}`}>
+    <Link to={`/artists-hired/${artist.artist_hired_id}`}>
       <div
-        key={artist.artists_id}
+        key={artist.artist_hired_id}
         className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
       >
         <img

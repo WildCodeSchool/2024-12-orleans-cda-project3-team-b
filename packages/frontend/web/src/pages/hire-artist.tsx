@@ -5,6 +5,7 @@ import ArtistCardHire from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 
 export type Artist = {
+  artist_hired_id: number;
   artist_id: number;
   firstname: string;
   lastname: string;
