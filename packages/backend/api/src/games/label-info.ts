@@ -74,7 +74,7 @@ getLabelInfoRouter.get('/label', async (req: Request, res) => {
     if (!Boolean(xpData)) {
       res.status(404).json({
         ok: false,
-        error: 'xpData inconnu',
+        error: 'xpData undefiend',
       });
       return;
     }
