@@ -1,37 +1,49 @@
 import { useEffect, useState } from 'react';
 
-import ArtistCard from '@/components/artist-card';
-import type { ArtistHired } from '@/pages/main-menu';
-
-export type ModalMyArtistsProps = {
-  readonly isOpen: boolean;
-  readonly onClose: () => void;
-  readonly onSelectArtist: (artistId: number) => void;
+export type Singles = {
+  readonly id: number;
+  readonly name: string;
+  readonly score: number;
+  readonly artists_hired_id: number;
 };
 
-export default function ModalMyArtists({
+export type ModalSinglesProps = {
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onSelectSingle: (SingleId: number) => void;
+  readonly artistId: number | null;
+};
+
+export function ModalSingles({
   isOpen,
   onClose,
-  onSelectArtist,
-}: ModalMyArtistsProps) {
-  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  artistId,
+  onSelectSingle,
+}: ModalSinglesProps) {
+  const [singles, setSingles] = useState<Singles[]>([]);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    const fetchArtists = async () => {
+    const fetchSingles = async () => {
       try {
-        const res = await fetch(`/api/artists-hired`);
-        const data = await res.json();
-        setArtists(data);
+        const res = await fetch(`/api/singles`);
+        const data: Singles[] = await res.json();
+
+        if (artistId != null) {
+          const filtered = data.filter(
+            (single) => single.artists_hired_id === artistId,
+          );
+          setSingles(filtered);
+        } else {
+          setSingles([]);
+        }
       } catch (error) {
-        console.error('Error loading artists:', error);
-        setArtists([]);
+        console.error('Error loading singles:', error);
+        setSingles([]);
       }
     };
 
-    void fetchArtists();
-  }, [isOpen]);
+    void fetchSingles();
+  }, [isOpen, artistId]);
 
   if (!isOpen) return null;
 
@@ -44,7 +56,7 @@ export default function ModalMyArtists({
       <div className='bg-primary relative z-10 w-full max-w-3xl rounded-2xl p-6 shadow-xl'>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-secondary w-full text-center text-xl font-bold'>
-            {'My Artists'}
+            {'My Singles'}
           </h2>
           <button
             type='button'
@@ -56,16 +68,16 @@ export default function ModalMyArtists({
         </div>
 
         <div className='grid grid-cols-2 gap-4'>
-          {artists.map((artist) => (
+          {singles.map((single) => (
             <div
-              key={artist.id}
+              key={single.id}
               onClick={() => {
-                onSelectArtist(artist.id);
+                onSelectSingle(single.id);
                 onClose();
               }}
               className='cursor-pointer transition-transform hover:scale-105'
             >
-              <ArtistCard artist={artist} />
+              <h1 className='bg-secondary text-white'> {single.name}</h1>
             </div>
           ))}
         </div>

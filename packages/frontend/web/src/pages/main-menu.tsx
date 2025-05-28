@@ -6,6 +6,7 @@ import ArtistCard from '@/components/artist-card';
 import AddButton from '../components/add-button';
 
 export type ArtistHired = {
+  id: number;
   artists_id: number;
   milestones_id: number;
   firstname: string;

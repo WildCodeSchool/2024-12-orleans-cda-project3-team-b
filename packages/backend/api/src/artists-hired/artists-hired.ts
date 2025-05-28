@@ -49,7 +49,7 @@ artistsHiredRouter.get('/', async (req, res) => {
       .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .select([
-        'artists_hired.id as artist_hired_id',
+        'artists_hired.id as id',
         'artists_hired.artists_id',
         'artists_hired.milestones_id',
         'artists_hired.notoriety',

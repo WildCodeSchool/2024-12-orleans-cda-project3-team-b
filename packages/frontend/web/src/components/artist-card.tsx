@@ -7,7 +7,7 @@ export type ArtistCardProps = {
 export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <div
-      key={artist.artists_id}
+      key={artist.id}
       className='bg-secondary flex h-14 w-76 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
     >
       <img

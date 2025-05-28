@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
-import AddSingle from '@/components/add-single';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
+import ChooseSingle from '@/components/choose.single';
 import MarketingCard from '@/components/marketing-card';
 import type { Marketing } from '@/components/modal-marketing';
-import RemoveSingle from '@/components/remove-single';
+import type { Singles } from '@/components/modal-singles';
+import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from './main-menu';
@@ -19,7 +20,52 @@ export default function CreateAlbumMenu() {
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
   );
+  const [chosenSingles, setChosenSingles] = useState<Singles[]>([]);
+
+  const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
   const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [singleName, setSingleName] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleName(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedArtistId || !singleName.trim()) {
+      alert('Please select an artist and enter a name for your single.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/albums/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          artistId: selectedArtistId,
+          singleName: singleName.trim(),
+        }),
+      });
+
+      if (!res.ok) {
+        alert('An error occurred while submitting the form.');
+        return;
+      }
+
+      setSubmitted(true);
+
+      console.log('Form submitted with:', {
+        selectedArtistId,
+        selectedMarketingId,
+        singleName,
+      });
+    } catch (error) {
+      console.error('Submission failed:', error);
+      alert('Failed to submit. Please try again.');
+    }
+  };
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
@@ -35,7 +81,7 @@ export default function CreateAlbumMenu() {
 
         if (selectedArtistId != null) {
           const selected = data.find(
-            (artist) => artist.artists_id === selectedArtistId,
+            (artist) => artist.id === selectedArtistId,
           );
           setArtists(selected ? [selected] : []);
         } else {
@@ -83,13 +129,42 @@ export default function CreateAlbumMenu() {
     }
   }, [selectedMarketingId]);
 
+  useEffect(() => {
+    const fetchSingles = async () => {
+      try {
+        const apiUrl = `/api/singles`;
+        const response = await fetch(apiUrl);
+        console.log('IDs sélectionnés :', selectedSinglesId);
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data: Singles[] = await response.json();
+
+        const selected = data.filter((single) =>
+          selectedSinglesId.includes(single.id),
+        );
+
+        setChosenSingles(selected.slice(0, 3));
+      } catch (error) {
+        console.error('Error fetching singles:', error);
+        setChosenSingles([]);
+      }
+    };
+
+    if (selectedSinglesId.length > 0) {
+      void fetchSingles();
+    } else {
+      setChosenSingles([]);
+    }
+  }, [selectedSinglesId]);
+
   return (
     <form action='' method='post'>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
         <div className='mb-4 flex w-full items-center justify-between'>
-          <button type='button'>
+          <div>
             <ArrowLeft />
-          </button>
+          </div>
           <h1 className='text-secondary text-center text-2xl font-bold'>
             {'RECORDING A NEW ALBUM'}
           </h1>
@@ -114,18 +189,41 @@ export default function CreateAlbumMenu() {
         </div>
         <div className='flex flex-col items-center justify-center'>
           <ChooseName
-            name={"Choose your album's name"}
-            placeholder={"Album's name"}
+            name="Choose your album's name"
+            placeholder="Album's name"
+            value={singleName}
+            onChange={handleChange}
           />
         </div>
 
         <div className='mt-12 flex w-full flex-col items-center gap-2'>
-          <h2 className='text-secondary mb-2 text-center text-xl'>
-            {'Choose 3 singles:'}
-          </h2>
-          <RemoveSingle />
-          <AddSingle />
-          <AddSingle />
+          {chosenSingles.length > 0 ? (
+            chosenSingles.map((single) => (
+              <SingleCard
+                key={single.id}
+                id={single.id}
+                name={single.name}
+                score={single.score}
+                onToggleSelect={(id) => {
+                  setSelectedSinglesId((prevIds) =>
+                    prevIds.filter((prevId) => prevId !== id),
+                  );
+                }}
+              />
+            ))
+          ) : (
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No single selected'}
+            </p>
+          )}
+          <ChooseSingle
+            onSingleSelected={(id) => {
+              setSelectedSinglesId((prev) =>
+                prev.includes(id) ? prev : [...prev, id].slice(0, 3),
+              );
+            }}
+            artistId={selectedArtistId}
+          />
         </div>
         <div className='mt-6'>
           {marketing.length > 0 ? (
@@ -155,7 +253,11 @@ export default function CreateAlbumMenu() {
           <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
             {'Cancel'}
           </VerifyButton>
-          <VerifyButton color='bg-orange-500' image='/assets/check.png'>
+          <VerifyButton
+            color='bg-orange-500'
+            image='/assets/check.png'
+            onClick={handleSubmit}
+          >
             {'Confirm'}
           </VerifyButton>
         </div>

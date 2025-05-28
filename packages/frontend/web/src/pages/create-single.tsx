@@ -18,6 +18,48 @@ export default function CreateSingleMenu() {
     null,
   );
   const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [singleName, setSingleName] = useState('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleName(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedArtistId || !singleName.trim()) {
+      alert('Please select an artist and enter a name for your single.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/singles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          artistId: selectedArtistId,
+          singleName: singleName.trim(),
+        }),
+      });
+
+      if (!res.ok) {
+        alert('An error occurred while submitting the form.');
+        return;
+      }
+
+      setSubmitted(true);
+
+      console.log('Form submitted with:', {
+        selectedArtistId,
+        selectedMarketingId,
+        singleName,
+      });
+    } catch (error) {
+      console.error('Submission failed:', error);
+      alert('Failed to submit. Please try again.');
+    }
+  };
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
@@ -82,7 +124,7 @@ export default function CreateSingleMenu() {
   }, [selectedMarketingId]);
 
   return (
-    <form action='' method='post'>
+    <form>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
         <div className='mb-4 flex w-full items-center justify-between'>
           <button type='button'>
@@ -120,6 +162,8 @@ export default function CreateSingleMenu() {
           <ChooseName
             name="Choose your single's name"
             placeholder="Single's name"
+            value={singleName}
+            onChange={handleChange}
           />
         </div>
 
@@ -153,7 +197,11 @@ export default function CreateSingleMenu() {
           <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
             {'Cancel'}
           </VerifyButton>
-          <VerifyButton color='bg-orange-500' image='/assets/check.png'>
+          <VerifyButton
+            color='bg-orange-500'
+            image='/assets/check.png'
+            onClick={handleSubmit}
+          >
             {'Confirm'}
           </VerifyButton>
         </div>
