@@ -79,10 +79,10 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
           <Link to=''>{'Profile'}</Link>
         </li>
         <li className='flex items-center'>
-          <Link to='' onClick={logout}>
+          <div onClick={logout}>
             <img className='w-8' src='/assets/log-out.png' alt='log out logo' />
             {'Log out'}
-          </Link>
+          </div>
         </li>
       </ul>
     </nav>
