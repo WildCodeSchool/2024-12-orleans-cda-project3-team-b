@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 import Logo from '../../public/assets/logo.png';
-import WhiteBarre from './white-barre';
 
 type Info = {
   id: number;
@@ -37,7 +36,7 @@ export default function LogoSection() {
           }
           alt="Label's logo"
         />
-        <div className='text-sm sm:flex sm:text-xl'>
+        <div className='h-14 border-r-white pr-4 text-sm text-xl sm:flex sm:border-r-4 sm:text-xl'>
           <p className='mr-2'>{labelInfo?.name}</p>
           <div
             className={
@@ -50,7 +49,6 @@ export default function LogoSection() {
             </p>
           </div>
         </div>
-        <WhiteBarre />
       </div>
     </div>
   );

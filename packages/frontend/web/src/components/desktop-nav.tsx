@@ -37,6 +37,7 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
     const data = (await res.json()) as { ok: boolean };
     if (data.ok) {
       auth?.setIsLoggedIn(false);
+      auth?.setUser(undefined);
     }
   };
   return (
