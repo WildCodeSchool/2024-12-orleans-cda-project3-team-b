@@ -21,6 +21,7 @@ staffHiredRouter.post('/staff-hire', async (req: Request, res) => {
 
     if (!staffMember) {
       res.status(404).json({ error: 'Staff member not found' });
+      return;
     }
 
     await db
@@ -40,10 +41,29 @@ staffHiredRouter.post('/staff-hire', async (req: Request, res) => {
       .executeTakeFirst();
 
     if (!staffLabelEntry) {
-      res.status(500).json({ error: 'Failed to retrieve staff_label ID' });
+      res.status(500).json({
+        error:
+          'Failed to retrieve staff_label.staff ID and staff_label.labels ID',
+      });
+      return;
     }
 
-    // Optional: Insert into a proper join/relationship table if needed
+    const label = await db
+      .selectFrom('labels')
+      .select('budget')
+      .where('users_id', '=', Number(userId))
+      .where('id', '=', labelId)
+      .execute();
+
+    if (!label) {
+      res.status(404).json({ error: 'Label not found' });
+      return;
+    }
+
+    if (label[0].budget < cost) {
+      res.status(400).json({ error: 'Insufficient budget' });
+      return;
+    }
 
     await db
       .updateTable('labels')

@@ -133,7 +133,7 @@ export default function MainMenu() {
             </div>
           </div>
         ) : (
-          <p>{'staff is max'}</p>
+          <p>{'You can have only 4 staffs'}</p>
         )}
       </div>
     </div>

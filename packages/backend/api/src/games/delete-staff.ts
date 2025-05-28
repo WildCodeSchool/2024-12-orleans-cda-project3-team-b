@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const deleteStaffRouter = Router();
 
-deleteStaffRouter.post('/delete-staff', async (req: Request, res) => {
+deleteStaffRouter.delete('/delete-staff', async (req: Request, res) => {
   const { staffId } = req.body;
 
   try {

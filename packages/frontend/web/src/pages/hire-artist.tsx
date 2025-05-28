@@ -102,7 +102,6 @@ export default function HireArtist() {
       );
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Error hiring artist. Please try again.');
     }
   };
 
