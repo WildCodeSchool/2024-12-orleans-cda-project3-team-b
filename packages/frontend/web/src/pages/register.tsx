@@ -38,7 +38,7 @@ export default function Register() {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const res = await fetch(`/api/auth/register`, {
+        const res = await fetch('/api/auth/register', {
           method: 'POST',
           body: JSON.stringify({ email, password }),
           headers: { 'Content-Type': 'application/json' },
