@@ -15,6 +15,11 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
   }
 
   try {
+    if (!Number(artistId)) {
+      res.status(400).json({ error: 'artistId is required' });
+      return;
+    }
+
     const artist = await db
       .selectFrom('artists')
       .select(['milestones_id', 'notoriety'])
