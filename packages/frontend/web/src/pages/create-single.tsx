@@ -34,9 +34,7 @@ export default function CreateSingleMenu() {
     try {
       const res = await fetch('/api/singles', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           artistId: selectedArtistId,
           singleName: singleName.trim(),
@@ -64,12 +62,9 @@ export default function CreateSingleMenu() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
+        const response = await fetch('/api/artists-hired');
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const data: ArtistHired[] = await response.json();
 
@@ -95,19 +90,14 @@ export default function CreateSingleMenu() {
   useEffect(() => {
     const fetchMarketing = async () => {
       try {
-        const apiUrl = `/api/marketing`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
+        const response = await fetch('/api/marketing');
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
         const data: Marketing[] = await response.json();
 
         if (selectedMarketingId != null) {
-          const selected = data.find(
-            (marketing) => marketing.id === selectedMarketingId,
-          );
+          const selected = data.find((m) => m.id === selectedMarketingId);
           setMarketing(selected ? [selected] : []);
         } else {
           setMarketing([]);
@@ -125,28 +115,33 @@ export default function CreateSingleMenu() {
 
   return (
     <form>
-      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
-        <div className='mb-4 flex w-full items-center justify-between'>
+      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
+        {/* Header */}
+        <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
           <button type='button'>
             <ArrowLeft />
           </button>
-          <h1 className='text-secondary text-center text-2xl font-bold'>
+          <h1 className='text-secondary text-center text-xl font-bold sm:text-2xl'>
             {' RECORDING A NEW SINGLE'}
           </h1>
           <div className='h-6 w-6' />
         </div>
 
         {/* Image */}
-        <img className='h-18 w-18' src='/assets/music-note.png' alt='note' />
+        <img
+          className='h-20 w-20 sm:h-28 sm:w-28'
+          src='/assets/music-note.png'
+          alt='note'
+        />
 
-        {/* Selected Artist */}
-        <div className='mt-6'>
+        {/* Artist */}
+        <div className='mt-6 w-full max-w-md'>
           {artists.length > 0 ? (
             artists.map((artist) => (
               <ArtistCard key={artist.artists_id} artist={artist} />
             ))
           ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
+            <p className='text-secondary mt-4 text-center text-sm'>
               {'No artist selected'}
             </p>
           )}
@@ -157,8 +152,8 @@ export default function CreateSingleMenu() {
           />
         </div>
 
-        {/* Choose Name */}
-        <div className='mt-6 flex flex-col items-center justify-center'>
+        {/* Single name */}
+        <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
           <ChooseName
             name="Choose your single's name"
             placeholder="Single's name"
@@ -167,21 +162,21 @@ export default function CreateSingleMenu() {
           />
         </div>
 
-        {/* Marketing Section */}
-        <div className='mt-6'>
+        {/* Marketing */}
+        <div className='mt-6 w-full max-w-md'>
           {marketing.length > 0 ? (
-            marketing.map((marketing) => (
+            marketing.map((m) => (
               <MarketingCard
-                key={marketing.id}
-                id={marketing.id}
-                name={marketing.name}
-                bonus={marketing.bonus}
-                price={marketing.price}
-                image={marketing.image}
+                key={m.id}
+                id={m.id}
+                name={m.name}
+                bonus={m.bonus}
+                price={m.price}
+                image={m.image}
               />
             ))
           ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
+            <p className='text-secondary mt-4 text-center text-sm'>
               {'No Marketing Campaign selected'}
             </p>
           )}
@@ -192,8 +187,8 @@ export default function CreateSingleMenu() {
           />
         </div>
 
-        {/* Footer Buttons */}
-        <div className='mt-12 flex items-center justify-between gap-x-16'>
+        {/* Buttons */}
+        <div className='mt-12 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between'>
           <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
             {'Cancel'}
           </VerifyButton>

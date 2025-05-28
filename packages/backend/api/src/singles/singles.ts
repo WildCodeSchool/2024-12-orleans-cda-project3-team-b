@@ -191,7 +191,7 @@ singlesRouter.post('/', async (req: Request, res) => {
         artists_hired_id: artistId,
         name: singleName.trim(),
         genres_id: 1,
-        exp_value: 0,
+        exp_value: 50,
         listeners: 0,
         money_earned: 0,
         score: 0,
