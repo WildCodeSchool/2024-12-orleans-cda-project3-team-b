@@ -1,9 +1,9 @@
 INSERT INTO levels (value) 
 VALUES
-  (0), (100), (300), (600), (1 000),
-  (2 500), (5 000), (10 000), (20 000), (40 000),
-  (80 000), (150 000), (300 000), (600 000), (1 200 000),
-  (2 500 000), (5 000 000), (10 000 000), (20 000 000), ( 50 000 000);
+  (0), (50), (500), (), (),
+  (), (), (), (), (),
+  (), (), (), ( 800), (1 500),
+  (3 500), (6 250), (12 500), (25 000), ( 50 000);
 
 INSERT INTO logos (logo_img)
 VALUES 
@@ -16,11 +16,11 @@ VALUES
 
 INSERT INTO milestones (name, value)
 VALUES
-  ('Amateur', 0.1),
-  ('Regional Artist', 0.2),
-  ('National Star', 0.3),
-  ('International Star', 0.4),
-  ('Icon', 0);
+  ('Amateur', 10),
+  ('Regional Artist', 20),
+  ('National Star', 30),
+  ('International Star', 40),
+  ('Icon', 50);
 
 
 INSERT INTO skills (name,exp_value )
