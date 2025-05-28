@@ -67,7 +67,7 @@ export default function RegisterLabel() {
       setMessage('All fields are required');
       return;
     }
-    const res = await fetch('/api/games/register-label', {
+    const res = await fetch(`/api/games/register-label`, {
       method: 'POST',
       body: JSON.stringify({
         name: input,
