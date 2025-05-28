@@ -24,6 +24,7 @@ type ArtistHired = {
   ];
   artistsHiredId: number;
   grade: number;
+  fetchArtistsHired: () => Promise<void>;
 };
 
 export default function ArtistHirePage() {
@@ -37,7 +38,6 @@ export default function ArtistHirePage() {
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        console.log(data);
 
         setArtistsHired(data);
       } catch (error) {
@@ -47,8 +47,22 @@ export default function ArtistHirePage() {
     };
 
     void fetchArtistsHired();
-  }, []);
-  console.log(artistsHired);
+  }, [id]);
+
+  //get out the fetch for refresh in props
+  const fetchArtistsHired = async () => {
+    try {
+      const response = await fetch(`/api/artists-hired/${id}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+
+      setArtistsHired(data);
+    } catch (error) {
+      console.error('Error fetching artists:', error);
+      setArtistsHired([]);
+    }
+  };
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
@@ -63,8 +77,9 @@ export default function ArtistHirePage() {
           genre_name={artist.genre_name}
           milestone_name={artist.milestone_name}
           skills={artist.skills}
-          artistsHiredId={artist.artists_id}
           isAddButton
+          fetchArtistsHired={fetchArtistsHired}
+          artistsHiredId={artist.artistsHiredId}
         />
       ))}
     </div>

@@ -36,7 +36,7 @@ export default function MainMenu() {
 
         const data = await response.json();
 
-        setArtists(data);
+        setArtists(data.artistsHired);
       } catch (error) {
         console.error('Error details:', error);
         setArtists([]); // Reset artists on error
@@ -45,7 +45,6 @@ export default function MainMenu() {
 
     void fetchArtistsHired();
   }, []);
-  console.log(artists);
 
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>

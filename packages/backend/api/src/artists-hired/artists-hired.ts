@@ -6,7 +6,7 @@ import { db } from '@app/backend-shared';
 const artistsHiredRouter = express.Router();
 
 artistsHiredRouter.post('/', async (req, res) => {
-  const { artistId } = req.body;
+  const { artistId, skills } = req.body;
 
   try {
     if (!Number(artistId)) {
@@ -25,14 +25,30 @@ artistsHiredRouter.post('/', async (req, res) => {
       return;
     }
 
-    await db
+    const artistsId = await db
       .insertInto('artists_hired')
       .values({
         artists_id: artistId,
         milestones_id: artist.milestones_id,
         notoriety: artist.notoriety,
       })
+      .execute();
 
+    await db
+      .selectFrom('artists_hired')
+      .select('id')
+      .where('artists_hired.artists_id', '=', Number(artistsId[0].insertId))
+      .execute();
+
+    await db
+      .insertInto('artists_hired_skills')
+      .values(
+        skills.map((skill: { skillsId: number; grade: number }) => ({
+          skills_id: skill.skillsId,
+          grade: skill.grade,
+          artists_hired_id: artistsId[0].insertId,
+        })),
+      )
       .execute();
 
     res.status(201).json({ message: 'Artist hired successfully' });
@@ -64,7 +80,7 @@ artistsHiredRouter.get('/', async (req, res) => {
       ])
       .execute();
 
-    res.json(artistsHired);
+    res.json({ artistsHired });
     return;
   } catch (error) {
     console.error('Error fetching artists with genres:', error);

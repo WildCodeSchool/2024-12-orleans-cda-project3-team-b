@@ -14,6 +14,17 @@ export type Artist = {
   genre_name: string;
   notoriety: number;
   price: number;
+  artists_hired_id: number;
+  name: string;
+  skills: [
+    {
+      name: string;
+      grade: number;
+      skills_id: number;
+      artistsHiredSkillsId: number;
+    },
+  ];
+  artistsHiredId: number;
 };
 
 export default function HireArtist() {
@@ -51,20 +62,22 @@ export default function HireArtist() {
     sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
   );
 
-  const handleHireArtist = async (artistId: number) => {
+  const handleHireArtist = async (artist: Artist) => {
     try {
       const hireResponse = await fetch(`/api/artists-hired`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artistId }),
+        body: JSON.stringify({
+          artistId: artist.artist_id,
+          skills: artist.skills,
+        }),
       });
 
       if (!hireResponse.ok) {
         throw new Error(`Hire failed. Status: ${hireResponse.status}`);
       }
-
       setArtists((prev) =>
-        prev.filter((artist) => artist.artist_id !== artistId),
+        prev.filter((artist) => artist.artist_id !== artist.artist_id),
       );
     } catch (error) {
       console.error('Error hiring artist:', error);
@@ -92,7 +105,7 @@ export default function HireArtist() {
           <ArtistCardHire
             key={artist.artist_id}
             artist={artist}
-            onHire={handleHireArtist}
+            onHire={() => handleHireArtist(artist)}
           />
         ))}
       </div>

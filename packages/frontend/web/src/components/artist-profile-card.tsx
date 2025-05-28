@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import AddButton from './add-button';
 
 type ArtistHired = {
@@ -21,6 +19,7 @@ type ArtistHired = {
   readonly isAddButton?: boolean;
   readonly key: number;
   readonly artistsHiredId: number;
+  readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
 };
 
 export default function ArtistProfileCard({
@@ -33,11 +32,9 @@ export default function ArtistProfileCard({
   milestone_name,
   skills,
   isAddButton = false,
-  artistsHiredId,
   key,
+  fetchArtistsHired,
 }: ArtistHired) {
-  const [point, setPoint] = useState<number | null>(null);
-
   async function addPoint(artistsHiredSkillsId: number, skills_id: number) {
     try {
       const response = await fetch(`/api/games/point`, {
@@ -48,13 +45,14 @@ export default function ArtistProfileCard({
       });
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      setPoint(data.addPoint);
+      await response.json();
     } catch (error) {
       console.error('Failed to fetch points:', error);
     }
+    if (fetchArtistsHired) {
+      await fetchArtistsHired();
+    }
   }
-  console.log(skills);
 
   return (
     <div

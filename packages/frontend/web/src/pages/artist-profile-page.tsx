@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ArtistProfileCard from '@/components/artist-profile-card';
 
-type ArtistHired = {
+type Artist = {
   artists_id: number;
   milestones_id: number;
   firstname: string;
@@ -14,12 +14,19 @@ type ArtistHired = {
   notoriety: number;
   genre_name: string;
   milestone_name: string;
-  skills: [{ name: string; grade: number; skills_id: number }];
+  skills: [
+    {
+      name: string;
+      grade: number;
+      skills_id: number;
+      artistsHiredSkillsId: number;
+    },
+  ];
   artistsHiredId: number;
 };
 
 export default function ArtistPage() {
-  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
@@ -29,7 +36,7 @@ export default function ArtistPage() {
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setArtists(data.artist);
+        setArtists(data);
       } catch (error) {
         console.error('Error fetching artists:', error);
         setArtists([]);
@@ -38,7 +45,6 @@ export default function ArtistPage() {
 
     void fetchArtistsHired();
   }, [id]);
-  console.log(artists);
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>

@@ -38,7 +38,6 @@ export interface Artists {
   milestones_id: number;
   notoriety: number;
   price: number;
-  skills_id: number | null;
 }
 
 export interface ArtistsHired {
@@ -151,7 +150,6 @@ export interface SinglesMarketing {
 
 export interface Skills {
   exp_value: number;
-  grade: number | null;
   id: Generated<number>;
   name: string;
 }

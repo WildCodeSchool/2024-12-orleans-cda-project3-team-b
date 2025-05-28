@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import ArtistCard from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
@@ -18,10 +17,10 @@ type ArtistHired = {
   genre_name: string;
   name: string;
   price: number;
+  artist_hired_id: number;
 };
 
 export default function MyArtists() {
-  const navigate = useNavigate();
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
