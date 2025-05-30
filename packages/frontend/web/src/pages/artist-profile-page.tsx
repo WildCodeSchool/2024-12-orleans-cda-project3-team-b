@@ -46,7 +46,6 @@ export default function ArtistPage() {
 
     void fetchArtistsHired();
   }, [id]);
-  console.log(artists);
 
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
