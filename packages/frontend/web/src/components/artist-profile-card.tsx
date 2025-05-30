@@ -25,6 +25,7 @@ type Artist = {
 type ArtistProfileCardProps = {
   readonly artist: Artist;
   readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
+  readonly isAddButton?: boolean;
 };
 
 export default function ArtistProfileCard({ artist }: ArtistProfileCardProps) {
@@ -88,7 +89,7 @@ export default function ArtistProfileCard({ artist }: ArtistProfileCardProps) {
                 {' :'}
                 {competence.grade}
                 {' /25'}
-                {(artist.isAddButton ?? false) ? (
+                {Boolean(AddButton) ? (
                   <AddButton
                     key={competence.artistsHiredSkillsId}
                     onClick={() =>

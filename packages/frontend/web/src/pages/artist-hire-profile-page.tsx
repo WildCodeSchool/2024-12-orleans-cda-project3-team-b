@@ -6,12 +6,14 @@ import ArtistProfileCard from '@/components/artist-profile-card';
 
 import type { Artist } from './artist-profile-page';
 
-// type ArtistHired = {
-//   artist:Artist;
-// }
+type ArtistHired = Artist & {
+  artistsHiredId: number;
+  fetchArtistsHired: () => Promise<void>;
+  isAddButton?: boolean;
+};
 
 export default function ArtistHirePage() {
-  const [artistsHired, setArtistsHired] = useState<Artist[]>([]);
+  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function ArtistHirePage() {
           key={artist.artists_id}
           artist={artist}
           fetchArtistsHired={fetchArtistsHired}
+          isAddButton
         />
       ))}
     </div>

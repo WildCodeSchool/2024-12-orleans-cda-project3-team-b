@@ -14,9 +14,10 @@ artistsRouter.get('/', async (req, res) => {
       .leftJoin('artists_hired', 'artists_hired.artists_id', 'artists.id')
       .select((eb) => [
         'artists.id as artist_id',
+        'artists.alias',
         'artists.firstname',
         'artists.lastname',
-        'genres.name',
+        'genres.name as genre',
         'artists.image',
         'artists.milestones_id',
         'artists.notoriety',
@@ -30,7 +31,7 @@ artistsRouter.get('/', async (req, res) => {
               'artists_skills.grade',
               'skills.id as skillsId',
             ])
-            .whereRef('artists_skills.artists_id', '=', 'skills.id'),
+            .whereRef('artists.id', '=', 'artists_skills.artists_id'),
         ).as('skills'),
       ])
       .where('artists_hired.artists_id', 'is', null)
@@ -53,6 +54,7 @@ artistsRouter.get('/:id', async (req, res) => {
         'artists.id',
         'artists.firstname',
         'artists.lastname',
+        'artists.alias',
         'genres.name',
         'artists.image',
         'artists.milestones_id',
@@ -63,7 +65,7 @@ artistsRouter.get('/:id', async (req, res) => {
             .selectFrom('artists_skills')
             .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
             .select(['skills.name', 'artists_skills.grade'])
-            .whereRef('artists_skills.artists_id', '=', 'skills.id'),
+            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
         ).as('skills'),
       ])
       .where('artists.id', '=', Number(id))

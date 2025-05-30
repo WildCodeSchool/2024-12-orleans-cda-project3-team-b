@@ -148,6 +148,7 @@ artistsHiredRouter.get('/:id', async (req, res) => {
           eb
             .selectFrom('artists_hired_skills')
             .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
+            // .leftJoin('artists_skills','artists_skills.skills_id','skills.id')
             .select([
               'skills.name',
               'artists_hired_skills.grade',
