@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import type { Logo } from './label';
 import Label from './label';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 type Logos = {
   logos: Logo[];
 };
@@ -31,7 +29,8 @@ export default function RegisterLabel() {
   useEffect(() => {
     const fetchLabels = async () => {
       try {
-        const apiUrl = '/api/games/labels';
+
+        const apiUrl = `/api/games/labels`;
         const response = await fetch(apiUrl);
         const data = await response.json();
 
@@ -44,7 +43,8 @@ export default function RegisterLabel() {
 
     const fetchLogos = async () => {
       try {
-        const res = await fetch('/api/games/logos');
+
+        const res = await fetch(`/api/games/logos`);
         const data: Logos = await res.json();
         setLogos(data.logos);
       } catch (error) {
@@ -69,7 +69,8 @@ export default function RegisterLabel() {
       setMessage('All fields are required');
       return;
     }
-    const res = await fetch('/api/games/register-label', {
+
+    const res = await fetch(`/api/games/register-label`, {
       method: 'POST',
       body: JSON.stringify({
         name: input,
