@@ -28,7 +28,11 @@ type ArtistProfileCardProps = {
   readonly isAddButton?: boolean;
 };
 
-export default function ArtistProfileCard({ artist }: ArtistProfileCardProps) {
+export default function ArtistProfileCard({
+  artist,
+  isAddButton,
+  fetchArtistsHired,
+}: ArtistProfileCardProps) {
   async function addPoint(artistsHiredSkillsId: number, skills_id: number) {
     try {
       const response = await fetch(`/api/games/point`, {
@@ -43,8 +47,8 @@ export default function ArtistProfileCard({ artist }: ArtistProfileCardProps) {
     } catch (error) {
       console.error('Failed to fetch points:', error);
     }
-    if (artist.fetchArtistsHired) {
-      await artist.fetchArtistsHired();
+    if (fetchArtistsHired) {
+      await fetchArtistsHired();
     }
   }
 
@@ -89,7 +93,7 @@ export default function ArtistProfileCard({ artist }: ArtistProfileCardProps) {
                 {' :'}
                 {competence.grade}
                 {' /25'}
-                {Boolean(AddButton) ? (
+                {isAddButton ? (
                   <AddButton
                     key={competence.artistsHiredSkillsId}
                     onClick={() =>
