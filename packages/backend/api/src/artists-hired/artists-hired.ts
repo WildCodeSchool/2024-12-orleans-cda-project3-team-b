@@ -1,12 +1,19 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
 import { db } from '@app/backend-shared';
 
-const artistsHiredRouter = express.Router();
+const artistsHiredRouter = Router();
 
-artistsHiredRouter.post('/', async (req, res) => {
-  const { artistId, skills } = req.body;
+artistsHiredRouter.post('/', async (req: Request, res) => {
+  const { artistId, labelId, cost, skills } = req.body;
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
 
   try {
     if (!Number(artistId)) {
@@ -51,7 +58,40 @@ artistsHiredRouter.post('/', async (req, res) => {
       )
       .execute();
 
-    res.status(201).json({ message: 'Artist hired successfully' });
+    const artistsHiredId = await db
+      .selectFrom('artists_hired')
+      .select('id')
+      .where('artists_hired.artists_id', '=', artistId)
+      .limit(1)
+      .executeTakeFirst();
+
+    if (!artistsHiredId) {
+      res
+        .status(500)
+        .json({ error: 'Failed to retrieve hired artist_hired ID' });
+      return;
+    }
+
+    await db
+      .insertInto('label_artists')
+      .values({
+        label_id: labelId,
+        artists_hired_id: Number(artistsHiredId.id),
+      })
+      .execute();
+
+    await db
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '-', cost),
+      }))
+      .where('users_id', '=', userId)
+      .execute();
+
+    res.status(201).json({
+      ok: true,
+      message: 'Artist hired successfully',
+    });
   } catch (error) {
     console.error('Error hiring artist:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -80,7 +120,7 @@ artistsHiredRouter.get('/', async (req, res) => {
       ])
       .execute();
 
-    res.json({ artistsHired });
+    res.json(artistsHired);
     return;
   } catch (error) {
     console.error('Error fetching artists with genres:', error);
