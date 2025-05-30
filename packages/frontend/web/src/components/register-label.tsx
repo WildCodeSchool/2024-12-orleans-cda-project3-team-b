@@ -29,7 +29,6 @@ export default function RegisterLabel() {
   useEffect(() => {
     const fetchLabels = async () => {
       try {
-
         const apiUrl = `/api/games/labels`;
         const response = await fetch(apiUrl);
         const data = await response.json();
@@ -43,7 +42,6 @@ export default function RegisterLabel() {
 
     const fetchLogos = async () => {
       try {
-
         const res = await fetch(`/api/games/logos`);
         const data: Logos = await res.json();
         setLogos(data.logos);
