@@ -32,12 +32,17 @@ export default function CreateAlbumMenu() {
   };
 
   const handleSubmit = async () => {
-    if (!selectedArtistId || !singleName.trim()) {
-      alert('Please select an artist and enter a name for your single.');
+    if (
+      !selectedArtistId ||
+      !singleName.trim() ||
+      selectedSinglesId.length === 0
+    ) {
+      alert('Please select an artist, a name, and at least one single.');
       return;
     }
 
     try {
+      // 1. Créer l'album
       const res = await fetch('/api/albums/create', {
         method: 'POST',
         headers: {
@@ -50,16 +55,38 @@ export default function CreateAlbumMenu() {
       });
 
       if (!res.ok) {
-        alert('An error occurred while submitting the form.');
+        alert('An error occurred while creating the album.');
+        return;
+      }
+
+      const { albumId } = await res.json();
+
+      if (!albumId) {
+        alert('Album created but no album ID returned.');
+        return;
+      }
+
+      // 3. Envoyer les singles dans singles_albums
+      const resLink = await fetch('/api/singles-albums', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          singlesId: selectedSinglesId,
+          albumId: albumId,
+        }),
+      });
+
+      if (!resLink.ok) {
+        alert('Album created, but failed to link singles.');
         return;
       }
 
       setSubmitted(true);
-
-      console.log('Form submitted with:', {
-        selectedArtistId,
-        selectedMarketingId,
-        singleName,
+      console.log('Album and singles linked:', {
+        albumId,
+        selectedSinglesId,
       });
     } catch (error) {
       console.error('Submission failed:', error);

@@ -51,43 +51,6 @@ albumsRouter.get('/:id', async (req: Request, res) => {
   }
 });
 
-albumsRouter.post('/', async (req, res) => {
-  const { artistId } = req.body;
-
-  try {
-    if (!Number(artistId)) {
-      res.status(400).json({ error: 'artistId is required' });
-      return;
-    }
-
-    const artist = await db
-      .selectFrom('artists')
-      .select(['milestones_id', 'notoriety'])
-      .where('artists.id', '=', artistId)
-      .executeTakeFirst();
-
-    if (!artist) {
-      res.status(404).json({ error: 'Artist not found' });
-      return;
-    }
-
-    await db
-      .insertInto('artists_hired')
-      .values({
-        artists_id: artistId,
-        milestones_id: artist.milestones_id,
-        notoriety: artist.notoriety,
-      })
-
-      .execute();
-
-    res.status(201).json({ message: 'Artist hired successfully' });
-  } catch (error) {
-    console.error('Error hiring artist:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 albumsRouter.post('/create', async (req: Request, res) => {
   const { artistId, singleName } = req.body;
   const userId = req.userId;
