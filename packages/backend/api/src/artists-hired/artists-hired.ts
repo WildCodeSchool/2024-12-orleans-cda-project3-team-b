@@ -53,7 +53,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         skills.map((skill: { skillsId: number; grade: number }) => ({
           skills_id: skill.skillsId,
           grade: skill.grade,
-          artists_hired_id: artistsId[0].insertId,
+          artists_hired_id: Number(artistsId[0].insertId),
         })),
       )
       .execute();
@@ -144,7 +144,6 @@ artistsHiredRouter.get('/:id', async (req, res) => {
         'artists.milestones_id',
         'artists.notoriety',
         'artists.price',
-
         jsonArrayFrom(
           eb
             .selectFrom('artists_hired_skills')

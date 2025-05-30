@@ -67,11 +67,9 @@ export default function MyArtists() {
         {'ARTISTS'}
       </div>
       <div className='mt-5 grid grid-cols-2 gap-4'>
-        {artists.slice(0, visibleCount).map((artist) => {
-          return (
-            <ArtistCard key={artist.artist_id} artist={artist} budget={0} />
-          );
-        })}
+        {artists.slice(0, visibleCount).map((artist) => (
+          <ArtistCard key={artist.artist_id} artist={artist} budget={0} />
+        ))}
       </div>
       <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
     </div>

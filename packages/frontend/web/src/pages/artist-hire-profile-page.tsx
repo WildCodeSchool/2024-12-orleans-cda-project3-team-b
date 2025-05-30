@@ -4,31 +4,14 @@ import { useParams } from 'react-router-dom';
 
 import ArtistProfileCard from '@/components/artist-profile-card';
 
-type ArtistHired = {
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  milestone_name: string;
-  skills: [
-    {
-      name: string;
-      grade: number;
-      skills_id: number;
-      artistsHiredSkillsId: number;
-    },
-  ];
-  artistsHiredId: number;
-  grade: number;
-  fetchArtistsHired: () => Promise<void>;
-};
+import type { Artist } from './artist-profile-page';
+
+// type ArtistHired = {
+//   artist:Artist;
+// }
 
 export default function ArtistHirePage() {
-  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
+  const [artistsHired, setArtistsHired] = useState<Artist[]>([]);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -69,17 +52,8 @@ export default function ArtistHirePage() {
       {artistsHired.map((artist) => (
         <ArtistProfileCard
           key={artist.artists_id}
-          firstname={artist.firstname}
-          lastname={artist.lastname}
-          alias={artist.alias}
-          image={artist.image}
-          notoriety={artist.notoriety}
-          genre_name={artist.genre_name}
-          milestone_name={artist.milestone_name}
-          skills={artist.skills}
-          isAddButton
+          artist={artist}
           fetchArtistsHired={fetchArtistsHired}
-          artistsHiredId={artist.artistsHiredId}
         />
       ))}
     </div>
