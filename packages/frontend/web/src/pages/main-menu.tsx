@@ -72,7 +72,13 @@ export default function MainMenu() {
 
         <div className='mt-5 grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => {
-            return <ArtistCard key={artist.artist_hired_id} artist={artist} />;
+            return (
+              <ArtistCard
+                key={artist.artist_hired_id}
+                artist={artist}
+                budget={0}
+              />
+            );
           })}
         </div>
         <Link to='/my-artists'>

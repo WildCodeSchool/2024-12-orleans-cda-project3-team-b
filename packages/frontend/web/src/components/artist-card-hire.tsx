@@ -4,13 +4,11 @@ import type { ArtistHired } from '@/pages/main-menu';
 
 type ArtistCardHireProps = {
   readonly artist: ArtistHired;
-  readonly onHire: (artistId: number) => void;
   readonly budget: number;
 };
 
 export default function ArtistCardHire({
   artist,
-  onHire,
   budget,
 }: ArtistCardHireProps) {
   const isDisabled = budget < artist.price;
@@ -42,7 +40,7 @@ export default function ArtistCardHire({
         />
       </div>
       <div className='flex flex-col items-center'>
-        <button
+        {/* <button
           type='button'
           onClick={() => {
             onHire(artist.artist_id);
@@ -54,15 +52,15 @@ export default function ArtistCardHire({
         >
           {'Hire'}
           <img className='h-7 w-7' src='/assets/sign.png' alt='contract logo' />
-        </button>
-        <div className='flex items-center'>
+        </button> */}
+        {/* <div className='flex items-center'>
           <h2 className='flex items-center font-bold'>{artist.price}</h2>
           <img
             className='mt-0.5 h-3.5 w-3.5'
             src='/assets/dollar-icon.png'
             alt='dollar icon'
           />
-        </div>
+        </div> */}
         {isDisabled ? (
           <p className='mt-1 text-xs text-red-200'>{'Not enough budget'}</p>
         ) : null}

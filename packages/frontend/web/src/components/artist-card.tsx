@@ -5,12 +5,16 @@ import type { Artist } from '@/pages/hire-artist';
 type ArtistCardHireProps = {
   readonly artist: Artist;
   readonly onHire: (artistId: number) => void;
+  readonly budget: number;
 };
 
 export default function ArtistCardHire({
   artist,
   onHire,
+  budget,
 }: ArtistCardHireProps) {
+  const isDisabled = budget < artist.price;
+
   return (
     <Link to={`/artists/${artist.artist_id}`}>
       <div
@@ -42,7 +46,10 @@ export default function ArtistCardHire({
             onClick={() => {
               onHire(artist.artist_id);
             }}
-            className='flex h-8 w-18 items-center justify-center rounded-sm bg-orange-500 pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+            disabled={isDisabled}
+            className={`flex h-8 w-18 items-center justify-center rounded-sm pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] ${
+              isDisabled ? 'cursor-not-allowed bg-gray-400' : 'bg-orange-500'
+            }`}
           >
             {'Hire'}
             <img

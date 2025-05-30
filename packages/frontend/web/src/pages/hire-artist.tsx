@@ -85,7 +85,11 @@ export default function HireArtist() {
     sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
   );
 
-  const handleHireArtist = async (artist: Artist) => {
+  const handleHireArtist = async (
+    artist: Artist,
+    labelId: number,
+    budget: number,
+  ) => {
     try {
       const userId = auth?.user?.id;
       const hireResponse = await fetch('/api/artists-hired', {
@@ -94,7 +98,7 @@ export default function HireArtist() {
         body: JSON.stringify({
           artistId: artist.artist_id,
           skills: artist.skills,
-          cost: price,
+          cost: artist.price,
           labelId,
           budget,
           userId,
@@ -111,6 +115,7 @@ export default function HireArtist() {
       console.error('Error hiring artist:', error);
     }
   };
+  // console.log(budget);
 
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
@@ -139,12 +144,7 @@ export default function HireArtist() {
               }
 
               try {
-                await handleHireArtist(
-                  artist.artist_id,
-                  artist.price,
-                  labelId,
-                  budget,
-                );
+                await handleHireArtist(artist, labelId, budget);
                 await navigate('/main-menu'); // only after successful hire
               } catch {
                 setMessageBudget('redirection not working');
