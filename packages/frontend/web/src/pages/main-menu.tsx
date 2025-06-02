@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import AddButton from '@/components/add-button';
 import ArtistCard from '@/components/artist-card';
+import StaffLabelsCard from '@/components/staff-labels-card';
 
 export type ArtistHired = {
   id: number;
@@ -16,9 +17,17 @@ export type ArtistHired = {
   genre_name: string;
   milestone_name: string;
 };
+type StaffHired = {
+  id: number;
+  job: string;
+  bonus: number;
+  price: number;
+  image: string;
+};
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [staff, setStaff] = useState<StaffHired[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
@@ -35,7 +44,21 @@ export default function MainMenu() {
       }
     };
 
+    const fetchStaff = async () => {
+      try {
+        const response = await fetch('/api/games/staff-labels');
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setStaff(data.staffLabels);
+      } catch (error) {
+        console.error('Error fetching staff:', error);
+        setStaff([]);
+      }
+    };
+
     void fetchArtistsHired();
+    void fetchStaff();
   }, []);
 
   return (
@@ -105,6 +128,19 @@ export default function MainMenu() {
             </div>
           ))}
         </div>
+
+        {staff.length <= 3 ? (
+          <div className='flex h-50 items-center justify-center'>
+            <div className='flex flex-col items-center justify-center pr-2 pl-2'>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
+            </div>
+          </div>
+        ) : (
+          <p>{'You can have only 4 staffs'}</p>
+        )}
       </div>
     </div>
   );

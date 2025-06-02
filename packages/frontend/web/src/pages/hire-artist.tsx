@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
+import { useAuth } from '@/contexts/auth-context';
 
 export type Artist = {
   artist_id: number;
@@ -15,15 +17,26 @@ export type Artist = {
   price: number;
 };
 
+export type InfoLabel = {
+  label: number;
+  budget: number;
+};
+
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
+  const [messageBudget, setMessageBudget] = useState('');
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const labelId = infoLabel?.label;
+  const budget = infoLabel?.budget ?? 0;
 
   useEffect(() => {
     const fetchArtists = async () => {
       try {
-        const apiUrl = `/api/artists`;
+        const apiUrl = '/api/artists';
 
         const response = await fetch(apiUrl);
 
@@ -40,7 +53,17 @@ export default function HireArtist() {
       }
     };
 
+    const fetchInfoLabel = async () => {
+      try {
+        const res = await fetch('/api/games/label');
+        const data = await res.json();
+        setInfoLabel(data);
+      } catch (error) {
+        console.error('Error fetching budget:', error);
+      }
+    };
     void fetchArtists();
+    void fetchInfoLabel();
   }, []);
 
   const handleSeeMore = () => {
@@ -50,12 +73,24 @@ export default function HireArtist() {
     sortOrder === 'asc' ? a.price - b.price : b.price - a.price,
   );
 
-  const handleHireArtist = async (artistId: number) => {
+  const handleHireArtist = async (
+    artistId: number,
+    price: number,
+    labelId: number,
+    budget: number,
+  ) => {
     try {
-      const hireResponse = await fetch(`/api/artists-hired`, {
+      const userId = auth?.user?.id;
+      const hireResponse = await fetch('/api/artists-hired', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ artistId }),
+        body: JSON.stringify({
+          artistId,
+          cost: price,
+          labelId,
+          budget,
+          userId,
+        }),
       });
 
       if (!hireResponse.ok) {
@@ -67,7 +102,6 @@ export default function HireArtist() {
       );
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Error hiring artist. Please try again.');
     }
   };
 
@@ -91,11 +125,35 @@ export default function HireArtist() {
           <ArtistCardHire
             key={artist.artist_id}
             artist={artist}
-            onHire={handleHireArtist}
+            onHire={async () => {
+              if (labelId === undefined) {
+                setMessageBudget('Label or budget info not loaded yet.');
+                return;
+              }
+
+              try {
+                await handleHireArtist(
+                  artist.artist_id,
+                  artist.price,
+                  labelId,
+                  budget,
+                );
+                await navigate('/main-menu'); // only after successful hire
+              } catch {
+                setMessageBudget('redirection not working');
+              }
+            }}
+            budget={budget}
           />
         ))}
       </div>
       <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
+
+      {messageBudget ? (
+        <div className='mb-4 text-sm font-medium text-red-600'>
+          {messageBudget}
+        </div>
+      ) : null}
     </div>
   );
 }
