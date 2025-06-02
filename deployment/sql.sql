@@ -60,7 +60,7 @@ VALUES
 ('Yuna','Voltage',null,2,3,2,60000,"yuna-voltage.png",40),
 (null,null,'Zaria',0.7,4,1,15000,"zaria.jpg",15),
 ('Ed','Sheern',null,4,5,4,900000,"ed-sheern.jpeg",500),
-('Al','Hassane',null,1,2,1,10000,"al-hassane.jpg",10),
+('Al','Hassane',null,1,2,1,10000,"al-hassane.jpg",10);
 
 
 
@@ -81,8 +81,7 @@ VALUES
 ('Music producer',8,100000,'music-producer.png',60),
 ('Makeup artist',4,35000,'makeup-artist.png',20),
 ('Musician',7,80000,'musician.jpg',50),
-('Vocal coach',6,60000,'vocal-coach.jpg',30)
-;
+('Vocal coach',6,60000,'vocal-coach.jpg',30);
 
 INSERT INTO marketing (name,bonus,price,image,exp_value)
 VALUES 
