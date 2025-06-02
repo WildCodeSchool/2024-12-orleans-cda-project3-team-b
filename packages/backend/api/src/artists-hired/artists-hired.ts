@@ -100,6 +100,7 @@ artistsHiredRouter.get('/', async (req, res) => {
         'milestones.name as milestone_name',
         'genres.name as genre_name',
       ])
+      .where('artists.id', 'is', null)
       .execute();
 
     res.json(artistsHired);
