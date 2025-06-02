@@ -7,7 +7,7 @@ type AuthProviderState = {
   isLoading: boolean;
   setIsLoggedIn: (value: boolean) => void;
   isLoggedIn: boolean;
-  setUser: (value: User) => void;
+  setUser: (value: User | undefined) => void;
   user: User | undefined;
 };
 const authProviderContext = createContext<AuthProviderState | undefined>(
