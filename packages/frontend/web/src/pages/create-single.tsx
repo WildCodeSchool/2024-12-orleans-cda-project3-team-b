@@ -11,7 +11,7 @@ import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from './main-menu';
 
-export default function CreateSingleMenu() {
+export default function CreateSingle() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(

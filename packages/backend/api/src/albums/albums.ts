@@ -4,6 +4,20 @@ import { db } from '@app/backend-shared';
 
 const albumsRouter = Router();
 
+export type ArtistHired = {
+  id: number;
+  artists_id: number;
+  milestones_id: number;
+  firstname: string;
+  lastname: string;
+  alias: string;
+  genre_id: number;
+  image: string;
+  notoriety: number;
+  genre_name: string;
+  milestone_name: string;
+};
+
 albumsRouter.get('/:id', async (req: Request, res) => {
   const artistId = Number(req.params.id);
   const userId = req.userId;
@@ -52,7 +66,7 @@ albumsRouter.get('/:id', async (req: Request, res) => {
 });
 
 albumsRouter.post('/create', async (req: Request, res) => {
-  const { artistId, singleName } = req.body;
+  const { artistId, singleName, singleId, artists } = req.body;
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -67,7 +81,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
       return;
     }
 
-    const artist = await db
+    const album = await db
       .selectFrom('users')
       .where('users.id', '=', userId)
       .leftJoin('labels', 'labels.users_id', 'users.id')
@@ -91,21 +105,40 @@ albumsRouter.post('/create', async (req: Request, res) => {
       .where('albums.name', '=', singleName.trim())
       .execute();
 
-    if (!artist) {
+    if (!album) {
       res.status(404).json({ error: 'Artist not found' });
       return;
     }
     await db
       .insertInto('albums')
-      .values({
-        artists_hired_id: artistId,
-        name: singleName.trim(),
-        genres_id: 1,
-        exp_value: 100,
-        sales: 0,
-        money_earned: 0,
-        score: 0,
-      })
+      .values(
+        artists.map((artist: ArtistHired) => ({
+          artists_hired_id: artistId,
+          name: singleName.trim(),
+          genres_id: artist.genre_id,
+          exp_value: 100,
+          sales: 0,
+          money_earned: 0,
+          score: 0,
+        })),
+      )
+      .execute();
+
+    const albumId = await db
+      .selectFrom('albums')
+      .select('id')
+      .where('artists_hired_id', '=', artistId)
+      .execute();
+
+    await db
+      .insertInto('singles_albums')
+      .values(
+        singleId.map((singleId: number) => ({
+          singles_id: singleId,
+          albums_id: Number(albumId[0].id),
+        })),
+      )
+
       .execute();
 
     return res.status(201).json({ success: true });

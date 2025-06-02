@@ -99,6 +99,7 @@ artistsHiredRouter.get('/', async (req, res) => {
         'artists.notoriety',
         'milestones.name as milestone_name',
         'genres.name as genre_name',
+        'genres.id as genre_id',
       ])
       .execute();
 

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import AddButton from '@/components/add-button';
 import ArtistCard from '@/components/artist-card';
-import StaffLabelsCard from '@/components/staff-labels-card';
 
 export type ArtistHired = {
   id: number;
@@ -12,6 +11,7 @@ export type ArtistHired = {
   firstname: string;
   lastname: string;
   alias: string;
+  genres_id: number;
   image: string;
   notoriety: number;
   genre_name: string;

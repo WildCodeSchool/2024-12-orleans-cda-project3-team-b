@@ -14,7 +14,7 @@ import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from './main-menu';
 
-export default function CreateAlbumMenu() {
+export default function CreateAlbum() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
@@ -35,63 +35,27 @@ export default function CreateAlbumMenu() {
     if (
       !selectedArtistId ||
       !singleName.trim() ||
-      selectedSinglesId.length === 0
-    ) {
-      alert('Please select an artist, a name, and at least one single.');
-      return;
-    }
+      selectedSinglesId.length !== 0
+    )
+      try {
+        const res = await fetch('/api/albums/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            artistId: selectedArtistId,
+            singleName: singleName.trim(),
+            singleId: selectedSinglesId,
+            artists,
+          }),
+        });
 
-    try {
-      // 1. Créer l'album
-      const res = await fetch('/api/albums/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          artistId: selectedArtistId,
-          singleName: singleName.trim(),
-        }),
-      });
-
-      if (!res.ok) {
-        alert('An error occurred while creating the album.');
-        return;
+        setSubmitted(true);
+      } catch (error) {
+        console.error('Submission failed:', error);
+        alert('Failed to submit. Please try again.');
       }
-
-      const { albumId } = await res.json();
-
-      if (!albumId) {
-        alert('Album created but no album ID returned.');
-        return;
-      }
-
-      // 3. Envoyer les singles dans singles_albums
-      const resLink = await fetch('/api/singles-albums', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          singlesId: selectedSinglesId,
-          albumId: albumId,
-        }),
-      });
-
-      if (!resLink.ok) {
-        alert('Album created, but failed to link singles.');
-        return;
-      }
-
-      setSubmitted(true);
-      console.log('Album and singles linked:', {
-        albumId,
-        selectedSinglesId,
-      });
-    } catch (error) {
-      console.error('Submission failed:', error);
-      alert('Failed to submit. Please try again.');
-    }
   };
 
   useEffect(() => {
@@ -184,6 +148,7 @@ export default function CreateAlbumMenu() {
       setChosenSingles([]);
     }
   }, [selectedSinglesId]);
+  console.log(artists, 'artists');
 
   return (
     <form action='' method='post'>
