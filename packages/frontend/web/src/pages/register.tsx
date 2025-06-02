@@ -7,7 +7,7 @@ export default function Register() {
   const [message, setMessage] = useState('');
 
   const regex = {
-    minLength: password.length >= 15,
+    minLength: password.length >= 8,
     lowercase: /[a-z]/.test(password),
     uppercase: /[A-Z]/.test(password),
     number: /[0-9]/.test(password),
