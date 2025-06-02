@@ -25,7 +25,7 @@ export default function MyArtists() {
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
+        const apiUrl = '/api/artists-hired';
 
         const response = await fetch(apiUrl);
 
