@@ -1,3 +1,4 @@
+// import express from 'express';
 import { type Request, Router } from 'express';
 import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
@@ -19,7 +20,6 @@ artistsRouter.get('/', async (req: Request, res) => {
       .selectFrom('artists')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
-      .leftJoin('artists_hired', 'artists.id', 'artists_hired.artists_id')
       .select([
         'artists.id as artist_id',
         'artists.alias',
@@ -30,17 +30,6 @@ artistsRouter.get('/', async (req: Request, res) => {
         'artists.milestones_id',
         'artists.notoriety',
         'artists.price',
-        jsonArrayFrom(
-          eb
-            .selectFrom('artists_skills')
-            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
-            .select([
-              'skills.name',
-              'artists_skills.grade',
-              'skills.id as skillsId',
-            ])
-            .whereRef('artists.id', '=', 'artists_skills.artists_id'),
-        ).as('skills'),
       ])
       .where((eb) =>
         eb.not(
