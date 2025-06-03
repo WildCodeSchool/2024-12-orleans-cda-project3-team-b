@@ -62,7 +62,7 @@ const router = createBrowserRouter([
         element: <CreateSingle />,
       },
       {
-        path: '/create-single-menu',
+        path: '/create-single',
         element: <CreateSingleMenu />,
       },
       {
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
         element: <CreateAlbum />,
       },
       {
-        path: '/create-album-menu',
+        path: '/create-album',
         element: <CreateAlbumMenu />,
       },
       {

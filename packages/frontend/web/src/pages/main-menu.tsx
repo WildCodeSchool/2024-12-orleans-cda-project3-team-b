@@ -96,7 +96,7 @@ export default function MainMenu() {
 
         <div className='mt-6 flex flex-col items-center justify-center gap-8 sm:flex-row'>
           <div className='flex flex-col items-center'>
-            <Link to='/create-single-menu'>
+            <Link to='/create-single'>
               <AddButton>{'+'}</AddButton>
             </Link>
             <h2 className='text-secondary pt-1 text-xl'>
@@ -104,7 +104,7 @@ export default function MainMenu() {
             </h2>
           </div>
           <div className='flex flex-col items-center'>
-            <Link to='/create-album-menu'>
+            <Link to='/create-album'>
               <AddButton>{'+'}</AddButton>
             </Link>
             <h3 className='text-secondary pt-1 text-xl'>
