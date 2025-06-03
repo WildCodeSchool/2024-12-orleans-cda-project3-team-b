@@ -31,7 +31,7 @@ export default function ArtistPage() {
   const { id } = useParams<{ id?: string }>();
 
   useEffect(() => {
-    const fetchArtistsHired = async () => {
+    const fetchArtists = async () => {
       try {
         const response = await fetch(`/api/artists/${id}`);
         if (!response.ok)
@@ -44,7 +44,7 @@ export default function ArtistPage() {
       }
     };
 
-    void fetchArtistsHired();
+    void fetchArtists();
   }, [id]);
 
   return (
