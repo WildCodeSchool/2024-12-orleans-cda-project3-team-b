@@ -117,18 +117,6 @@ export default function MainMenu() {
       {/* STAFF Section */}
       <div className='pt-10'>
         <h2 className='text-secondary text-3xl underline'>{'STAFF'}</h2>
-
-        <div className='mt-6 grid grid-cols-2 justify-items-center gap-6 sm:grid-cols-4'>
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className='flex flex-col items-center'>
-              <Link to='/hire-staff'>
-                <AddButton>{'+'}</AddButton>
-              </Link>
-              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-            </div>
-          ))}
-        </div>
-
         {staff.length <= 3 ? (
           <div className='flex h-50 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-2 pl-2'>
