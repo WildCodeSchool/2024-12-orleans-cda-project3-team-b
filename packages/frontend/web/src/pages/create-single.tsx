@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
@@ -17,15 +18,19 @@ export default function CreateSingle() {
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
   );
+  const navigate = useNavigate();
   const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
   };
 
   const handleSubmit = async () => {
+    setHasTriedSubmit(true);
+
     if (!selectedArtistId || !singleName.trim()) {
       return;
     }
@@ -170,13 +175,27 @@ export default function CreateSingle() {
           />
         </div>
 
+        <div className='mt-6'>
+          {hasTriedSubmit && (!selectedArtistId || !singleName.trim()) ? (
+            <p className='text-center text-sm text-red-500'>
+              {'Please select an artist and enter a name for the single.'}
+            </p>
+          ) : null}
+        </div>
+
         {/* Buttons */}
         <div className='mt-12 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between'>
-          <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
+          <VerifyButton
+            color='bg-secondary active:scale-95 transition-transform'
+            image='/assets/not-check.png'
+            onClick={async () => {
+              await navigate(-1);
+            }}
+          >
             {'Cancel'}
           </VerifyButton>
           <VerifyButton
-            color='bg-orange-500'
+            color='bg-orange-500 active:scale-95 transition-transform'
             image='/assets/check.png'
             onClick={handleSubmit}
           >

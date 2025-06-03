@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
@@ -21,17 +22,19 @@ export default function CreateAlbum() {
     null,
   );
   const [chosenSingles, setChosenSingles] = useState<Singles[]>([]);
-
+  const navigate = useNavigate();
   const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
   const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
   };
 
   const handleSubmit = async () => {
+    setHasTriedSubmit(true);
     if (
       !selectedArtistId ||
       !singleName.trim() ||
@@ -214,13 +217,31 @@ export default function CreateAlbum() {
             }}
           />
         </div>
+        <div className='mt-6'>
+          {hasTriedSubmit &&
+          (!selectedArtistId ||
+            !singleName.trim() ||
+            selectedSinglesId.length !== 0) ? (
+            <p className='text-center text-sm text-red-500'>
+              {
+                'Please select an artist, enter a name for the album and choose at least 1 single.'
+              }
+            </p>
+          ) : null}
+        </div>
 
         <div className='mt-12 flex items-center justify-between gap-x-16'>
-          <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
+          <VerifyButton
+            color='bg-secondary active:scale-95 transition-transform'
+            image='/assets/not-check.png'
+            onClick={async () => {
+              await navigate(-1);
+            }}
+          >
             {'Cancel'}
           </VerifyButton>
           <VerifyButton
-            color='bg-orange-500'
+            color='bg-orange-500 active:scale-95 transition-transform'
             image='/assets/check.png'
             onClick={handleSubmit}
           >
