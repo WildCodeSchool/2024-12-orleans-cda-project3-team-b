@@ -127,4 +127,95 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
   }
 });
 
+artistsHiredRouter.get('/:id/singles', async (req: Request, res) => {
+  const artistId = Number(req.params.id);
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const singles = await db
+      .selectFrom('users')
+      .where('users.id', '=', userId)
+      .leftJoin('labels', 'labels.users_id', 'users.id')
+      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .leftJoin(
+        'artists_hired',
+        'artists_hired.id',
+        'label_artists.artists_hired_id',
+      )
+      .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .select([
+        'singles.id as id',
+        'singles.artists_hired_id',
+        'singles.name',
+        'singles.listeners',
+        'singles.money_earned',
+        'artists.firstname as artist_firstname',
+        'artists.lastname as artist_lastname',
+        'artists.alias as artist_alias',
+        'singles.score',
+      ])
+      .where('artists_hired.id', '=', artistId)
+      .where('labels.users_id', '=', userId)
+      .execute();
+
+    res.json(singles);
+    return;
+  } catch (error) {
+    console.error('Error fetching singles:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+artistsHiredRouter.get('/:id/albums', async (req: Request, res) => {
+  const artistId = Number(req.params.id);
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const albums = await db
+      .selectFrom('albums')
+      .leftJoin('artists_hired', 'artists_hired.id', 'albums.artists_hired_id')
+      .leftJoin(
+        'label_artists',
+        'label_artists.artists_hired_id',
+        'artists_hired.id',
+      )
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .where('artists_hired.id', '=', artistId)
+      .where('labels.users_id', '=', userId)
+      .select([
+        'albums.artists_hired_id',
+        'albums.name',
+        'albums.sales',
+        'albums.money_earned',
+        'artists.firstname as artist_firstname',
+        'artists.lastname as artist_lastname',
+        'artists.alias as artist_alias',
+        'albums.notoriety_gain',
+        'albums.score',
+      ])
+      .execute();
+
+    res.json(albums);
+    return;
+  } catch (error) {
+    console.error('Error fetching albums:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export default artistsHiredRouter;
