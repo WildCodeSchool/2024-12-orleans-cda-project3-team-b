@@ -99,7 +99,7 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
         'artists_hired.id',
         'label_artists.artists_hired_id',
       )
-      .leftJoin('artists', 'artists_hired.artists_id', 'artists.id')
+      .innerJoin('artists', 'artists_hired.artists_id', 'artists.id')
       .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .select([
@@ -115,7 +115,7 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
         'milestones.name as milestone_name',
         'genres.name as genre_name',
       ])
-      .where('artists.id', 'is not', null)
+      // .where('artists.id', 'is not', null)
       .execute();
 
     res.json(artistsHired);
