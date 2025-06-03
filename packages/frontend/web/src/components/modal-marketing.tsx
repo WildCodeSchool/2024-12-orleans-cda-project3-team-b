@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import MarketingCard from './marketing-card';
-
-export type Marketing = {
-  id: number;
-  name: number;
-  bonus: string;
-  price: string;
-  image: string;
-};
+import type { Marketing } from './marketing-card';
 
 export type ModalMarketingProps = {
   readonly isOpen: boolean;
@@ -63,22 +56,16 @@ export default function ModalMarketing({
         </div>
 
         <div className='grid grid-cols-2 gap-4'>
-          {marketing.map((marketing) => (
+          {marketing.map((m) => (
             <div
-              key={marketing.id}
+              key={m.id}
               onClick={() => {
-                onSelectMarketing(marketing.id);
+                onSelectMarketing(m.id);
                 onClose();
               }}
               className='cursor-pointer transition-transform hover:scale-105'
             >
-              <MarketingCard
-                id={marketing.id}
-                name={marketing.name}
-                bonus={marketing.bonus}
-                price={marketing.price}
-                image={marketing.image}
-              />
+              <MarketingCard marketing={m} />
             </div>
           ))}
         </div>

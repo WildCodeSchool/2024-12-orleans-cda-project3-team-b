@@ -47,7 +47,6 @@ export default function MyArtists() {
 
   return (
     <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
-      {/* Header */}
       <div className='mb-4 flex w-full items-center justify-between'>
         <button type='button'>
           <ArrowLeft />
@@ -62,14 +61,10 @@ export default function MyArtists() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-
-      {/* Artist grid */}
-      <div className='mt-5 grid grid-cols-2 gap-4'>
-        {artists.slice(0, visibleCount).map((artist) => (
-          <div key={artist.artists_id}>
-            <ArtistCard artist={artist} />
-          </div>
-        ))}
+      <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
+        {artists.slice(0, visibleCount).map((artist) => {
+          return <ArtistCard key={artist.artist_id} artist={artist} />;
+        })}
       </div>
 
       {/* See More */}

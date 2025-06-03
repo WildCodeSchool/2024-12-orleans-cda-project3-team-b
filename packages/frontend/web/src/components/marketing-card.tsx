@@ -1,18 +1,18 @@
-type Marketing = {
+export type Marketing = {
   readonly id: number;
-  readonly name: number;
+  readonly name: string;
   readonly bonus: string;
-  readonly price: string;
+  readonly price: number;
   readonly image: string;
 };
 
-export default function MarketingCard({
-  id,
-  name,
-  bonus,
-  price,
-  image,
-}: Marketing) {
+type MarketingCardProps = {
+  readonly marketing: Marketing;
+};
+
+export default function MarketingCard({ marketing }: MarketingCardProps) {
+  const { id, name, bonus, price, image } = marketing;
+
   return (
     <div className='bg-secondary flex h-14 w-76 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'>
       <img className='h-10 w-10 rounded-4xl' src={`/assets/${image}`} alt='' />

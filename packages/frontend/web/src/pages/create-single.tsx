@@ -7,7 +7,7 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
-import type { Marketing } from '@/components/modal-marketing';
+import type { Marketing } from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from './main-menu';
@@ -153,16 +153,7 @@ export default function CreateSingle() {
         {/* Marketing */}
         <div className='mt-6 w-full max-w-md'>
           {marketing.length > 0 ? (
-            marketing.map((m) => (
-              <MarketingCard
-                key={m.id}
-                id={m.id}
-                name={m.name}
-                bonus={m.bonus}
-                price={m.price}
-                image={m.image}
-              />
-            ))
+            marketing.map((m) => <MarketingCard key={m.id} marketing={m} />)
           ) : (
             <p className='text-secondary mt-4 text-center text-sm'>
               {'No Marketing Campaign selected'}

@@ -8,7 +8,7 @@ import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
 import MarketingCard from '@/components/marketing-card';
-import type { Marketing } from '@/components/modal-marketing';
+import type { Marketing } from '@/components/marketing-card';
 import type { Singles } from '@/components/modal-singles';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
@@ -196,16 +196,7 @@ export default function CreateAlbum() {
         </div>
         <div className='mt-6'>
           {marketing.length > 0 ? (
-            marketing.map((marketing) => (
-              <MarketingCard
-                key={marketing.id}
-                id={marketing.id}
-                name={marketing.name}
-                bonus={marketing.bonus}
-                price={marketing.price}
-                image={marketing.image}
-              />
-            ))
+            marketing.map((m) => <MarketingCard key={m.id} marketing={m} />)
           ) : (
             <p className='text-secondary text-s mt-4 text-center'>
               {'No Marketing Campaign selected'}

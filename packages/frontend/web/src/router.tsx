@@ -61,18 +61,12 @@ const router = createBrowserRouter([
         path: '/create-single',
         element: <CreateSingle />,
       },
-      {
-        path: '/create-single',
-        element: <CreateSingleMenu />,
-      },
+
       {
         path: '/create-album',
         element: <CreateAlbum />,
       },
-      {
-        path: '/create-album',
-        element: <CreateAlbumMenu />,
-      },
+
       {
         path: '/hire-staff',
         element: <HireStaff />,

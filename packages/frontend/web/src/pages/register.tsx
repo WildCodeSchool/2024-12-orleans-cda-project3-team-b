@@ -91,7 +91,7 @@ export default function Register() {
       {/* Critères de mot de passe */}
       <div className='mt-4 text-sm'>
         <p className={regex.minLength ? 'text-green-600' : 'text-red-600'}>
-          {regex.minLength ? '✅' : '❌'} {'Minimum 15 characters'}
+          {regex.minLength ? '✅' : '❌'} {'Minimum 8 characters'}
         </p>
         <p className={regex.lowercase ? 'text-green-600' : 'text-red-600'}>
           {regex.lowercase ? '✅' : '❌'} {'At least one lowercase letter'}
