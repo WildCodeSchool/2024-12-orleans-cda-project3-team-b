@@ -27,6 +27,7 @@ export default function ArtistHirePage() {
         setArtistsHired(data);
       } catch (error) {
         console.error('Error fetching artists:', error);
+        setArtistsHired([]);
       }
     };
 
@@ -44,7 +45,6 @@ export default function ArtistHirePage() {
       setArtistsHired(data);
     } catch (error) {
       console.error('Error fetching artists:', error);
-      setArtistsHired([]);
     }
   };
 

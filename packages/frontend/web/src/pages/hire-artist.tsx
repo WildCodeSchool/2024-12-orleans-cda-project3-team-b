@@ -26,7 +26,6 @@ export type Artist = {
       artistsHiredSkillsId: number;
     },
   ];
-  artistsHiredId: number;
 };
 
 export type InfoLabel = {
