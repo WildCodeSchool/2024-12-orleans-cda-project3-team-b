@@ -7,7 +7,7 @@ export default function Register() {
   const [message, setMessage] = useState('');
 
   const regex = {
-    minLength: password.length >= 15,
+    minLength: password.length >= 8,
     lowercase: /[a-z]/.test(password),
     uppercase: /[A-Z]/.test(password),
     number: /[0-9]/.test(password),
@@ -91,7 +91,7 @@ export default function Register() {
       {/* Critères de mot de passe */}
       <div className='mt-4 text-sm'>
         <p className={regex.minLength ? 'text-green-600' : 'text-red-600'}>
-          {regex.minLength ? '✅' : '❌'} {'Minimum 15 characters'}
+          {regex.minLength ? '✅' : '❌'} {'Minimum 8 characters'}
         </p>
         <p className={regex.lowercase ? 'text-green-600' : 'text-red-600'}>
           {regex.lowercase ? '✅' : '❌'} {'At least one lowercase letter'}
