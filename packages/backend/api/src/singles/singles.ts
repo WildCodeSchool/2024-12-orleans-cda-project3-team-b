@@ -4,6 +4,20 @@ import { db } from '@app/backend-shared';
 
 const singlesRouter = Router();
 
+export type ArtistHired = {
+  id: number;
+  artists_id: number;
+  milestones_id: number;
+  firstname: string;
+  lastname: string;
+  alias: string;
+  genre_id: number;
+  image: string;
+  notoriety: number;
+  genre_name: string;
+  milestone_name: string;
+};
+
 singlesRouter.get('/artist/:id', async (req: Request, res) => {
   const artistId = Number(req.params.id);
   const userId = req.userId;
@@ -27,7 +41,6 @@ singlesRouter.get('/artist/:id', async (req: Request, res) => {
       )
       .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .where('artists_hired.id', '=', artistId)
       .select([
         'singles.id as id',
         'singles.artists_hired_id',
@@ -39,7 +52,7 @@ singlesRouter.get('/artist/:id', async (req: Request, res) => {
         'artists.alias as artist_alias',
         'singles.score',
       ])
-      .where('artists_hired.id', '=', artistId)
+      .where('artists_hired.artists_id', '=', artistId)
       .where('labels.users_id', '=', userId)
       .execute();
 
@@ -142,7 +155,7 @@ singlesRouter.get('/', async (req: Request, res) => {
 });
 
 singlesRouter.post('/', async (req: Request, res) => {
-  const { artistId, singleName } = req.body;
+  const { artistId, singleName, artists } = req.body;
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -187,15 +200,17 @@ singlesRouter.post('/', async (req: Request, res) => {
     }
     await db
       .insertInto('singles')
-      .values({
-        artists_hired_id: artistId,
-        name: singleName.trim(),
-        genres_id: 1,
-        exp_value: 50,
-        listeners: 0,
-        money_earned: 0,
-        score: 0,
-      })
+      .values(
+        artists.map((artist: ArtistHired) => ({
+          artists_hired_id: artistId,
+          name: singleName.trim(),
+          genres_id: artist.genre_id,
+          exp_value: 100,
+          listeners: 0,
+          money_earned: 0,
+          score: 0,
+        })),
+      )
       .execute();
 
     return res.status(201).json({ success: true });

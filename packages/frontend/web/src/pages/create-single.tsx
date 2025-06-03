@@ -27,7 +27,6 @@ export default function CreateSingle() {
 
   const handleSubmit = async () => {
     if (!selectedArtistId || !singleName.trim()) {
-      alert('Please select an artist and enter a name for your single.');
       return;
     }
 
@@ -38,80 +37,64 @@ export default function CreateSingle() {
         body: JSON.stringify({
           artistId: selectedArtistId,
           singleName: singleName.trim(),
+          artists,
         }),
       });
 
       if (!res.ok) {
-        alert('An error occurred while submitting the form.');
         return;
       }
 
       setSubmitted(true);
-
-      console.log('Form submitted with:', {
-        selectedArtistId,
-        selectedMarketingId,
-        singleName,
-      });
     } catch (error) {
       console.error('Submission failed:', error);
-      alert('Failed to submit. Please try again.');
     }
   };
 
   useEffect(() => {
-    const fetchArtistsHired = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/artists-hired');
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data: ArtistHired[] = await response.json();
-
+        // Fetch and set selected artist
         if (selectedArtistId != null) {
-          const selected = data.find(
-            (artist) => artist.artists_id === selectedArtistId,
+          const resArtist = await fetch('/api/artists-hired');
+          if (!resArtist.ok)
+            throw new Error(`Artist fetch failed: ${resArtist.status}`);
+          const artistsData: ArtistHired[] = await resArtist.json();
+          const selectedArtist = artistsData.find(
+            (a) => a.id === selectedArtistId,
           );
-          setArtists(selected ? [selected] : []);
+          setArtists(selectedArtist ? [selectedArtist] : []);
         } else {
           setArtists([]);
         }
-      } catch (error) {
-        console.error('Error fetching artists:', error);
-        setArtists([]);
-      }
-    };
 
-    if (selectedArtistId != null) {
-      void fetchArtistsHired();
-    }
-  }, [selectedArtistId]);
-
-  useEffect(() => {
-    const fetchMarketing = async () => {
-      try {
-        const response = await fetch('/api/marketing');
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data: Marketing[] = await response.json();
-
+        // Fetch and set selected marketing
         if (selectedMarketingId != null) {
-          const selected = data.find((m) => m.id === selectedMarketingId);
-          setMarketing(selected ? [selected] : []);
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
+          );
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
         } else {
           setMarketing([]);
         }
       } catch (error) {
-        console.error('Error fetching marketing:', error);
+        console.error('Error fetching data:', error);
+        setArtists([]);
         setMarketing([]);
       }
     };
 
-    if (selectedMarketingId != null) {
-      void fetchMarketing();
+    if (selectedArtistId != null || selectedMarketingId != null) {
+      void fetchData();
+    } else {
+      setArtists([]);
+      setMarketing([]);
     }
-  }, [selectedMarketingId]);
+  }, [selectedArtistId, selectedMarketingId]);
 
   return (
     <form>

@@ -1,3 +1,4 @@
+// import { type Request, Router } from 'express';
 import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
@@ -12,7 +13,6 @@ getLabelRouter.get('/labels', async (req: Request, res) => {
     });
     return;
   }
-
   try {
     const labels = await db
       .selectFrom('labels')

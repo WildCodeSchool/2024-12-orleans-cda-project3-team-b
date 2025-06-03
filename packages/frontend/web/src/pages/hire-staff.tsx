@@ -98,7 +98,6 @@ export default function HireArtist() {
       setStaff((prev) => prev.filter((staff) => staff.id !== staffId));
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Error hiring artist. Please try again.');
     }
   };
 

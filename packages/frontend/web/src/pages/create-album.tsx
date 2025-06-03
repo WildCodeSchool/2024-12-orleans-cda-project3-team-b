@@ -54,101 +54,75 @@ export default function CreateAlbum() {
         setSubmitted(true);
       } catch (error) {
         console.error('Submission failed:', error);
-        alert('Failed to submit. Please try again.');
       }
   };
 
   useEffect(() => {
-    const fetchArtistsHired = async () => {
+    const fetchData = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: ArtistHired[] = await response.json();
-
+        // Fetch artists hired
         if (selectedArtistId != null) {
-          const selected = data.find(
-            (artist) => artist.id === selectedArtistId,
+          const resArtists = await fetch('/api/artists-hired');
+          if (!resArtists.ok)
+            throw new Error(`Artist error: ${resArtists.status}`);
+          const artistsData: ArtistHired[] = await resArtists.json();
+          const selectedArtist = artistsData.find(
+            (a) => a.id === selectedArtistId,
           );
-          setArtists(selected ? [selected] : []);
+          setArtists(selectedArtist ? [selectedArtist] : []);
         } else {
           setArtists([]);
         }
-      } catch (error) {
-        console.error('Error fetching artists:', error);
-        setArtists([]);
-      }
-    };
 
-    if (selectedArtistId != null) {
-      void fetchArtistsHired();
-    }
-  }, [selectedArtistId]);
-
-  useEffect(() => {
-    const fetchMarketing = async () => {
-      try {
-        const apiUrl = `/api/marketing`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data: Marketing[] = await response.json();
-
+        // Fetch marketing
         if (selectedMarketingId != null) {
-          const selected = data.find(
-            (marketing) => marketing.id === selectedMarketingId,
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing error: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
           );
-          setMarketing(selected ? [selected] : []);
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
         } else {
           setMarketing([]);
         }
+
+        // Fetch singles
+        if (selectedSinglesId.length > 0) {
+          const resSingles = await fetch('/api/singles');
+          if (!resSingles.ok)
+            throw new Error(`Singles error: ${resSingles.status}`);
+          const singlesData: Singles[] = await resSingles.json();
+          const selected = singlesData.filter((s) =>
+            selectedSinglesId.includes(s.id),
+          );
+          setChosenSingles(selected.slice(0, 3));
+        } else {
+          setChosenSingles([]);
+        }
       } catch (error) {
-        console.error('Error fetching marketing:', error);
+        console.error('Error fetching data:', error);
+        // Optionally clear all in case of error
+        setArtists([]);
         setMarketing([]);
-      }
-    };
-
-    if (selectedMarketingId != null) {
-      void fetchMarketing();
-    }
-  }, [selectedMarketingId]);
-
-  useEffect(() => {
-    const fetchSingles = async () => {
-      try {
-        const apiUrl = `/api/singles`;
-        const response = await fetch(apiUrl);
-        console.log('IDs sélectionnés :', selectedSinglesId);
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data: Singles[] = await response.json();
-
-        const selected = data.filter((single) =>
-          selectedSinglesId.includes(single.id),
-        );
-
-        setChosenSingles(selected.slice(0, 3));
-      } catch (error) {
-        console.error('Error fetching singles:', error);
         setChosenSingles([]);
       }
     };
 
-    if (selectedSinglesId.length > 0) {
-      void fetchSingles();
+    if (
+      selectedArtistId != null ||
+      selectedMarketingId != null ||
+      selectedSinglesId.length > 0
+    ) {
+      void fetchData();
     } else {
+      // Clear all if nothing selected
+      setArtists([]);
+      setMarketing([]);
       setChosenSingles([]);
     }
-  }, [selectedSinglesId]);
-  console.log(artists, 'artists');
+  }, [selectedArtistId, selectedMarketingId, selectedSinglesId]);
 
   return (
     <form action='' method='post'>
