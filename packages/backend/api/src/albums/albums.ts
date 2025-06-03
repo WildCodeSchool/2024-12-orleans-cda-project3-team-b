@@ -128,17 +128,24 @@ albumsRouter.post('/create', async (req: Request, res) => {
       .selectFrom('albums')
       .select('id')
       .where('artists_hired_id', '=', artistId)
+      .orderBy('id', 'desc')
+      .limit(1)
       .execute();
+
+    if (albumId.length === 0) {
+      throw new Error('No album found for this artist');
+    }
+
+    const latestAlbumId = albumId[0].id;
 
     await db
       .insertInto('singles_albums')
       .values(
         singleId.map((singleId: number) => ({
           singles_id: singleId,
-          albums_id: Number(albumId[0].id),
+          albums_id: latestAlbumId,
         })),
       )
-
       .execute();
 
     return res.status(201).json({ success: true });

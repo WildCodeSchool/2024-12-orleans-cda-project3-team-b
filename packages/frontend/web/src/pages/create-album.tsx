@@ -61,9 +61,8 @@ export default function CreateAlbum() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchArtists = async () => {
       try {
-        // Fetch artists hired
         if (selectedArtistId != null) {
           const resArtists = await fetch('/api/artists-hired');
           if (!resArtists.ok)
@@ -76,8 +75,18 @@ export default function CreateAlbum() {
         } else {
           setArtists([]);
         }
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
 
-        // Fetch marketing
+    void fetchArtists();
+  }, [selectedArtistId]);
+
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
         if (selectedMarketingId != null) {
           const resMarketing = await fetch('/api/marketing');
           if (!resMarketing.ok)
@@ -90,8 +99,18 @@ export default function CreateAlbum() {
         } else {
           setMarketing([]);
         }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
 
-        // Fetch singles
+    void fetchMarketing();
+  }, [selectedMarketingId]);
+
+  useEffect(() => {
+    const fetchSingles = async () => {
+      try {
         if (selectedSinglesId.length > 0) {
           const resSingles = await fetch('/api/singles');
           if (!resSingles.ok)
@@ -105,27 +124,13 @@ export default function CreateAlbum() {
           setChosenSingles([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        // Optionally clear all in case of error
-        setArtists([]);
-        setMarketing([]);
+        console.error('Error fetching singles:', error);
         setChosenSingles([]);
       }
     };
 
-    if (
-      selectedArtistId != null ||
-      selectedMarketingId != null ||
-      selectedSinglesId.length > 0
-    ) {
-      void fetchData();
-    } else {
-      // Clear all if nothing selected
-      setArtists([]);
-      setMarketing([]);
-      setChosenSingles([]);
-    }
-  }, [selectedArtistId, selectedMarketingId, selectedSinglesId]);
+    void fetchSingles();
+  }, [selectedSinglesId]);
 
   return (
     <form action='' method='post'>
@@ -212,7 +217,7 @@ export default function CreateAlbum() {
           {hasTriedSubmit &&
           (!selectedArtistId ||
             !singleName.trim() ||
-            selectedSinglesId.length !== 0) ? (
+            selectedSinglesId.length === 0) ? (
             <p className='text-center text-sm text-red-500'>
               {
                 'Please select an artist, enter a name for the album and choose at least 1 single.'

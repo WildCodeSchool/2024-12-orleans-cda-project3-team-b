@@ -57,9 +57,8 @@ export default function CreateSingle() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchArtists = async () => {
       try {
-        // Fetch and set selected artist
         if (selectedArtistId != null) {
           const resArtist = await fetch('/api/artists-hired');
           if (!resArtist.ok)
@@ -72,8 +71,18 @@ export default function CreateSingle() {
         } else {
           setArtists([]);
         }
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
 
-        // Fetch and set selected marketing
+    void fetchArtists();
+  }, [selectedArtistId]);
+
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
         if (selectedMarketingId != null) {
           const resMarketing = await fetch('/api/marketing');
           if (!resMarketing.ok)
@@ -87,19 +96,13 @@ export default function CreateSingle() {
           setMarketing([]);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        setArtists([]);
+        console.error('Error fetching marketing:', error);
         setMarketing([]);
       }
     };
 
-    if (selectedArtistId != null || selectedMarketingId != null) {
-      void fetchData();
-    } else {
-      setArtists([]);
-      setMarketing([]);
-    }
-  }, [selectedArtistId, selectedMarketingId]);
+    void fetchMarketing();
+  }, [selectedMarketingId]);
 
   return (
     <form>
