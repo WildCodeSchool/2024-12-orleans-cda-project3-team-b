@@ -20,7 +20,7 @@ artistsRouter.get('/', async (req: Request, res) => {
       .selectFrom('artists')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
-      .select([
+      .select((eb) => [
         'artists.id as artist_id',
         'artists.alias',
         'artists.firstname',
@@ -30,6 +30,13 @@ artistsRouter.get('/', async (req: Request, res) => {
         'artists.milestones_id',
         'artists.notoriety',
         'artists.price',
+        jsonArrayFrom(
+          eb
+            .selectFrom('artists_skills')
+            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
+            .select(['skills.id as skillsId', 'artists_skills.grade'])
+            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
+        ).as('skills'),
       ])
       .where((eb) =>
         eb.not(

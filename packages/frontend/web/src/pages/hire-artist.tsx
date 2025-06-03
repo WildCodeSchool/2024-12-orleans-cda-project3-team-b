@@ -114,6 +114,7 @@ export default function HireArtist() {
       console.error('Error hiring artist:', error);
     }
   };
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>

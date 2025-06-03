@@ -41,23 +41,6 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
-    await db
-      .selectFrom('artists_hired')
-      .select('id')
-      .where('artists_hired.artists_id', '=', Number(artistsId[0].insertId))
-      .execute();
-
-    await db
-      .insertInto('artists_hired_skills')
-      .values(
-        skills.map((skill: { skillsId: number; grade: number }) => ({
-          skills_id: skill.skillsId,
-          grade: skill.grade,
-          artists_hired_id: Number(artistsId[0].insertId),
-        })),
-      )
-      .execute();
-
     const artistsHiredId = await db
       .selectFrom('artists_hired')
       .select('id')
@@ -71,13 +54,23 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         .json({ error: 'Failed to retrieve hired artist_hired ID' });
       return;
     }
-
     await db
       .insertInto('label_artists')
       .values({
         label_id: labelId,
         artists_hired_id: Number(artistsHiredId.id),
       })
+      .execute();
+
+    await db
+      .insertInto('artists_hired_skills')
+      .values(
+        skills.map((skill: { skillsId: number; grade: number }) => ({
+          skills_id: skill.skillsId,
+          grade: skill.grade,
+          artists_hired_id: Number(artistsHiredId.id),
+        })),
+      )
       .execute();
 
     await db
@@ -133,9 +126,7 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
         'milestones.name as milestone_name',
         'genres.name as genre_name',
       ])
-      // .where('artists.id', 'is not', null)
       .execute();
-
     res.json(artistsHired);
     return;
   } catch (error) {
@@ -164,18 +155,14 @@ artistsHiredRouter.get('/:id', async (req, res) => {
           eb
             .selectFrom('artists_hired_skills')
             .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
-            // .leftJoin('artists_skills','artists_skills.skills_id','skills.id')
+            .leftJoin('artists_skills', 'artists_skills.skills_id', 'skills.id')
             .select([
               'skills.name',
               'artists_hired_skills.grade',
               'artists_hired_skills.skills_id as skills_id',
               'artists_hired_skills.id as artistsHiredSkillsId',
             ])
-            .whereRef(
-              'artists_hired_skills.artists_hired_id',
-              '=',
-              'artists_hired.id',
-            ),
+            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
         ).as('skills'),
       ])
       .where('artists_hired.id', '=', Number(id))
