@@ -6,7 +6,7 @@ import ArtistCardHire from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 import { useAuth } from '@/contexts/auth-context';
 
-import type { Artists } from '../../../../backend/api/src/artists/artists';
+import type { Artist } from '../../../../backend/api/src/artists/artists';
 
 export type InfoLabel = {
   label: number;
@@ -14,7 +14,7 @@ export type InfoLabel = {
 };
 
 export default function HireArtist() {
-  const [artists, setArtists] = useState<Artists[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
@@ -65,7 +65,7 @@ export default function HireArtist() {
   );
 
   const handleHireArtist = async (
-    artist: Artists,
+    artist: Artist,
     labelId: number,
     budget: number,
   ) => {
@@ -75,7 +75,7 @@ export default function HireArtist() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          artistId: artist.artist_id,
+          artistId: artist.id,
           skills: artist.skills,
           cost: artist.price,
           labelId,
@@ -87,9 +87,7 @@ export default function HireArtist() {
       if (!hireResponse.ok) {
         throw new Error(`Hire failed. Status: ${hireResponse.status}`);
       }
-      setArtists((prev) =>
-        prev.filter((artist) => artist.artist_id !== artist.artist_id),
-      );
+      setArtists((prev) => prev.filter((artist) => artist.id !== artist.id));
     } catch (error) {
       console.error('Error hiring artist:', error);
     }
@@ -113,7 +111,7 @@ export default function HireArtist() {
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         {sortedArtists.slice(0, visibleCount).map((artist) => (
           <ArtistCardHire
-            key={artist.artist_id}
+            key={artist.id}
             artist={artist}
             onHire={async () => {
               if (labelId === undefined) {

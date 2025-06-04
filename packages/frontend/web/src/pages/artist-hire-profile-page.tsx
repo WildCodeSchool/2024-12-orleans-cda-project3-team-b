@@ -4,15 +4,10 @@ import { useParams } from 'react-router-dom';
 
 import ArtistProfileCard from '@/components/artist-profile-card';
 
-import type { Artist } from '../../../../backend/api/src/artists/artists';
-
-type SingleArtistHired = {
-  fetchArtistsHired: () => Promise<void>;
-  isAddButton?: boolean;
-};
+import type { HiredArtist } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 export default function ArtistHirePage() {
-  const [artistsHired, setArtistsHired] = useState<Artist[]>([]);
+  const [artistsHired, setArtistsHired] = useState<HiredArtist[]>([]);
   const { id } = useParams<{ id: string }>();
 
   const fetchArtistsHired = useCallback(async () => {
