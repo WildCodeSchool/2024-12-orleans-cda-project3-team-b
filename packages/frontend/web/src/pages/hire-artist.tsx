@@ -6,27 +6,7 @@ import ArtistCardHire from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 import { useAuth } from '@/contexts/auth-context';
 
-export type Artist = {
-  artist_hired_id: number;
-  artist_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  genre_name: string;
-  notoriety: number;
-  price: number;
-  artists_hired_id: number;
-  name: string;
-  skills: [
-    {
-      name: string;
-      grade: number;
-      skills_id: number;
-      artistsHiredSkillsId: number;
-    },
-  ];
-};
+import type { Artists } from '../../../../backend/api/src/artists/artists';
 
 export type InfoLabel = {
   label: number;
@@ -34,7 +14,7 @@ export type InfoLabel = {
 };
 
 export default function HireArtist() {
-  const [artists, setArtists] = useState<Artist[]>([]);
+  const [artists, setArtists] = useState<Artists[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
@@ -85,7 +65,7 @@ export default function HireArtist() {
   );
 
   const handleHireArtist = async (
-    artist: Artist,
+    artist: Artists,
     labelId: number,
     budget: number,
   ) => {

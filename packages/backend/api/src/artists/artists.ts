@@ -6,6 +6,51 @@ import { db } from '@app/backend-shared';
 
 const artistsRouter = Router();
 
+function getArtists(userId: number) {
+  return db
+    .selectFrom('artists')
+    .leftJoin('genres', 'artists.genres_id', 'genres.id')
+    .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
+    .select((eb) => [
+      'artists.id as artist_id',
+      'artists.alias',
+      'artists.firstname',
+      'artists.lastname',
+      'genres.name as genre',
+      'artists.image',
+      'artists.milestones_id',
+      'artists.notoriety',
+      'artists.price',
+      jsonArrayFrom(
+        eb
+          .selectFrom('artists_skills')
+          .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
+          .select(['skills.id as skillsId', 'artists_skills.grade'])
+          .whereRef('artists_skills.artists_id', '=', 'artists.id'),
+      ).as('skills'),
+    ])
+    .where((eb) =>
+      eb.not(
+        eb.exists(
+          eb
+            .selectFrom('artists_hired')
+            .leftJoin(
+              'label_artists',
+              'label_artists.artists_hired_id',
+              'artists_hired.id',
+            )
+            .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+            .select('artists_hired.artists_id')
+            .whereRef('artists_hired.artists_id', '=', 'artists.id')
+            .where('labels.users_id', '=', userId),
+        ),
+      ),
+    )
+    .execute();
+}
+
+export type Artists = Awaited<ReturnType<typeof getArtists>>[number];
+
 artistsRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -16,46 +61,7 @@ artistsRouter.get('/', async (req: Request, res) => {
   }
 
   try {
-    const artists = await db
-      .selectFrom('artists')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
-      .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
-      .select((eb) => [
-        'artists.id as artist_id',
-        'artists.alias',
-        'artists.firstname',
-        'artists.lastname',
-        'genres.name as genre',
-        'artists.image',
-        'artists.milestones_id',
-        'artists.notoriety',
-        'artists.price',
-        jsonArrayFrom(
-          eb
-            .selectFrom('artists_skills')
-            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
-            .select(['skills.id as skillsId', 'artists_skills.grade'])
-            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
-        ).as('skills'),
-      ])
-      .where((eb) =>
-        eb.not(
-          eb.exists(
-            eb
-              .selectFrom('artists_hired')
-              .leftJoin(
-                'label_artists',
-                'label_artists.artists_hired_id',
-                'artists_hired.id',
-              )
-              .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-              .select('artists_hired.artists_id')
-              .whereRef('artists_hired.artists_id', '=', 'artists.id')
-              .where('labels.users_id', '=', userId),
-          ),
-        ),
-      )
-      .execute();
+    const artists = await getArtists(userId);
 
     res.json(artists);
   } catch (error) {
