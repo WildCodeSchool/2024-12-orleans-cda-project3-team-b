@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ArtistCard from '@/components/artist-card';
+import StaffLabelsCard from '@/components/staff-labels-card';
 
 import AddButton from '../components/add-button';
 
@@ -15,32 +16,48 @@ type ArtistHired = {
   notoriety: number;
   genre_name: string;
 };
+type StaffHired = {
+  id: number;
+  job: string;
+  bonus: number;
+  price: number;
+  image: string;
+};
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [staff, setStaff] = useState<StaffHired[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
-
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) {
+        const response = await fetch('/api/artists-hired');
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
-
         setArtists(data);
       } catch (error) {
-        console.error('Error details:', error);
-        setArtists([]); // Reset artists on error
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
+
+    const fetchStaff = async () => {
+      try {
+        const response = await fetch('/api/games/staff-labels');
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setStaff(data.staffLabels);
+      } catch (error) {
+        console.error('Error fetching staff:', error);
+        setStaff([]);
       }
     };
 
     void fetchArtistsHired();
+    void fetchStaff();
   }, []);
 
   const handleSeeMore = () => {
@@ -54,7 +71,7 @@ export default function MainMenu() {
           {'MyARTISTS'}
         </h2>
 
-        <div className='mt-5 grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => {
             return <ArtistCard key={artist.artist_id} artist={artist} />;
           })}
@@ -74,56 +91,48 @@ export default function MainMenu() {
 
         <h2 className='text-secondary pt-1 text-xl'>{'Hire a new artist'}</h2>
       </div>
-      <div className='h-70 pt-7'>
+      <div className='h-50 pt-7'>
         <h2 className='text-secondary mt-4 text-3xl underline'>{' RECORD'}</h2>
 
-        <div className='flex h-50 items-center justify-center'>
+        <div className='mt-8 flex h-15 items-center justify-center'>
           <div className='flex flex-col items-center justify-center'>
             <Link to={'/create-single-menu'}>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h2 className='text-secondary pt-1 text-xl'>
-              {'Create a new single'}
-            </h2>
+            <h2 className='text-secondary ml-1 text-xl'>{'Create a single'}</h2>
           </div>
           <div className='flex flex-col items-center justify-center pl-10'>
             <Link to={'/create-album-menu'}>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h3 className='text-secondary pt-1 text-xl'>
-              {'Create a new album'}
+            <h3 className='text-secondary mr-1 pt-1 text-xl'>
+              {'Create an album'}
             </h3>
           </div>
         </div>
       </div>
-      <div className='h-70 pt-7'>
+
+      <div className='h-70'>
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
-        <div className='flex h-50 items-center justify-center'>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
-          <div className='flex flex-col items-center justify-center pr-10 pl-10'>
-            <Link to={'/hire-staff'}>
-              <AddButton>{'+'}</AddButton>
-            </Link>
-            <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
-          </div>
+
+        <div className='mt-5 flex flex-wrap justify-center gap-2'>
+          {staff.slice(0, visibleCount).map((staf) => (
+            <StaffLabelsCard key={staf.id} staf={staf} />
+          ))}
         </div>
+
+        {staff.length <= 3 ? (
+          <div className='flex h-30 items-center justify-center'>
+            <div className='flex flex-col items-center justify-center pr-2 pl-2'>
+              <Link to={'/hire-staff'}>
+                <AddButton>{'+'}</AddButton>
+              </Link>
+              <h3 className='text-secondary text-xl'>{'Hire staff'}</h3>
+            </div>
+          </div>
+        ) : (
+          <p>{'You can have only 4 staffs'}</p>
+        )}
       </div>
     </div>
   );

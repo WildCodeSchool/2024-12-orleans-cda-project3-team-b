@@ -11,6 +11,7 @@ export default function Register() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
 
+
   const validateEmail = (email: string): boolean => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
@@ -171,6 +172,7 @@ export default function Register() {
         >
           {passwordCriteria.minLength ? '✅' : '❌'}
           {' Minimum 8 characters'}
+
         </p>
         <p
           className={

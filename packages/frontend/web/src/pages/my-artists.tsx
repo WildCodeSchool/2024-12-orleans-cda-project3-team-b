@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
@@ -18,14 +17,13 @@ type ArtistHired = {
 };
 
 export default function MyArtists() {
-  const navigate = useNavigate();
   const [artists, setArtists] = useState<ArtistHired[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const apiUrl = `/api/artists-hired`;
+        const apiUrl = '/api/artists-hired';
 
         const response = await fetch(apiUrl);
 
@@ -50,7 +48,7 @@ export default function MyArtists() {
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
+    <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
         <button type='button'>
           <ArrowLeft />
@@ -64,7 +62,7 @@ export default function MyArtists() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='mt-5 grid grid-cols-2 gap-4'>
+      <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
         {artists.slice(0, visibleCount).map((artist) => {
           return <ArtistCard key={artist.artist_id} artist={artist} />;
         })}

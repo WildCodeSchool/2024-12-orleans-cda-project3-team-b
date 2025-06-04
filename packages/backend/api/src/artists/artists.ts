@@ -1,17 +1,24 @@
-import express from 'express';
+// import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const artistsRouter = express.Router();
+const artistsRouter = Router();
 
-artistsRouter.get('/', async (req, res) => {
+artistsRouter.get('/', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
   try {
     const artists = await db
-
       .selectFrom('artists')
       .leftJoin('genres', 'artists.genres_id', 'genres.id')
       .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
-      .leftJoin('artists_hired', 'artists.id', 'artists_hired.artists_id')
       .select([
         'artists.id as artist_id',
         'artists.firstname',
@@ -24,7 +31,23 @@ artistsRouter.get('/', async (req, res) => {
         'milestones.name as milestone_name',
         'artists.exp_value',
       ])
-      .where('artists_hired.artists_id', 'is', null)
+      .where((eb) =>
+        eb.not(
+          eb.exists(
+            eb
+              .selectFrom('artists_hired')
+              .leftJoin(
+                'label_artists',
+                'label_artists.artists_hired_id',
+                'artists_hired.id',
+              )
+              .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+              .select('artists_hired.artists_id')
+              .whereRef('artists_hired.artists_id', '=', 'artists.id')
+              .where('labels.users_id', '=', userId),
+          ),
+        ),
+      )
       .execute();
 
     res.json(artists);
@@ -41,7 +64,7 @@ artistsRouter.get('/:id', async (req, res) => {
     const artists = await db
       .selectFrom('artists')
       .selectAll()
-      .where('artists.id', '=', id)
+      .where('artists.id', '=', Number(id))
       .execute();
 
     res.json(artists);
