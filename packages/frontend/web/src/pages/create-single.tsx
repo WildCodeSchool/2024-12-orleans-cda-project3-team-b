@@ -156,7 +156,9 @@ export default function CreateSingle() {
         {/* Marketing */}
         <div className='mt-6 w-full max-w-md'>
           {marketing.length > 0 ? (
-            marketing.map((m) => <MarketingCard key={m.id} marketing={m} />)
+            marketing.map((campaign) => (
+              <MarketingCard key={campaign.id} marketing={campaign} />
+            ))
           ) : (
             <p className='text-secondary mt-4 text-center text-sm'>
               {'No Marketing Campaign selected'}

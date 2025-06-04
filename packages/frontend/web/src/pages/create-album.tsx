@@ -201,7 +201,9 @@ export default function CreateAlbum() {
         </div>
         <div className='mt-6'>
           {marketing.length > 0 ? (
-            marketing.map((m) => <MarketingCard key={m.id} marketing={m} />)
+            marketing.map((campaign) => (
+              <MarketingCard key={campaign.id} marketing={campaign} />
+            ))
           ) : (
             <p className='text-secondary text-s mt-4 text-center'>
               {'No Marketing Campaign selected'}

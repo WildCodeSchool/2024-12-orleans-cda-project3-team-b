@@ -56,16 +56,16 @@ export default function ModalMarketing({
         </div>
 
         <div className='grid grid-cols-2 gap-4'>
-          {marketing.map((m) => (
+          {marketing.map((campaign) => (
             <div
-              key={m.id}
+              key={campaign.id}
               onClick={() => {
-                onSelectMarketing(m.id);
+                onSelectMarketing(campaign.id);
                 onClose();
               }}
               className='cursor-pointer transition-transform hover:scale-105'
             >
-              <MarketingCard marketing={m} />
+              <MarketingCard marketing={campaign} />
             </div>
           ))}
         </div>

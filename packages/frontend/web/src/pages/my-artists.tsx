@@ -4,16 +4,7 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 
-type ArtistHired = {
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-};
+import type { ArtistHired } from './main-menu';
 
 export default function MyArtists() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
@@ -63,7 +54,7 @@ export default function MyArtists() {
       </div>
       <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
         {artists.slice(0, visibleCount).map((artist) => {
-          return <ArtistCard key={artist.artist_id} artist={artist} />;
+          return <ArtistCard key={artist.artists_id} artist={artist} />;
         })}
       </div>
 
