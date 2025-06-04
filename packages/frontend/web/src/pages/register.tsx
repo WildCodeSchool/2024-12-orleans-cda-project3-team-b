@@ -10,32 +10,45 @@ export default function Register() {
   const [isAcceptpp, setIsAcceptpp] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
+
+  const validateEmail = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const passwordCriteria = {
+    minLength: password.length >= 8,
+    lowercase: /[a-z]/.test(password),
+    uppercase: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
+  const isStrongPassword = Object.values(passwordCriteria).every(Boolean);
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      newErrors.email = 'Email is not valid';
+
+    if (!validateEmail(email)) {
+      newErrors.email = 'Invalid email format';
     }
-    if (!password) {
-      newErrors.password = 'Password is required';
-    } else if (
-      !/^.*(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).*$/.test(
-        password,
-      )
-    ) {
-      newErrors.password =
-        'The password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character.';
+
+    if (!isStrongPassword) {
+      newErrors.password = 'Password is too weak';
     }
+
     if (!isAcceptpp) {
-      newErrors.isAcceptpp = 'Please accept the Privacy Policy to continue.';
+      newErrors.isAcceptpp = 'You must accept the privacy policy';
     }
+
     return newErrors;
   };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
+
     if (Object.keys(validationErrors).length === 0) {
       try {
         const res = await fetch('/api/auth/register', {
@@ -45,7 +58,7 @@ export default function Register() {
           credentials: 'include',
         });
         const data = await res.json();
-        if (data.ok === false) {
+        if (!data.ok) {
           setMessage('Email is already in use');
         } else {
           setMessage('You can login now');
@@ -55,6 +68,7 @@ export default function Register() {
       }
     }
   };
+
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
       <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
@@ -128,12 +142,12 @@ export default function Register() {
                 ) : null}
                 <div className='mt-4 flex flex-col items-center gap-1 text-sm'>
                   <Link
-                    to='/sign-in'
+                    to='/login'
                     className='group hover:text-primary hover:underline'
                   >
                     {'Already have an account ? '}
                     <span className='group-hover:text-primary text-[var(--color-orange)]'>
-                      {'Sign In'}
+                      {'Log In'}
                     </span>
                   </Link>
                 </div>
@@ -146,6 +160,49 @@ export default function Register() {
           src='/assets/vinyl.png'
           alt='Vinyle'
         />
+      </div>
+
+      {/* Critères de mot de passe */}
+      <div className='z-1 mb-8 ml-2 text-sm'>
+        <p
+          className={
+            passwordCriteria.minLength ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.minLength ? '✅' : '❌'}
+          {' Minimum 8 characters'}
+        </p>
+        <p
+          className={
+            passwordCriteria.lowercase ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.lowercase ? '✅' : '❌'}{' '}
+          {'At least one lowercase letter'}
+        </p>
+        <p
+          className={
+            passwordCriteria.uppercase ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.uppercase ? '✅' : '❌'}
+          {' At least one uppercase letter'}
+        </p>
+        <p
+          className={
+            passwordCriteria.number ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.number ? '✅' : '❌'} {'At least one number'}
+        </p>
+        <p
+          className={
+            passwordCriteria.specialChar ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.specialChar ? '✅' : '❌'}{' '}
+          {'At least one special character'}
+        </p>
       </div>
     </div>
   );
