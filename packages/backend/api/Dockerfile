@@ -17,7 +17,6 @@ FROM node:22.14.0-alpine3.21
 
 ENV NODE_ENV=production
 
-
 WORKDIR /app
 
 COPY packages/backend/api/package.production.json /app/package.json
