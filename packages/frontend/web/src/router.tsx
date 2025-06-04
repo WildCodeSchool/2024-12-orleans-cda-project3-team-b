@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import AlbumCongratulations from './pages/album-congratulations.tsx';
 import App from './pages/app.tsx';
 import CreateAlbumMenu from './pages/create-album-menu.tsx';
 import CreateAlbum from './pages/create-album.tsx';
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'album-congrats',
+        element: <AlbumCongratulations />,
       },
       {
         path: '*',
