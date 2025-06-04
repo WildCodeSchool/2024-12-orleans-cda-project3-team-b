@@ -24,7 +24,7 @@ export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
         <h2 className='ml-2'>
           {artist.firstname} {artist.lastname} {artist.alias}
         </h2>
-        <h3>{artist.genre_name}</h3>
+        <h3 className='text-sm md:text-lg'>{artist.genre_name}</h3>
       </div>
       <div className='flex items-center text-sm'>
         <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>

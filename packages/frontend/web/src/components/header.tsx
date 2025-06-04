@@ -19,7 +19,7 @@ export default function Header() {
       <nav className='m-auto'>
         <ul className='mb-10 hidden flex-row gap-12 sm:flex'>
           <li>
-            <Link to='/register'>{'SIGN IN'}</Link>
+            <Link to='/register'>{'SIGN UP'}</Link>
           </li>
           <li>
             <Link to='/login'>{'LOGIN'}</Link>
@@ -51,7 +51,7 @@ export default function Header() {
         <ul onClick={closeMenu} className='text-center'>
           <CustomLink to='/'>{'Home'}</CustomLink>
           <CustomLink to=''>{'Privacy Policy'}</CustomLink>
-          <CustomLink to='/'>{'Sign in'}</CustomLink>
+          <CustomLink to='/'>{'Sign up'}</CustomLink>
         </ul>
       </nav>
     </header>

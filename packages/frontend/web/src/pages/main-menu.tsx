@@ -94,30 +94,28 @@ export default function MainMenu() {
 
         <h2 className='text-secondary pt-1 text-xl'>{'Hire a new artist'}</h2>
       </div>
-      <div className='h-70 pt-7'>
+      <div className='h-50 pt-7'>
         <h2 className='text-secondary mt-4 text-3xl underline'>{' RECORD'}</h2>
 
-        <div className='flex h-50 items-center justify-center'>
+        <div className='mt-8 flex h-15 items-center justify-center'>
           <div className='flex flex-col items-center justify-center'>
             <Link to={'/create-single-menu'}>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h2 className='text-secondary pt-1 text-xl'>
-              {'Create a new single'}
-            </h2>
+            <h2 className='text-secondary ml-1 text-xl'>{'Create a single'}</h2>
           </div>
           <div className='flex flex-col items-center justify-center pl-10'>
             <Link to={'/create-album-menu'}>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h3 className='text-secondary pt-1 text-xl'>
-              {'Create a new album'}
+            <h3 className='text-secondary mr-1 pt-1 text-xl'>
+              {'Create an album'}
             </h3>
           </div>
         </div>
       </div>
 
-      <div className='h-70 pt-7'>
+      <div className='h-70'>
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
 
         <div className='mt-5 flex flex-wrap justify-center gap-2'>
@@ -127,7 +125,7 @@ export default function MainMenu() {
         </div>
 
         {staff.length <= 3 ? (
-          <div className='flex h-50 items-center justify-center'>
+          <div className='flex h-30 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-2 pl-2'>
               <Link to={'/hire-staff'}>
                 <AddButton>{'+'}</AddButton>
