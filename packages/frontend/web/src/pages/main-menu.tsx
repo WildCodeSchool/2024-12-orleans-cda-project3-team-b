@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import AddButton from '@/components/add-button';
 import ArtistCard from '@/components/artist-card';
+import StaffLabelsCard from '@/components/staff-labels-card';
 
 export type ArtistHired = {
   id: number;
@@ -99,26 +100,30 @@ export default function MainMenu() {
             <Link to='/create-single'>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h2 className='text-secondary pt-1 text-xl'>
-              {'Create a new single'}
-            </h2>
+            <h2 className='text-secondary ml-1 text-xl'>{'Create a single'}</h2>
           </div>
           <div className='flex flex-col items-center'>
             <Link to='/create-album'>
               <AddButton>{'+'}</AddButton>
             </Link>
-            <h3 className='text-secondary pt-1 text-xl'>
-              {'Create a new album'}
+            <h3 className='text-secondary mr-1 pt-1 text-xl'>
+              {'Create an album'}
             </h3>
           </div>
         </div>
       </div>
 
-      {/* STAFF Section */}
-      <div className='pt-10'>
-        <h2 className='text-secondary text-3xl underline'>{'STAFF'}</h2>
+      <div className='h-70'>
+        <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
+
+        <div className='mt-5 flex flex-wrap justify-center gap-2'>
+          {staff.slice(0, visibleCount).map((staf) => (
+            <StaffLabelsCard key={staf.id} staf={staf} />
+          ))}
+        </div>
+
         {staff.length <= 3 ? (
-          <div className='flex h-50 items-center justify-center'>
+          <div className='flex h-30 items-center justify-center'>
             <div className='flex flex-col items-center justify-center pr-2 pl-2'>
               <Link to={'/hire-staff'}>
                 <AddButton>{'+'}</AddButton>
