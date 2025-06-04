@@ -1,3 +1,4 @@
+import type { FormEvent } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -11,12 +12,6 @@ export default function Register() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
 
-
-  const validateEmail = (email: string): boolean => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
   const passwordCriteria = {
     minLength: password.length >= 8,
     lowercase: /[a-z]/.test(password),
@@ -27,46 +22,52 @@ export default function Register() {
 
   const isStrongPassword = Object.values(passwordCriteria).every(Boolean);
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
+  const validateEmail = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleRegister = async (event: FormEvent) => {
+    event.preventDefault();
+    setErrors({});
+    setMessage('');
 
     if (!validateEmail(email)) {
-      newErrors.email = 'Invalid email format';
+      setErrors({ email: 'Invalid email address' });
+      return;
     }
 
     if (!isStrongPassword) {
-      newErrors.password = 'Password is too weak';
+      setErrors({ password: 'Password does not meet the criteria' });
+      return;
     }
 
     if (!isAcceptpp) {
-      newErrors.isAcceptpp = 'You must accept the privacy policy';
+      setErrors({ isAcceptpp: 'You must accept the privacy policy.' });
+      return;
     }
 
-    return newErrors;
-  };
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const validationErrors = validate();
-    setErrors(validationErrors);
+      const data = await res.json();
 
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        const res = await fetch('/api/auth/register', {
-          method: 'POST',
-          body: JSON.stringify({ email, password }),
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-        });
-        const data = await res.json();
-        if (!data.ok) {
-          setMessage('Email is already in use');
-        } else {
-          setMessage('You can login now');
-        }
-      } catch (error) {
-        setMessage('An error occurred');
+      if (data.ok === false) {
+        setMessage('Email is already in use');
+      } else {
+        setMessage('You can login now');
+        setEmail('');
+        setPassword('');
+        setIsAcceptpp(false);
       }
+    } catch (error) {
+      console.error(error);
+      setMessage('Error during registration');
     }
   };
 
@@ -83,7 +84,7 @@ export default function Register() {
             <h1 className='mb-5 text-3xl font-light tracking-wide'>
               {'REGISTER'}
             </h1>
-            <form className='w-full max-w-xl' onSubmit={handleSubmit}>
+            <form className='w-full max-w-xl' onSubmit={handleRegister}>
               <div className='flex flex-col gap-2'>
                 <Input
                   type='email'
@@ -95,7 +96,7 @@ export default function Register() {
                   }}
                   className='bg-primary w-full'
                 />
-                {errors.email ? <ErrorForm error={errors.email} /> : null}
+
                 <Input
                   type='password'
                   placeholder='Password'
@@ -106,7 +107,7 @@ export default function Register() {
                   }}
                   className='bg-primary w-full'
                 />
-                {errors.password ? <ErrorForm error={errors.password} /> : null}
+
                 <div className='flex items-center gap-2'>
                   <Input
                     id='acceptpp'
@@ -172,7 +173,6 @@ export default function Register() {
         >
           {passwordCriteria.minLength ? '✅' : '❌'}
           {' Minimum 8 characters'}
-
         </p>
         <p
           className={
