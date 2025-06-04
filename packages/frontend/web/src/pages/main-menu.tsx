@@ -15,6 +15,7 @@ type ArtistHired = {
   image: string;
   notoriety: number;
   genre_name: string;
+  price: number;
 };
 type StaffHired = {
   id: number;

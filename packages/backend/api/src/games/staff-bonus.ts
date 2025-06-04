@@ -2,9 +2,9 @@ import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const deleteStaffRouter = Router();
+const staffBonusRouter = Router();
 
-deleteStaffRouter.get('/staff', async (req: Request, res) => {
+staffBonusRouter.get('/staff-bonus', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -16,18 +16,12 @@ deleteStaffRouter.get('/staff', async (req: Request, res) => {
   try {
     const staffBouns = await db
       .selectFrom('labels')
+      .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+      .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
+      .select([db.fn.sum('staff.bonus').as('staff_xp')])
       .where('labels.users_id', '=', userId)
-      //   .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
-      //   .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
-      .select([
-        'staff.bonus',
-        // db.fn.sum('staff_label.staff_id').as('staff_xp')
-      ])
-      .groupBy('staff_label.labels_id')
-      .executeTakeFirst();
+      .execute();
 
-    //   const totalScore =
-    //   Number(staffBouns?.staff_xp);
     res.json({ ok: true, staffBouns });
   } catch (error) {
     console.error('Error hiring staff:', error);
@@ -35,4 +29,4 @@ deleteStaffRouter.get('/staff', async (req: Request, res) => {
   }
 });
 
-export default deleteStaffRouter;
+export default staffBonusRouter;

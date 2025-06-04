@@ -17,10 +17,10 @@ staffLabelsRouter.get('/staff-labels', async (req: Request, res) => {
       .selectFrom('users')
       .where('users.id', '=', userId)
       .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+      .innerJoin('staff_label', 'staff_label.labels_id', 'labels.id')
       .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
       .select(['staff.image', 'staff.bonus', 'staff.job', 'staff_label.id'])
-      .where('staff_label.id', 'is not', null)
+      // .where('staff_label.id', 'is not', null)
       .execute();
 
     res.json({ staffLabels });

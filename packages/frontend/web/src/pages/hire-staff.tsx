@@ -103,48 +103,50 @@ export default function HireArtist() {
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
-      <div className='mb-4 flex w-full items-center justify-between'>
-        <button type='button'>
-          <ArrowLeft />
-        </button>
-        <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
+    <>
+      <ArrowLeft />
+      <div className='flex min-h-screen flex-col items-center bg-white py-6'>
+        <h1 className='text-secondary w-full text-center text-2xl font-bold underline underline-offset-4'>
           {'HIRE STAFF'}
         </h1>
-        <div className='h-6 w-6' />
-      </div>
 
-      <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
-        {'STAFF'}
-      </div>
-      <div className='grid grid-cols-2 gap-4'>
-        {sortedStaff.slice(0, visibleCount).map((staff) => (
-          <StaffCardHire
-            key={staff.id}
-            staff={staff}
-            onHire={async () => {
-              if (labelId === undefined) {
-                setMessageBudget('Label or budget info not loaded yet.');
-                return;
-              }
-              try {
-                void handleStaffArtist(staff.id, staff.price, labelId, budget);
-                await navigate('/main-menu');
-              } catch {
-                setMessageBudget('redirection not working');
-              }
-            }}
-            budget={budget}
-          />
-        ))}
-      </div>
-      <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
-
-      {messageBudget ? (
-        <div className='mb-4 text-sm font-medium text-red-600'>
-          {messageBudget}
+        <div className='mb-8 w-full text-center text-xl font-medium text-teal-800'>
+          {'STAFF'}
         </div>
-      ) : null}
-    </div>
+        <div className='grid grid-cols-2 gap-4'>
+          {sortedStaff.slice(0, visibleCount).map((staff) => (
+            <StaffCardHire
+              key={staff.id}
+              staff={staff}
+              onHire={async () => {
+                if (labelId === undefined) {
+                  setMessageBudget('Label or budget info not loaded yet.');
+                  return;
+                }
+                try {
+                  void handleStaffArtist(
+                    staff.id,
+                    staff.price,
+                    labelId,
+                    budget,
+                  );
+                  await navigate('/main-menu');
+                } catch {
+                  setMessageBudget('redirection not working');
+                }
+              }}
+              budget={budget}
+            />
+          ))}
+        </div>
+        <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
+
+        {messageBudget ? (
+          <div className='mb-4 text-sm font-medium text-red-600'>
+            {messageBudget}
+          </div>
+        ) : null}
+      </div>
+    </>
   );
 }
