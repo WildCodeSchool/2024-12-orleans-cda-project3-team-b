@@ -4,7 +4,7 @@ export default function ErrorForm({ error }: { readonly error: string }) {
     // Container for the error message (could be used for spacing or layout)
     <div>
       {/* The actual error message, styled in small, orange, italic text */}
-      <p className='text-xs text-[var(--color-orange)] italic'>{error}</p>
+      <p className='text-orange text-xs italic'>{error}</p>
     </div>
   );
 }

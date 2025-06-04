@@ -8,7 +8,7 @@ import Input from '@/components/input';
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isAcceptpp, setIsAcceptpp] = useState(false);
+  const [isAccepted, setIsAccepted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
 
@@ -42,8 +42,8 @@ export default function Register() {
       return;
     }
 
-    if (!isAcceptpp) {
-      setErrors({ isAcceptpp: 'You must accept the privacy policy.' });
+    if (!isAccepted) {
+      setErrors({ isAccepted: 'You must accept the privacy policy.' });
       return;
     }
 
@@ -63,7 +63,7 @@ export default function Register() {
         setMessage('You can login now');
         setEmail('');
         setPassword('');
-        setIsAcceptpp(false);
+        setIsAccepted(false);
       }
     } catch (error) {
       console.error(error);
@@ -113,31 +113,31 @@ export default function Register() {
                     id='acceptpp'
                     type='checkbox'
                     name='acceptpp'
-                    className='h-4 w-4 accent-[var(--color-orange)]'
-                    checked={isAcceptpp}
+                    className='accent-orange h-4 w-4'
+                    checked={isAccepted}
                     onChange={(event) => {
-                      setIsAcceptpp(event.target.checked);
+                      setIsAccepted(event.target.checked);
                     }}
                   />
                   <label htmlFor='acceptpp' className='text-sm select-none'>
                     {'Please accept the '}
                     <Link
                       to='/privacy-policy'
-                      className='hover:text-primary text-[var(--color-orange)] hover:underline'
+                      className='hover:text-primary text-orange hover:underline'
                       target='_blank'
                     >
                       {'Privacy Policy'}
                     </Link>
                   </label>
                 </div>
-                {errors.isAcceptpp ? (
-                  <ErrorForm error={errors.isAcceptpp} />
+                {errors.isAccepted ? (
+                  <ErrorForm error={errors.isAccepted} />
                 ) : null}
                 <Input
                   type='submit'
                   value='Register'
                   name='submit'
-                  className='bg-primary hover:text-primary w-full self-center !rounded-full text-black transition duration-300 ease-in-out hover:bg-[var(--color-orange)] md:w-1/2'
+                  className='bg-primary hover:text-primary hover:bg-orange w-full self-center !rounded-full text-black transition duration-300 ease-in-out md:w-1/2'
                 />
                 {message ? (
                   <div className='mt-2 text-center text-sm'>{message}</div>
@@ -148,7 +148,7 @@ export default function Register() {
                     className='group hover:text-primary hover:underline'
                   >
                     {'Already have an account ? '}
-                    <span className='group-hover:text-primary text-[var(--color-orange)]'>
+                    <span className='group-hover:text-primary text-orange'>
                       {'Log In'}
                     </span>
                   </Link>
