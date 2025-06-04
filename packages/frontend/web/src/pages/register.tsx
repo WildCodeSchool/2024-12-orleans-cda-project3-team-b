@@ -110,16 +110,16 @@ export default function Register() {
 
                 <div className='flex items-center gap-2'>
                   <Input
-                    id='acceptpp'
+                    id='accepted'
                     type='checkbox'
-                    name='acceptpp'
+                    name='accepted'
                     className='accent-orange h-4 w-4'
                     checked={isAccepted}
                     onChange={(event) => {
                       setIsAccepted(event.target.checked);
                     }}
                   />
-                  <label htmlFor='acceptpp' className='text-sm select-none'>
+                  <label htmlFor='accepted' className='text-sm select-none'>
                     {'Please accept the '}
                     <Link
                       to='/privacy-policy'
