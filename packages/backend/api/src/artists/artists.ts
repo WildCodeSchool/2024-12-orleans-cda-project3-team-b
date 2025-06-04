@@ -14,7 +14,7 @@ function getArtists(userId: number) {
     .leftJoin('genres', 'artists.genres_id', 'genres.id')
     .leftJoin('milestones', 'artists.milestones_id', 'milestones.id')
     .select((eb) => [
-      'artists.id as artist_id',
+      'artists.id',
       'artists.alias',
       'artists.firstname',
       'artists.lastname',

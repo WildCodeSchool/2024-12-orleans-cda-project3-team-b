@@ -1,5 +1,4 @@
 import { type Request, Router } from 'express';
-import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
 import { db } from '@app/backend-shared';
 

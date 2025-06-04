@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import type { Artist } from '@/pages/hire-artist';
+import type { Artist } from '../../../../backend/api/src/artists/artists';
 
 type ArtistCardHireProps = {
   readonly artist: Artist;
@@ -16,9 +16,9 @@ export default function ArtistCardHire({
   const isDisabled = budget < artist.price;
 
   return (
-    <Link to={`/artists/${artist.artist_id}`}>
+    <Link to={`/artists/${artist.id}`}>
       <div
-        key={artist.artist_id}
+        key={artist.id}
         className='bg-secondary flex h-20 w-110 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
       >
         <img
@@ -30,7 +30,7 @@ export default function ArtistCardHire({
           <h2 className='ml-2'>
             {artist.firstname} {artist.lastname} {artist.alias}
           </h2>
-          <h3>{artist.genre_name}</h3>
+          <h3>{artist.name}</h3>
         </div>
         <div className='flex items-center'>
           <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>
@@ -44,7 +44,7 @@ export default function ArtistCardHire({
           <button
             type='button'
             onClick={() => {
-              onHire(artist.artist_id);
+              onHire(artist.id);
             }}
             disabled={isDisabled}
             className={`flex h-8 w-18 items-center justify-center rounded-sm pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] ${

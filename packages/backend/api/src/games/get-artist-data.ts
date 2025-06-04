@@ -7,7 +7,7 @@ type ArtistData = {
   firstname: string;
   lastname: string;
   alias?: string;
-  name: string; // genre name
+  name: string;
   image: string;
   milestones?: string;
   notoriety: number;
@@ -22,7 +22,7 @@ type ArtistData = {
   ];
 };
 
-export function GetArtistData({
+export async function GetArtistData({
   userId,
   id,
   hired = false,
@@ -32,11 +32,11 @@ export function GetArtistData({
   hired?: boolean;
 }): Promise<ArtistData[]> {
   if (hired) {
-    if (userId == null) {
-      throw new Error('userId is null');
+    if (userId === undefined || userId === null) {
+      throw new Error('userId is required when hired is true');
     }
 
-    return db
+    const baseQuery = db
       .selectFrom('users')
       .where('users.id', '=', userId)
       .leftJoin('labels', 'labels.users_id', 'users.id')
@@ -48,7 +48,9 @@ export function GetArtistData({
       )
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .leftJoin('genres', 'genres.id', 'artists.genres_id')
-      .leftJoin('milestones', 'milestones.id', 'artists.milestones_id')
+      .leftJoin('milestones', 'milestones.id', 'artists.milestones_id');
+
+    return baseQuery
       .select((eb) => [
         'artists.id',
         'artists.firstname',
@@ -78,35 +80,37 @@ export function GetArtistData({
       ])
       .where('artists_hired.id', '=', id)
       .execute() as Promise<ArtistData[]>;
-  } else {
-    return db
-      .selectFrom('artists')
-      .leftJoin('genres', 'genres.id', 'artists.genres_id')
-      .leftJoin('milestones', 'milestones.id', 'artists.milestones_id')
-      .select((eb) => [
-        'artists.id',
-        'artists.firstname',
-        'artists.lastname',
-        'artists.alias',
-        'genres.name',
-        'artists.image',
-        'milestones.name as milestones',
-        'artists.notoriety',
-        'artists.price',
-        jsonArrayFrom(
-          eb
-            .selectFrom('artists_skills')
-            .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
-            .select([
-              'skills.name',
-              'artists_skills.grade',
-              'artists_skills.skills_id',
-              'artists_skills.skills_id as artistsHiredSkillsId', // fallback
-            ])
-            .whereRef('artists_skills.artists_id', '=', 'artists.id'),
-        ).as('skills'),
-      ])
-      .where('artists.id', '=', id)
-      .execute() as Promise<ArtistData[]>;
   }
+
+  const baseQuery = db
+    .selectFrom('artists')
+    .leftJoin('genres', 'genres.id', 'artists.genres_id')
+    .leftJoin('milestones', 'milestones.id', 'artists.milestones_id');
+
+  return baseQuery
+    .select((eb) => [
+      'artists.id',
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
+      'genres.name',
+      'artists.image',
+      'milestones.name as milestones',
+      'artists.notoriety',
+      'artists.price',
+      jsonArrayFrom(
+        eb
+          .selectFrom('artists_skills')
+          .leftJoin('skills', 'skills.id', 'artists_skills.skills_id')
+          .select([
+            'skills.name',
+            'artists_skills.grade',
+            'artists_skills.skills_id',
+            'artists_skills.skills_id as artistsHiredSkillsId',
+          ])
+          .whereRef('artists_skills.artists_id', '=', 'artists.id'),
+      ).as('skills'),
+    ])
+    .where('artists.id', '=', id)
+    .execute() as Promise<ArtistData[]>;
 }
