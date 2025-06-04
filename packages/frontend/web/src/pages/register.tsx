@@ -1,12 +1,18 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import ErrorForm from '@/components/errors-form';
+import Input from '@/components/input';
 
 export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
 
-  const regex = {
+  const passwordCriteria = {
     minLength: password.length >= 8,
     lowercase: /[a-z]/.test(password),
     uppercase: /[A-Z]/.test(password),
@@ -14,23 +20,30 @@ export default function Register() {
     specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
   };
 
-  const isStrongPassword = Object.values(regex).every(Boolean);
+  const isStrongPassword = Object.values(passwordCriteria).every(Boolean);
 
   const validateEmail = (email: string): boolean => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
 
-  const login = async (event: FormEvent) => {
+  const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
+    setErrors({});
+    setMessage('');
 
     if (!validateEmail(email)) {
-      setMessage('Email invalid');
+      setErrors({ email: 'Invalid email address' });
       return;
     }
 
     if (!isStrongPassword) {
-      setMessage('Low password');
+      setErrors({ password: 'Password does not meet the criteria' });
+      return;
+    }
+
+    if (!isAccepted) {
+      setErrors({ isAccepted: 'You must accept the privacy policy.' });
       return;
     }
 
@@ -48,6 +61,9 @@ export default function Register() {
         setMessage('Email is already in use');
       } else {
         setMessage('You can login now');
+        setEmail('');
+        setPassword('');
+        setIsAccepted(false);
       }
     } catch (error) {
       console.error(error);
@@ -56,56 +72,140 @@ export default function Register() {
   };
 
   return (
-    <>
-      <form
-        onSubmit={async (event) => {
-          await login(event);
-        }}
-      >
-        <label htmlFor='email' />
-        <input
-          type='email'
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-          }}
-          className='bg-amber-300'
-          placeholder='Email'
+    <div className='bg-secondary flex min-h-screen flex-col'>
+      <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
+        <div className='text-primary top-0 z-2 w-full max-w-3xl self-start bg-transparent'>
+          <div className='relative top-0 flex flex-col items-center gap-4 text-center'>
+            <img
+              className='h-32 w-auto md:h-42'
+              src='/assets/logo-label.png'
+              alt='Logo Label'
+            />
+            <h1 className='mb-5 text-3xl font-light tracking-wide'>
+              {'REGISTER'}
+            </h1>
+            <form className='w-full max-w-xl' onSubmit={handleRegister}>
+              <div className='flex flex-col gap-2'>
+                <Input
+                  type='email'
+                  placeholder='Email'
+                  name='email'
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                  }}
+                  className='bg-primary w-full'
+                />
+
+                <Input
+                  type='password'
+                  placeholder='Password'
+                  name='password'
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
+                  className='bg-primary w-full'
+                />
+
+                <div className='flex items-center gap-2'>
+                  <Input
+                    id='accepted'
+                    type='checkbox'
+                    name='accepted'
+                    className='accent-orange h-4 w-4'
+                    checked={isAccepted}
+                    onChange={(event) => {
+                      setIsAccepted(event.target.checked);
+                    }}
+                  />
+                  <label htmlFor='accepted' className='text-sm select-none'>
+                    {'Please accept the '}
+                    <Link
+                      to='/privacy-policy'
+                      className='hover:text-primary text-orange hover:underline'
+                      target='_blank'
+                    >
+                      {'Privacy Policy'}
+                    </Link>
+                  </label>
+                </div>
+                {errors.isAccepted ? (
+                  <ErrorForm error={errors.isAccepted} />
+                ) : null}
+                <Input
+                  type='submit'
+                  value='Register'
+                  name='submit'
+                  className='bg-primary hover:text-primary hover:bg-orange w-full self-center !rounded-full text-black transition duration-300 ease-in-out md:w-1/2'
+                />
+                {message ? (
+                  <div className='mt-2 text-center text-sm'>{message}</div>
+                ) : null}
+                <div className='mt-4 flex flex-col items-center gap-1 text-sm'>
+                  <Link
+                    to='/login'
+                    className='group hover:text-primary hover:underline'
+                  >
+                    {'Already have an account ? '}
+                    <span className='group-hover:text-primary text-orange'>
+                      {'Log In'}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <img
+          className='lg:w-1xl pointer-events-none fixed right-0 bottom-0 w-md md:w-xl'
+          src='/assets/vinyl.png'
+          alt='Vinyle'
         />
-        <label htmlFor='password' />
-        <input
-          type='password'
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-          className='bg-amber-300'
-          placeholder='Password'
-        />
-        <button type='submit' className='rounded-md bg-gray-500 text-center'>
-          {'Register'}
-        </button>
-        {message ? <p className='mt-2 text-sm'>{message}</p> : null}
-      </form>
+      </div>
 
       {/* Critères de mot de passe */}
-      <div className='mt-4 text-sm'>
-        <p className={regex.minLength ? 'text-green-600' : 'text-red-600'}>
-          {regex.minLength ? '✅' : '❌'} {'Minimum 8 characters'}
+      <div className='z-1 mb-8 ml-2 text-sm'>
+        <p
+          className={
+            passwordCriteria.minLength ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.minLength ? '✅' : '❌'}
+          {' Minimum 8 characters'}
         </p>
-        <p className={regex.lowercase ? 'text-green-600' : 'text-red-600'}>
-          {regex.lowercase ? '✅' : '❌'} {'At least one lowercase letter'}
+        <p
+          className={
+            passwordCriteria.lowercase ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.lowercase ? '✅' : '❌'}{' '}
+          {'At least one lowercase letter'}
         </p>
-        <p className={regex.uppercase ? 'text-green-600' : 'text-red-600'}>
-          {regex.uppercase ? '✅' : '❌'} {'At least one uppercase letter'}
+        <p
+          className={
+            passwordCriteria.uppercase ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.uppercase ? '✅' : '❌'}
+          {' At least one uppercase letter'}
         </p>
-        <p className={regex.number ? 'text-green-600' : 'text-red-600'}>
-          {regex.number ? '✅' : '❌'} {'At least one number'}
+        <p
+          className={
+            passwordCriteria.number ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.number ? '✅' : '❌'} {'At least one number'}
         </p>
-        <p className={regex.specialChar ? 'text-green-600' : 'text-red-600'}>
-          {regex.specialChar ? '✅' : '❌'} {'At least one special character'}
+        <p
+          className={
+            passwordCriteria.specialChar ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {passwordCriteria.specialChar ? '✅' : '❌'}{' '}
+          {'At least one special character'}
         </p>
       </div>
-    </>
+    </div>
   );
 }
