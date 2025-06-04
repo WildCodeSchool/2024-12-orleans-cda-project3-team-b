@@ -4,16 +4,15 @@ import { useParams } from 'react-router-dom';
 
 import ArtistProfileCard from '@/components/artist-profile-card';
 
-import type { Artist } from './artist-profile-page';
+import type { Artist } from '../../../../backend/api/src/artists/artists';
 
-type ArtistHired = Artist & {
-  artistsHiredId: number;
+type SingleArtistHired = {
   fetchArtistsHired: () => Promise<void>;
   isAddButton?: boolean;
 };
 
 export default function ArtistHirePage() {
-  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
+  const [artistsHired, setArtistsHired] = useState<Artist[]>([]);
   const { id } = useParams<{ id: string }>();
 
   const fetchArtistsHired = useCallback(async () => {
@@ -40,7 +39,7 @@ export default function ArtistHirePage() {
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
       {artistsHired.map((artist) => (
         <ArtistProfileCard
-          key={artist.artists_id}
+          key={artist.id}
           artist={artist}
           fetchArtistsHired={fetchArtistsHired}
           isAddButton

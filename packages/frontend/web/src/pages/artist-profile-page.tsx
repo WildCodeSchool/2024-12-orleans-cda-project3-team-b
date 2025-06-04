@@ -4,27 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ArtistProfileCard from '@/components/artist-profile-card';
 
-export type Artist = {
-  key: number;
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  milestone_name: string;
-  skills: [
-    {
-      name: string;
-      grade: number;
-      skills_id: number;
-      artistsHiredSkillsId: number;
-    },
-  ];
-  artistsHiredId: number;
-};
+import type { Artist } from '../../../../backend/api/src/artists/artists';
 
 export default function ArtistPage() {
   const [artists, setArtists] = useState<Artist[]>([]);
@@ -50,7 +30,7 @@ export default function ArtistPage() {
   return (
     <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
       {artists.map((artist) => (
-        <ArtistProfileCard key={artist.artists_id} artist={artist} />
+        <ArtistProfileCard key={artist.id} artist={artist} />
       ))}
     </div>
   );

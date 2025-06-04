@@ -1,26 +1,5 @@
+import type { Artist } from '../../../../backend/api/src/artists/artists';
 import AddButton from './add-button';
-
-type Artist = {
-  readonly firstname: string;
-  readonly lastname: string;
-  readonly alias: string;
-  readonly image: string;
-  readonly notoriety: number;
-  readonly genre_name: string;
-  readonly milestone_name: string;
-  readonly skills: [
-    {
-      skills_id: number;
-      name: string;
-      grade: number;
-      artistsHiredSkillsId: number;
-    },
-  ];
-  readonly isAddButton?: boolean;
-  readonly key: number;
-  readonly artistsHiredId: number;
-  readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
-};
 
 type ArtistProfileCardProps = {
   readonly artist: Artist;
@@ -55,7 +34,7 @@ export default function ArtistProfileCard({
   return (
     <div
       className='bg-secondary h-80 w-120 rounded-xl border shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
-      key={artist.key}
+      key={artist.id}
     >
       <div className='mt-5 flex justify-center'>
         <img
@@ -69,14 +48,12 @@ export default function ArtistProfileCard({
             {artist.firstname} {artist.lastname} {artist.alias}
           </h2>
           <h3 className='text-primary text-xl font-extralight'>
-            {artist.genre_name}
+            {artist.name}
           </h3>
           <div className='ml-4 flex items-center text-sm'>
             <h2 className='text-primary flex text-xl'>{artist.notoriety}</h2>
             <img className='mt-1 h-7 w-7' src='/assets/star-sign.png' alt='' />
-            <h2 className='text-primary ml-2 text-xl'>
-              {artist.milestone_name}
-            </h2>
+            <h2 className='text-primary ml-2 text-xl'>{artist.milestones}</h2>
           </div>
         </div>
       </div>
@@ -98,11 +75,11 @@ export default function ArtistProfileCard({
                     key={competence.artistsHiredSkillsId}
                     onClick={() =>
                       addPoint(
-                        competence.artistsHiredSkillsId,
+                        competence.artistsHiredSkillsId ?? 0,
                         competence.skills_id,
                       )
                     }
-                    disabled={competence.grade >= 25}
+                    disabled={(competence.grade ?? 0) >= 25}
                   >
                     {'+'}
                   </AddButton>

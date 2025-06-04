@@ -91,6 +91,37 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+async function getArtistsHired(userId: number) {
+  return db
+    .selectFrom('users')
+    .where('users.id', '=', userId)
+    .leftJoin('labels', 'labels.users_id', 'users.id')
+    .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+    .leftJoin(
+      'artists_hired',
+      'artists_hired.id',
+      'label_artists.artists_hired_id',
+    )
+    .innerJoin('artists', 'artists_hired.artists_id', 'artists.id')
+    .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
+    .leftJoin('genres', 'artists.genres_id', 'genres.id')
+    .select([
+      'artists_hired.id as artist_hired_id',
+      'artists_hired.artists_id',
+      'artists_hired.milestones_id',
+      'artists_hired.notoriety',
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
+      'artists.image',
+      'artists.notoriety',
+      'milestones.name as milestone_name',
+      'genres.name as genre_name',
+    ])
+    .execute();
+}
+
+export type ArtistHired = Awaited<ReturnType<typeof getArtistsHired>>[number];
 
 artistsHiredRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
@@ -101,33 +132,7 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
     return;
   }
   try {
-    const artistsHired = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
-      .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
-        'label_artists.artists_hired_id',
-      )
-      .innerJoin('artists', 'artists_hired.artists_id', 'artists.id')
-      .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
-      .select([
-        'artists_hired.id as artist_hired_id',
-        'artists_hired.artists_id',
-        'artists_hired.milestones_id',
-        'artists_hired.notoriety',
-        'artists.firstname',
-        'artists.lastname',
-        'artists.alias',
-        'artists.image',
-        'artists.notoriety',
-        'milestones.name as milestone_name',
-        'genres.name as genre_name',
-      ])
-      .execute();
+    const artistsHired = await getArtistsHired(userId);
     res.json(artistsHired);
     return;
   } catch (error) {
@@ -135,6 +140,51 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+function getArtistHired(userId: number, id: number) {
+  return db
+    .selectFrom('users')
+    .where('users.id', '=', userId)
+    .leftJoin('labels', 'labels.users_id', 'users.id')
+    .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+    .leftJoin(
+      'artists_hired',
+      'artists_hired.id',
+      'label_artists.artists_hired_id',
+    )
+    .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .leftJoin('genres', 'genres.id', 'artists.genres_id')
+    .select((eb) => [
+      'artists.id as artistId',
+      'artists.firstname',
+      'artists.lastname',
+      'genres.name',
+      'artists.image',
+      'artists.milestones_id',
+      'artists.notoriety',
+      'artists.price',
+      jsonArrayFrom(
+        eb
+          .selectFrom('artists_hired_skills')
+          .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
+          .select([
+            'skills.name',
+            'artists_hired_skills.grade',
+            'artists_hired_skills.skills_id as skills_id',
+            'artists_hired_skills.id as artistsHiredSkillsId',
+          ])
+          .whereRef(
+            'artists_hired_skills.artists_hired_id',
+            '=',
+            'artists_hired.id',
+          ),
+      ).as('skills'),
+    ])
+    .where('artists_hired.id', '=', Number(id))
+    .execute();
+}
+
+export type Hired = Awaited<ReturnType<typeof getArtistHired>>[number];
 
 artistsHiredRouter.get('/:id', async (req: Request, res) => {
   const { id } = req.params;
@@ -146,48 +196,9 @@ artistsHiredRouter.get('/:id', async (req: Request, res) => {
     return;
   }
   try {
-    const artistsHired = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
-      .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
-        'label_artists.artists_hired_id',
-      )
-      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .leftJoin('genres', 'genres.id', 'artists.genres_id')
-      .select((eb) => [
-        'artists.id as artistId',
-        'artists.firstname',
-        'artists.lastname',
-        'genres.name',
-        'artists.image',
-        'artists.milestones_id',
-        'artists.notoriety',
-        'artists.price',
-        jsonArrayFrom(
-          eb
-            .selectFrom('artists_hired_skills')
-            .leftJoin('skills', 'skills.id', 'artists_hired_skills.skills_id')
-            .select([
-              'skills.name',
-              'artists_hired_skills.grade',
-              'artists_hired_skills.skills_id as skills_id',
-              'artists_hired_skills.id as artistsHiredSkillsId',
-            ])
-            .whereRef(
-              'artists_hired_skills.artists_hired_id',
-              '=',
-              'artists_hired.id',
-            ),
-        ).as('skills'),
-      ])
-      .where('artists_hired.id', '=', Number(id))
-      .execute();
+    const artistHired = await getArtistHired(userId, Number(id));
 
-    res.json(artistsHired);
+    res.json(artistHired);
   } catch (error) {
     console.error('Error fetching artists:', error);
     res.status(500).json({ error: 'Internal Server Error' });
