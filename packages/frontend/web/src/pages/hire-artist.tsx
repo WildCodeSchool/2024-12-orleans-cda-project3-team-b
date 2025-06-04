@@ -6,7 +6,7 @@ import ArtistCardHire from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 import { useAuth } from '@/contexts/auth-context';
 
-type Artist = {
+export type Artist = {
   artist_id: number;
   firstname: string;
   lastname: string;
@@ -120,7 +120,7 @@ export default function HireArtist() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='grid grid-cols-2 gap-4'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         {sortedArtists.slice(0, visibleCount).map((artist) => (
           <ArtistCardHire
             key={artist.artist_id}
