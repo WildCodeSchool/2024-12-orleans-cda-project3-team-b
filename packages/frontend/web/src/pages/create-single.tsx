@@ -7,10 +7,10 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
-import type { Marketing } from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateSingle() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);

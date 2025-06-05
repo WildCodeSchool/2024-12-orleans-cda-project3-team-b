@@ -1,10 +1,4 @@
-export type Marketing = {
-  readonly id: number;
-  readonly name: string;
-  readonly bonus: string;
-  readonly price: number;
-  readonly image: string;
-};
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 type MarketingCardProps = {
   readonly marketing: Marketing;

@@ -4,7 +4,7 @@ import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 
-import type { ArtistHired } from './main-menu';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 export default function MyArtists() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);

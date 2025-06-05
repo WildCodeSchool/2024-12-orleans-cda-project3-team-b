@@ -6,14 +6,7 @@ import ArtistCard from '@/components/artist-card';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-
-type StaffHired = {
-  id: number;
-  job: string;
-  bonus: number;
-  price: number;
-  image: string;
-};
+import type { StaffHired } from '../../../../backend/api/src/games/get-staff';
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);

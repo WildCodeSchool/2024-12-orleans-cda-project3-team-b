@@ -4,19 +4,23 @@ import { db } from '@app/backend-shared';
 
 const marketingRouter = express.Router();
 
+async function getMarketing() {
+  return db
+    .selectFrom('marketing')
+    .select([
+      'marketing.id as id',
+      'marketing.name as name',
+      'marketing.bonus as bonus',
+      'marketing.price as price',
+      'marketing.image as image',
+    ])
+    .execute();
+}
+export type Marketing = Awaited<ReturnType<typeof getMarketing>>[number];
+
 marketingRouter.get('/', async (req, res) => {
   try {
-    const marketing = await db
-      .selectFrom('marketing')
-      .select([
-        'marketing.id',
-        'marketing.name',
-        'marketing.bonus',
-        'marketing.price',
-        'marketing.image',
-      ])
-      .execute();
-
+    const marketing = await getMarketing();
     res.json(marketing);
     return;
   } catch (error) {
