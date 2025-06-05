@@ -1,4 +1,49 @@
+import { useEffect, useState } from 'react';
+
+type ArtistHired = {
+  artist_id: number;
+  milestones_id: number;
+  firstname: string;
+  lastname: string;
+  alias: string;
+  image: string;
+  notoriety: number;
+  genre_name: string;
+};
+
 export default function AlbumCongratulations() {
+  const [albums, setAlbums] = useState<ArtistHired[]>([]);
+  const [singles, setSingles] = useState<ArtistHired[]>([]);
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      try {
+        const response = await fetch('/api/albums');
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setArtists(data);
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
+    const fetchSingles = async () => {
+      try {
+        const response = await fetch('/api/singles-albums');
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        setArtists(data);
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+        setArtists([]);
+      }
+    };
+
+    void fetchAlbums();
+    void fetchSingles();
+  }, []);
   return (
     <div className='mt-5 flex flex-col items-center'>
       <h1 className='text-secondary text-2xl font-bold'>
@@ -11,7 +56,7 @@ export default function AlbumCongratulations() {
         <h3 className='text-secondary text-2xl'> {'Album.name'}</h3>
         <img className='h-22 w-22' src='/assets/album.png' alt='' />
       </div>
-      <div className='mt-3'>
+      <div className='mt-3 items-center'>
         <div className='flex'>
           <h2 className='text-secondary mr-2 font-bold'>
             {'Your reputation is now:'}
@@ -38,6 +83,9 @@ export default function AlbumCongratulations() {
             />
           </h3>
         </div>
+      </div>
+      <div className='bg-secondary mt-6 flex h-40 w-100 flex-col items-center rounded-xl'>
+        <h2 className='text-primary font-bold'>{'Singles'}</h2>
       </div>
     </div>
   );
