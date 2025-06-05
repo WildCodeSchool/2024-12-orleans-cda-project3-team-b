@@ -5,6 +5,16 @@ import { db } from '@app/backend-shared';
 
 const getLabelRouter = Router();
 
+async function getLabels(userId: number) {
+  return db
+    .selectFrom('labels')
+    .selectAll()
+    .where('labels.users_id', '=', userId)
+    .execute();
+}
+
+export type Labels = Awaited<ReturnType<typeof getLabels>>[number];
+
 getLabelRouter.get('/labels', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -14,11 +24,7 @@ getLabelRouter.get('/labels', async (req: Request, res) => {
     return;
   }
   try {
-    const labels = await db
-      .selectFrom('labels')
-      .selectAll()
-      .where('labels.users_id', '=', userId)
-      .execute();
+    const labels = await getLabels(userId);
     res.json({ labels });
   } catch (_error) {
     res.json({
