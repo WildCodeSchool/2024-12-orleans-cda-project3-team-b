@@ -5,19 +5,8 @@ import AddButton from '@/components/add-button';
 import ArtistCard from '@/components/artist-card';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
-export type ArtistHired = {
-  id: number;
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  genre_id: number;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  milestone_name: string;
-};
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+
 type StaffHired = {
   id: number;
   job: string;

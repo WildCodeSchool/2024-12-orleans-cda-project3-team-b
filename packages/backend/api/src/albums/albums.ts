@@ -5,9 +5,9 @@ import { db } from '@app/backend-shared';
 const albumsRouter = express.Router();
 
 albumsRouter.post('/create', async (req, res) => {
-  const { artistId, singleName, singleId, genreId } = req.body;
+  const { artistHiredId, singleName, singleId, genreId } = req.body;
   try {
-    if (!Number(artistId)) {
+    if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
       return;
     }
@@ -15,7 +15,7 @@ albumsRouter.post('/create', async (req, res) => {
     const albumId = await db
       .insertInto('albums')
       .values({
-        artists_hired_id: artistId,
+        artists_hired_id: artistHiredId,
         name: singleName.trim(),
         genres_id: genreId,
         exp_value: 100,

@@ -10,10 +10,10 @@ import MarketingCard from '@/components/marketing-card';
 import type { Marketing } from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
-import type { ArtistHired } from './main-menu';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 export default function CreateSingle() {
-  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
@@ -40,9 +40,11 @@ export default function CreateSingle() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          artistId: selectedArtistId,
+          artistHiredId: selectedArtistId,
           singleName: singleName.trim(),
-          genreId: artists.find((a) => a.id === selectedArtistId)?.genre_id,
+          genreId: artistsHired.find(
+            (a) => a.artist_hired_id === selectedArtistId,
+          )?.genre_id,
         }),
       });
 
@@ -60,20 +62,20 @@ export default function CreateSingle() {
     const fetchArtists = async () => {
       try {
         if (selectedArtistId != null) {
-          const resArtist = await fetch('/api/artists-hired');
-          if (!resArtist.ok)
-            throw new Error(`Artist fetch failed: ${resArtist.status}`);
-          const artistsData: ArtistHired[] = await resArtist.json();
-          const selectedArtist = artistsData.find(
-            (a) => a.id === selectedArtistId,
+          const resArtistHired = await fetch('/api/artists-hired');
+          if (!resArtistHired.ok)
+            throw new Error(`Artist fetch failed: ${resArtistHired.status}`);
+          const artistsData: ArtistHired[] = await resArtistHired.json();
+          const selectedArtistHired = artistsData.find(
+            (a) => a.artist_hired_id === selectedArtistId,
           );
-          setArtists(selectedArtist ? [selectedArtist] : []);
+          setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
-          setArtists([]);
+          setArtistsHired([]);
         }
       } catch (error) {
         console.error('Error fetching artists:', error);
-        setArtists([]);
+        setArtistsHired([]);
       }
     };
 
@@ -127,8 +129,8 @@ export default function CreateSingle() {
 
         {/* Artist */}
         <div className='mt-6 w-full max-w-md'>
-          {artists.length > 0 ? (
-            artists.map((artist) => (
+          {artistsHired.length > 0 ? (
+            artistsHired.map((artist) => (
               <ArtistCard key={artist.artists_id} artist={artist} />
             ))
           ) : (

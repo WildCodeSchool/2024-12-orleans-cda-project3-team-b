@@ -92,7 +92,7 @@ singlesRouter.get('/', async (req: Request, res) => {
 });
 
 singlesRouter.post('/', async (req: Request, res) => {
-  const { artistId, singleName, genreId } = req.body;
+  const { artistHiredId, singleName, genreId } = req.body;
   console.log(req.body);
 
   const userId = req.userId;
@@ -104,7 +104,7 @@ singlesRouter.post('/', async (req: Request, res) => {
   }
 
   try {
-    if (!Number(artistId)) {
+    if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
       return;
     }
@@ -112,7 +112,7 @@ singlesRouter.post('/', async (req: Request, res) => {
     await db
       .insertInto('singles')
       .values({
-        artists_hired_id: artistId,
+        artists_hired_id: artistHiredId,
         name: singleName.trim(),
         genres_id: genreId,
         exp_value: 100,

@@ -80,6 +80,39 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
   }
 });
 
+async function getArtistsHired(userId: number) {
+  return db
+    .selectFrom('artists_hired')
+    .leftJoin(
+      'label_artists',
+      'label_artists.artists_hired_id',
+      'artists_hired.id',
+    )
+    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
+    .innerJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .leftJoin('milestones', 'milestones.id', 'artists_hired.milestones_id')
+    .leftJoin('genres', 'genres.id', 'artists.genres_id')
+    .where('labels.users_id', '=', userId)
+    .select([
+      'artists_hired.id as artist_hired_id',
+      'artists_hired.artists_id',
+      'artists_hired.milestones_id',
+      'artists_hired.notoriety',
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
+      'artists.image',
+      'artists.notoriety',
+      'milestones.name as milestone_name',
+      'genres.name as genre_name',
+      'genres.id as genre_id',
+    ])
+    .execute();
+}
+
+export type ArtistHired = Awaited<ReturnType<typeof getArtistsHired>>[number];
+
 artistsHiredRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -89,34 +122,7 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
     return;
   }
   try {
-    const artistsHired = await db
-      .selectFrom('artists_hired')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .leftJoin('users', 'users.id', 'labels.users_id')
-      .innerJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .leftJoin('milestones', 'milestones.id', 'artists_hired.milestones_id')
-      .leftJoin('genres', 'genres.id', 'artists.genres_id')
-      .select([
-        'artists_hired.id',
-        'artists_hired.artists_id',
-        'artists_hired.milestones_id',
-        'artists_hired.notoriety',
-        'artists.firstname',
-        'artists.lastname',
-        'artists.alias',
-        'artists.image',
-        'artists.notoriety as artist_notoriety',
-        'milestones.name as milestone_name',
-        'genres.name as genre_name',
-        'genres.id as genre_id',
-      ])
-      .where('labels.users_id', '=', userId)
-      .execute();
+    const artistsHired = await getArtistsHired(userId);
 
     res.json(artistsHired);
     return;

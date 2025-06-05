@@ -13,10 +13,10 @@ import type { Singles } from '@/components/modal-singles';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
-import type { ArtistHired } from './main-menu';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 export default function CreateAlbum() {
-  const [artists, setArtists] = useState<ArtistHired[]>([]);
+  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
@@ -47,10 +47,12 @@ export default function CreateAlbum() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            artistId: selectedArtistId,
+            artistHiredId: selectedArtistId,
             singleName: singleName.trim(),
             singleId: selectedSinglesId,
-            genreId: artists.find((a) => a.id === selectedArtistId)?.genre_id,
+            genreId: artistsHired.find(
+              (a) => a.artist_hired_id === selectedArtistId,
+            )?.genre_id,
           }),
         });
 
@@ -64,20 +66,20 @@ export default function CreateAlbum() {
     const fetchArtists = async () => {
       try {
         if (selectedArtistId != null) {
-          const resArtists = await fetch('/api/artists-hired');
-          if (!resArtists.ok)
-            throw new Error(`Artist error: ${resArtists.status}`);
-          const artistsData: ArtistHired[] = await resArtists.json();
-          const selectedArtist = artistsData.find(
-            (a) => a.id === selectedArtistId,
+          const resArtistsHired = await fetch('/api/artists-hired');
+          if (!resArtistsHired.ok)
+            throw new Error(`Artist error: ${resArtistsHired.status}`);
+          const artistsData: ArtistHired[] = await resArtistsHired.json();
+          const selectedArtistHired = artistsData.find(
+            (a) => a.artist_hired_id === selectedArtistId,
           );
-          setArtists(selectedArtist ? [selectedArtist] : []);
+          setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
-          setArtists([]);
+          setArtistsHired([]);
         }
       } catch (error) {
         console.error('Error fetching artists:', error);
-        setArtists([]);
+        setArtistsHired([]);
       }
     };
 
@@ -146,8 +148,8 @@ export default function CreateAlbum() {
         </div>
         <img className='h-22 w-22' src='/assets/album.png' alt='' />
         <div className='mt-6'>
-          {artists.length > 0 ? (
-            artists.map((artist) => (
+          {artistsHired.length > 0 ? (
+            artistsHired.map((artist) => (
               <ArtistCard key={artist.artists_id} artist={artist} />
             ))
           ) : (
