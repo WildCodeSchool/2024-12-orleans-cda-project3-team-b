@@ -1,4 +1,4 @@
-import type { ArtistHired } from '../pages/main-menu';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 type ArtistCardProps = {
   readonly artist: ArtistHired;
@@ -7,7 +7,7 @@ type ArtistCardProps = {
 export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <div
-      key={artist.id}
+      key={artist.artist_hired_id}
       className='bg-secondary flex h-12 w-45 items-center justify-between gap-2 rounded-sm p-2 text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)] sm:h-12 sm:w-60 sm:flex-row sm:gap-0 md:w-60'
     >
       <img

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import ArtistCard from '@/components/artist-card';
-import type { ArtistHired } from '@/pages/main-menu';
+
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 export type ModalMyArtistsProps = {
   readonly isOpen: boolean;
@@ -58,9 +59,9 @@ export default function ModalMyArtists({
         <div className='grid grid-cols-2 gap-4'>
           {artists.map((artist) => (
             <div
-              key={artist.id}
+              key={artist.artist_hired_id}
               onClick={() => {
-                onSelectArtist(artist.id);
+                onSelectArtist(artist.artist_hired_id);
                 onClose();
               }}
               className='cursor-pointer transition-transform hover:scale-105'

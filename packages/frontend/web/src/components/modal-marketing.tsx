@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 import MarketingCard from './marketing-card';
-import type { Marketing } from './marketing-card';
 
 export type ModalMarketingProps = {
   readonly isOpen: boolean;
