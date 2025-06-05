@@ -6,7 +6,7 @@ import ArtistCard from '@/components/artist-card';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { StaffHired } from '../../../../backend/api/src/games/get-staff';
+import type { StaffHired } from '../../../../backend/api/src/games/get-staff-labels';
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
@@ -99,8 +99,8 @@ export default function MainMenu() {
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
 
         <div className='mt-5 flex flex-wrap justify-center gap-2'>
-          {staff.slice(0, visibleCount).map((staf) => (
-            <StaffLabelsCard key={staf.id} staf={staf} />
+          {staff.slice(0, visibleCount).map((staff) => (
+            <StaffLabelsCard key={staff.id} staf={staff} />
           ))}
         </div>
 

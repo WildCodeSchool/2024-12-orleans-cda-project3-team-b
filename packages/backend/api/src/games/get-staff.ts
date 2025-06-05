@@ -4,25 +4,21 @@ import { db } from '@app/backend-shared';
 
 const getStaffRouter = express.Router();
 
-async function getStaff() {
-  return db
-    .selectFrom('staff')
-    .leftJoin('staff_label', 'staff_label.staff_id', 'staff.id')
-    .select([
-      'staff.id',
-      'staff.job',
-      'staff.bonus',
-      'staff.price',
-      'staff.image',
-    ])
-    .where('staff_label.staff_id', 'is', null)
-    .execute();
-}
-export type StaffHired = Awaited<ReturnType<typeof getStaff>>[number];
-
 getStaffRouter.get('/staff', async (req, res) => {
   try {
-    const staff = await getStaff();
+    const staff = await db
+      .selectFrom('staff')
+      .leftJoin('staff_label', 'staff_label.staff_id', 'staff.id')
+      .select([
+        'staff.id',
+        'staff.job',
+        'staff.bonus',
+        'staff.price',
+        'staff.image',
+      ])
+      .where('staff_label.staff_id', 'is', null)
+      .execute();
+
     res.json({ ok: true, staff });
     return;
   } catch (error) {
