@@ -1,6 +1,7 @@
 import express from 'express';
 
 import deleteStaffRouter from './delete-staff';
+import getNotoRouter from './gain-notoreity';
 import getLabelRouter from './get-labels';
 import getLogosRouter from './get-logos';
 import getStaffRouter from './get-staff';
@@ -18,5 +19,6 @@ gamesRouter.use(getStaffRouter);
 gamesRouter.use(staffHiredRouter);
 gamesRouter.use(staffLabelsRouter);
 gamesRouter.use(deleteStaffRouter);
+gamesRouter.use(getNotoRouter);
 
 export default gamesRouter;
