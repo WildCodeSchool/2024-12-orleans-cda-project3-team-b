@@ -90,20 +90,19 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
   }
   try {
     const artistsHired = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .selectFrom('artists_hired')
       .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
+        'label_artists',
         'label_artists.artists_hired_id',
+        'artists_hired.id',
       )
-      .innerJoin('artists', 'artists_hired.artists_id', 'artists.id')
-      .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
+      .innerJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .leftJoin('milestones', 'milestones.id', 'artists_hired.milestones_id')
+      .leftJoin('genres', 'genres.id', 'artists.genres_id')
       .select([
-        'artists_hired.id as id',
+        'artists_hired.id',
         'artists_hired.artists_id',
         'artists_hired.milestones_id',
         'artists_hired.notoriety',
@@ -111,12 +110,12 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
         'artists.lastname',
         'artists.alias',
         'artists.image',
-        'artists.notoriety',
+        'artists.notoriety as artist_notoriety',
         'milestones.name as milestone_name',
         'genres.name as genre_name',
         'genres.id as genre_id',
       ])
-      // .where('artists.id', 'is not', null)
+      .where('labels.users_id', '=', userId)
       .execute();
 
     res.json(artistsHired);
@@ -139,16 +138,15 @@ artistsHiredRouter.get('/:id/singles', async (req: Request, res) => {
 
   try {
     const singles = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .selectFrom('singles')
+      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
       .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
+        'label_artists',
         'label_artists.artists_hired_id',
+        'artists_hired.id',
       )
-      .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .select([
         'singles.id as id',
@@ -156,13 +154,13 @@ artistsHiredRouter.get('/:id/singles', async (req: Request, res) => {
         'singles.name',
         'singles.listeners',
         'singles.money_earned',
+        'singles.score',
         'artists.firstname as artist_firstname',
         'artists.lastname as artist_lastname',
         'artists.alias as artist_alias',
-        'singles.score',
       ])
-      .where('artists_hired.id', '=', artistId)
       .where('labels.users_id', '=', userId)
+      .where('artists_hired.id', '=', artistId)
       .execute();
 
     res.json(singles);

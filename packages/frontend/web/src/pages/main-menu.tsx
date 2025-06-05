@@ -12,7 +12,7 @@ export type ArtistHired = {
   firstname: string;
   lastname: string;
   alias: string;
-  genres_id: number;
+  genre_id: number;
   image: string;
   notoriety: number;
   genre_name: string;

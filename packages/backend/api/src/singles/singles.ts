@@ -4,20 +4,6 @@ import { db } from '@app/backend-shared';
 
 const singlesRouter = Router();
 
-export type ArtistHired = {
-  id: number;
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  genre_id: number;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  milestone_name: string;
-};
-
 singlesRouter.get('/:id', async (req: Request, res) => {
   const singleId = Number(req.params.id);
   const userId = req.userId;
@@ -30,30 +16,28 @@ singlesRouter.get('/:id', async (req: Request, res) => {
 
   try {
     const singles = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .selectFrom('singles')
+      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
       .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
+        'label_artists',
         'label_artists.artists_hired_id',
+        'artists_hired.id',
       )
-      .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .where('singles.id', '=', singleId)
+      .where('labels.users_id', '=', userId)
       .select([
         'singles.artists_hired_id',
         'singles.name',
         'singles.listeners',
         'singles.money_earned',
+        'singles.score',
         'artists.firstname as artist_firstname',
         'artists.lastname as artist_lastname',
         'artists.alias as artist_alias',
-        'singles.score',
       ])
-
-      .where('labels.users_id', '=', userId)
       .execute();
 
     res.json(singles);
@@ -75,16 +59,15 @@ singlesRouter.get('/', async (req: Request, res) => {
 
   try {
     const singles = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
+      .selectFrom('singles')
+      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
       .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
+        'label_artists',
         'label_artists.artists_hired_id',
+        'artists_hired.id',
       )
-      .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
       .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
       .select([
         'singles.id as id',
@@ -92,10 +75,10 @@ singlesRouter.get('/', async (req: Request, res) => {
         'singles.name',
         'singles.listeners',
         'singles.money_earned',
+        'singles.score',
         'artists.firstname as artist_firstname',
         'artists.lastname as artist_lastname',
         'artists.alias as artist_alias',
-        'singles.score',
       ])
       .where('labels.users_id', '=', userId)
       .execute();
@@ -109,7 +92,9 @@ singlesRouter.get('/', async (req: Request, res) => {
 });
 
 singlesRouter.post('/', async (req: Request, res) => {
-  const { artistId, singleName, artists } = req.body;
+  const { artistId, singleName, genreId } = req.body;
+  console.log(req.body);
+
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -124,53 +109,25 @@ singlesRouter.post('/', async (req: Request, res) => {
       return;
     }
 
-    const artist = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
-      .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
-        'label_artists.artists_hired_id',
-      )
-      .leftJoin('artists', 'artists_hired.artists_id', 'artists.id')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
-      .leftJoin('singles', 'singles.artists_hired_id', 'artists_hired.id')
-      .select([
-        'artists_hired.id as artists_hired_id',
-        'artists.firstname',
-        'artists.lastname',
-        'artists.alias',
-        'genres.id as genre_id',
-      ])
-      .where('artists_hired.id', '=', artistId)
-      .where('singles.name', '=', singleName.trim())
-      .execute();
-
-    if (!artist) {
-      res.status(404).json({ error: 'Artist not found' });
-      return;
-    }
     await db
       .insertInto('singles')
-      .values(
-        artists.map((artist: ArtistHired) => ({
-          artists_hired_id: artistId,
-          name: singleName.trim(),
-          genres_id: artist.genre_id,
-          exp_value: 100,
-          listeners: 0,
-          money_earned: 0,
-          score: 0,
-        })),
-      )
+      .values({
+        artists_hired_id: artistId,
+        name: singleName.trim(),
+        genres_id: genreId,
+        exp_value: 100,
+        listeners: 0,
+        money_earned: 2000,
+        score: 0,
+      })
       .execute();
 
-    return res.status(201).json({ success: true });
+    res.status(201).json({ success: true });
+    return;
   } catch (err) {
     console.error('Insert failed:', err);
-    return res.status(500).json({ error: 'Failed to insert single' });
+    res.status(500).json({ error: 'Failed to insert single' });
+    return;
   }
 });
 

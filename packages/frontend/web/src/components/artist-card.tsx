@@ -1,6 +1,6 @@
 import type { ArtistHired } from '../pages/main-menu';
 
-export type ArtistCardProps = {
+type ArtistCardProps = {
   readonly artist: ArtistHired;
 };
 

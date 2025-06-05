@@ -50,7 +50,7 @@ export default function CreateAlbum() {
             artistId: selectedArtistId,
             singleName: singleName.trim(),
             singleId: selectedSinglesId,
-            artists,
+            genreId: artists.find((a) => a.id === selectedArtistId)?.genre_id,
           }),
         });
 

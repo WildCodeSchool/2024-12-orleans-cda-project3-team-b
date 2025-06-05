@@ -42,7 +42,7 @@ export default function CreateSingle() {
         body: JSON.stringify({
           artistId: selectedArtistId,
           singleName: singleName.trim(),
-          artists,
+          genreId: artists.find((a) => a.id === selectedArtistId)?.genre_id,
         }),
       });
 
