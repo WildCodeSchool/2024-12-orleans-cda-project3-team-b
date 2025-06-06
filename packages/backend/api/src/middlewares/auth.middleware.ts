@@ -60,7 +60,7 @@ export default async function authMiddleware(
         .setExpirationTime('60s')
         .sign(accessTokenSecret);
 
-      res.cookie('accesToken', newAccessToken, {
+      res.cookie('accessToken', newAccessToken, {
         httpOnly: true,
         secure: IS_PRODUCTION,
         sameSite: 'strict',
