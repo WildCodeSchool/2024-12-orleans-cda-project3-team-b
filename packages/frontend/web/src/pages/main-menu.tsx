@@ -6,11 +6,11 @@ import ArtistCard from '@/components/artist-card';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { StaffHired } from '../../../../backend/api/src/games/get-staff-labels';
+import type { StaffLabel } from '../../../../backend/api/src/games/get-staff-labels';
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
-  const [staff, setStaff] = useState<StaffHired[]>([]);
+  const [staff, setStaff] = useState<StaffLabel[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function MainMenu() {
 
         <div className='mt-5 flex flex-wrap justify-center gap-2'>
           {staff.slice(0, visibleCount).map((staff) => (
-            <StaffLabelsCard key={staff.id} staf={staff} />
+            <StaffLabelsCard key={staff.id} staff={staff} />
           ))}
         </div>
 

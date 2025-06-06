@@ -7,16 +7,22 @@ const staffLabelsRouter = Router();
 async function getStaff(userId: number) {
   return db
 
-    .selectFrom('users')
-    .where('users.id', '=', userId)
-    .leftJoin('labels', 'labels.users_id', 'users.id')
-    .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+    .selectFrom('staff_label')
+    .leftJoin('labels', 'labels.id', 'staff_label.labels_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
     .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
-    .select(['staff.image', 'staff.bonus', 'staff.job', 'staff_label.id'])
+    .select([
+      'staff.image',
+      'staff.bonus',
+      'staff.job',
+      'staff_label.id',
+      'staff.price',
+    ])
+    .where('users.id', '=', userId)
     .where('staff_label.id', 'is not', null)
     .execute();
 }
-export type StaffHired = Awaited<ReturnType<typeof getStaff>>[number];
+export type StaffLabel = Awaited<ReturnType<typeof getStaff>>[number];
 
 staffLabelsRouter.get('/staff-labels', async (req: Request, res) => {
   const userId = req.userId;
