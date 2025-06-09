@@ -1,7 +1,5 @@
-import { log } from 'console';
 import { useEffect, useState } from 'react';
 
-import { ArrowLeft } from '@/components/arrow-left';
 import { GoBackToMenu } from '@/components/go-back-to-menu';
 
 import type { Albums } from '../../../../backend/api/src/albums/albums';
@@ -56,6 +54,14 @@ export default function AlbumCongratulations() {
   const sortedAlbums = [...albums].sort((a, b) => b.id - a.id);
   const album = sortedAlbums[0];
 
+  if (!album) {
+    return (
+      <div className='mt-10 text-center'>
+        <p className='text-secondary'>{'Loading your album...'}</p>
+      </div>
+    );
+  }
+
   return (
     <div className='mt-5 flex flex-col items-center'>
       <h1 className='text-secondary text-2xl font-bold'>
@@ -91,9 +97,9 @@ export default function AlbumCongratulations() {
             {'Your reputation is now:'}
           </h2>
           <h3 className='text-secondary flex font-bold'>
-            {album.notoriety_gain ?? 0}
+            {album.notoriety_gain}
             <img
-              className='ml-1 h-6 w-6'
+              className='mt-1 h-5 w-5'
               src='/assets/star-sign.png'
               alt='star sign'
             />
@@ -104,10 +110,9 @@ export default function AlbumCongratulations() {
             {'You just earned:'}
           </h2>
           <h3 className='text-secondary flex font-bold'>
-            {'$'}
-            {album.money_earned ?? 0}
+            {album.money_earned}
             <img
-              className='mt-0.5 h-5 w-6 pl-1'
+              className='mt-1.5 h-3.5 w-4'
               src='/assets/dollar-icon.png'
               alt='dollar icon'
             />

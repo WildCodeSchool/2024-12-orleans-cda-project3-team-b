@@ -8,12 +8,12 @@ import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
 import MarketingCard from '@/components/marketing-card';
-import type { Singles } from '@/components/modal-singles';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+import type { Singles } from '../../../../backend/api/src/singles/singles';
 
 export default function CreateAlbum() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);

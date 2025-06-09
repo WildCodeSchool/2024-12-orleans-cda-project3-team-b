@@ -53,6 +53,7 @@ export default function CreateSingle() {
       }
 
       setSubmitted(true);
+      void navigate('/single-congrats');
     } catch (error) {
       console.error('Submission failed:', error);
     }

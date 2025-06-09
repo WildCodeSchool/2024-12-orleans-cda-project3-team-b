@@ -48,6 +48,36 @@ singlesRouter.get('/:id', async (req: Request, res) => {
   }
 });
 
+async function getSingles(userId: number) {
+  return db
+
+    .selectFrom('singles')
+    .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
+    .leftJoin(
+      'label_artists',
+      'label_artists.artists_hired_id',
+      'artists_hired.id',
+    )
+    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
+    .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .select([
+      'singles.id as id',
+      'singles.artists_hired_id',
+      'singles.name',
+      'singles.listeners',
+      'singles.money_earned',
+      'singles.score',
+      'artists.firstname as artist_firstname',
+      'artists.lastname as artist_lastname',
+      'artists.alias as artist_alias',
+    ])
+    .where('labels.users_id', '=', userId)
+    .execute();
+}
+
+export type Singles = Awaited<ReturnType<typeof getSingles>>[number];
+
 singlesRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -58,30 +88,7 @@ singlesRouter.get('/', async (req: Request, res) => {
   }
 
   try {
-    const singles = await db
-      .selectFrom('singles')
-      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .leftJoin('users', 'users.id', 'labels.users_id')
-      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .select([
-        'singles.id as id',
-        'singles.artists_hired_id',
-        'singles.name',
-        'singles.listeners',
-        'singles.money_earned',
-        'singles.score',
-        'artists.firstname as artist_firstname',
-        'artists.lastname as artist_lastname',
-        'artists.alias as artist_alias',
-      ])
-      .where('labels.users_id', '=', userId)
-      .execute();
+    const singles = await getSingles(userId);
 
     res.json(singles);
     return;

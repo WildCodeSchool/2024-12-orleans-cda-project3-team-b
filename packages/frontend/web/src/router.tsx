@@ -17,6 +17,7 @@ import MainMenu from './pages/main-menu';
 import MyAlbums from './pages/my-albums.tsx';
 import MyArtists from './pages/my-artists.tsx';
 import Register from './pages/register';
+import SingleCongratulations from './pages/single-congratulations-page.tsx';
 import HttpError from './utils/http-error.ts';
 
 const router = createBrowserRouter([
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
       {
         path: 'album-congrats',
         element: <AlbumCongratulations />,
+      },
+      {
+        path: 'single-congrats',
+        element: <SingleCongratulations />,
       },
       {
         path: '/create-album',
