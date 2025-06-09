@@ -8,7 +8,6 @@ type ArtistCardHireProps = {
   readonly artist: ArtistHired;
   readonly budget: number;
 };
-
 export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
   return (
     <div
