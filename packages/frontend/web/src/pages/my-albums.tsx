@@ -2,18 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ArrowLeft } from '@/components/arrow-left';
 
-export type Albums = {
-  id: number;
-  name: string;
-  sales: number;
-  money_earned: number;
-  genre_name: string;
-  artist_firstname: string;
-  artist_lastname: string;
-  artist_alias: string;
-  exp_value: number;
-  notoriety_gain: number;
-};
+import type { Albums } from '../../../../backend/api/src/albums/albums';
 
 export default function MyAlbums() {
   const [visibleCount, setVisibleCount] = useState(4);
@@ -93,10 +82,10 @@ export default function MyAlbums() {
         <h2 className='font-bold'>{'ALBUMS'}</h2>
         {albums.slice(0, visibleCount).map((album) => (
           <div key={album.id} className='text-center'>
-            <h3 className='font-semibold'>{album.name}</h3>
+            <h3 className='font-semibold'>{album.album_name}</h3>
             <p className='text-sm font-light'>
               {'by '}
-              {album.artist_alias
+              {album.artist_alias?.trim() != null
                 ? album.artist_alias
                 : `${album.artist_firstname} ${album.artist_lastname}`}
             </p>

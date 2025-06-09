@@ -34,10 +34,7 @@ const router = createBrowserRouter([
         path: 'register',
         element: <Register />,
       },
-      {
-        path: 'album-congrats',
-        element: <AlbumCongratulations />,
-      },
+
       {
         path: '*',
         loader: () => {
@@ -66,7 +63,10 @@ const router = createBrowserRouter([
         path: '/create-single',
         element: <CreateSingle />,
       },
-
+      {
+        path: 'album-congrats',
+        element: <AlbumCongratulations />,
+      },
       {
         path: '/create-album',
         element: <CreateAlbum />,

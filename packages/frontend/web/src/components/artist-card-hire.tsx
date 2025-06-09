@@ -46,7 +46,7 @@ export default function ArtistCardHire({
             onHire(artist.artist_id);
           }}
           disabled={isDisabled}
-          className={`mr-2 flex h-6 w-13 items-center justify-center rounded-sm pl-2 text-xs font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] md:mr-0 md:h-8 md:w-18 md:text-xl ${
+          className={`mr-2 flex h-6 w-13 items-center justify-center rounded-sm pl-2 text-xs font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] hover:scale-95 md:mr-0 md:h-8 md:w-18 md:text-xl ${
             isDisabled ? 'cursor-not-allowed bg-gray-400' : 'bg-orange-500'
           }`}
         >

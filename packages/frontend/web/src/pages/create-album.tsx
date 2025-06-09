@@ -57,6 +57,7 @@ export default function CreateAlbum() {
         });
 
         setSubmitted(true);
+        void navigate('/album-congrats');
       } catch (error) {
         console.error('Submission failed:', error);
       }
@@ -241,7 +242,7 @@ export default function CreateAlbum() {
             {'Cancel'}
           </VerifyButton>
           <VerifyButton
-            color='bg-orange-500 active:scale-95 transition-transform'
+            color='bg-orange-500 active:scale-95 transition-transform hover:scale-95'
             image='/assets/check.png'
             onClick={handleSubmit}
           >

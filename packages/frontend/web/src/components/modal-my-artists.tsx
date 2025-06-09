@@ -42,7 +42,7 @@ export default function ModalMyArtists({
       <div className='absolute inset-0' onClick={onClose} />
 
       {/* Modal Content */}
-      <div className='bg-primary relative z-10 w-full max-w-3xl rounded-2xl p-6 shadow-xl'>
+      <div className='bg-primary relative z-10 rounded-2xl p-6 shadow-xl'>
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-secondary w-full text-center text-xl font-bold'>
             {'My Artists'}
@@ -56,7 +56,7 @@ export default function ModalMyArtists({
           </button>
         </div>
 
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           {artists.map((artist) => (
             <div
               key={artist.artist_hired_id}

@@ -193,7 +193,7 @@ export default function CreateSingle() {
             {'Cancel'}
           </VerifyButton>
           <VerifyButton
-            color='bg-orange-500 active:scale-95 transition-transform'
+            color='bg-orange-500 active:scale-95 transition-transform hover:scale-95'
             image='/assets/check.png'
             onClick={handleSubmit}
           >
