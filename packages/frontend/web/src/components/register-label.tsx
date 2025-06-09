@@ -74,22 +74,6 @@ export default function RegisterLabel() {
       }
       return;
     }
-    const res = await fetch(`/api/games/register-label`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name: input,
-        logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
-    const data = res;
-    if (data.ok) {
-      await navigate('/main-menu');
-    } else {
-      setMessage('Something went wrong. Please try again.');
-    }
-
   };
 
   return (
