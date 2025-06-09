@@ -3,22 +3,8 @@ import { useEffect, useState } from 'react';
 import ArtistCard from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import { ArrowLeft } from '../components/arrow-left';
-
-type ArtistHired = {
-  artist_id: number;
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  name: string;
-  price: number;
-  artist_hired_id: number;
-};
 
 export default function MyArtists() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
@@ -68,7 +54,7 @@ export default function MyArtists() {
       </div>
       <div className='mt-5 grid grid-cols-2 gap-4'>
         {artists.slice(0, visibleCount).map((artist) => (
-          <ArtistCard key={artist.artist_id} artist={artist} budget={0} />
+          <ArtistCard key={artist.id} artist={artist} budget={0} />
         ))}
       </div>
       <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
