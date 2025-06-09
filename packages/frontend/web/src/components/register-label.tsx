@@ -55,8 +55,13 @@ export default function RegisterLabel() {
 
   const register = async (event: FormEvent) => {
     event.preventDefault();
+
     if (!input.trim() || selectedLogo === undefined) {
       setMessage('All fields are required');
+      return;
+    }
+
+    try {
       const res = await fetch(`/api/games/register-label`, {
         method: 'POST',
         body: JSON.stringify({
@@ -66,13 +71,15 @@ export default function RegisterLabel() {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
-      const data = res;
-      if (data.ok) {
+
+      if (res.ok) {
         await navigate('/main-menu');
       } else {
         setMessage('Something went wrong. Please try again.');
       }
-      return;
+    } catch (error) {
+      console.error('Error registering label:', error);
+      setMessage('Network error. Please try again.');
     }
   };
 
