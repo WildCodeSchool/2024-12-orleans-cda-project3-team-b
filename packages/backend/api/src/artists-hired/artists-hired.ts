@@ -80,6 +80,39 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
   }
 });
 
+async function getArtistsHired(userId: number) {
+  return db
+    .selectFrom('artists_hired')
+    .leftJoin(
+      'label_artists',
+      'label_artists.artists_hired_id',
+      'artists_hired.id',
+    )
+    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
+    .innerJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .leftJoin('milestones', 'milestones.id', 'artists_hired.milestones_id')
+    .leftJoin('genres', 'genres.id', 'artists.genres_id')
+    .where('labels.users_id', '=', userId)
+    .select([
+      'artists_hired.id as artist_hired_id',
+      'artists_hired.artists_id',
+      'artists_hired.milestones_id',
+      'artists_hired.notoriety',
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
+      'artists.image',
+      'artists.notoriety',
+      'milestones.name as milestone_name',
+      'genres.name as genre_name',
+      'genres.id as genre_id',
+    ])
+    .execute();
+}
+
+export type ArtistHired = Awaited<ReturnType<typeof getArtistsHired>>[number];
+
 artistsHiredRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -89,39 +122,102 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
     return;
   }
   try {
-    const artistsHired = await db
-      .selectFrom('users')
-      .where('users.id', '=', userId)
-      .leftJoin('labels', 'labels.users_id', 'users.id')
-      .leftJoin('label_artists', 'label_artists.label_id', 'labels.id')
-      .leftJoin(
-        'artists_hired',
-        'artists_hired.id',
-        'label_artists.artists_hired_id',
-      )
-      .innerJoin('artists', 'artists_hired.artists_id', 'artists.id')
-      .leftJoin('milestones', 'artists_hired.milestones_id', 'milestones.id')
-      .leftJoin('genres', 'artists.genres_id', 'genres.id')
-      .select([
-        'artists_hired.id as artist_hired_id',
-        'artists_hired.artists_id',
-        'artists_hired.milestones_id',
-        'artists_hired.notoriety',
-        'artists.firstname',
-        'artists.lastname',
-        'artists.alias',
-        'artists.image',
-        'artists.notoriety',
-        'milestones.name as milestone_name',
-        'genres.name as genre_name',
-      ])
-      // .where('artists.id', 'is not', null)
-      .execute();
+    const artistsHired = await getArtistsHired(userId);
 
     res.json(artistsHired);
     return;
   } catch (error) {
     console.error('Error fetching artists with genres:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+artistsHiredRouter.get('/:id/singles', async (req: Request, res) => {
+  const artistId = Number(req.params.id);
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const singles = await db
+      .selectFrom('singles')
+      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin(
+        'label_artists',
+        'label_artists.artists_hired_id',
+        'artists_hired.id',
+      )
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .select([
+        'singles.id as id',
+        'singles.artists_hired_id',
+        'singles.name',
+        'singles.listeners',
+        'singles.money_earned',
+        'singles.score',
+        'artists.firstname as artist_firstname',
+        'artists.lastname as artist_lastname',
+        'artists.alias as artist_alias',
+      ])
+      .where('labels.users_id', '=', userId)
+      .where('artists_hired.id', '=', artistId)
+      .execute();
+
+    res.json(singles);
+    return;
+  } catch (error) {
+    console.error('Error fetching singles:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+artistsHiredRouter.get('/:id/albums', async (req: Request, res) => {
+  const artistId = Number(req.params.id);
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const albums = await db
+      .selectFrom('albums')
+      .leftJoin('artists_hired', 'artists_hired.id', 'albums.artists_hired_id')
+      .leftJoin(
+        'label_artists',
+        'label_artists.artists_hired_id',
+        'artists_hired.id',
+      )
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .where('artists_hired.id', '=', artistId)
+      .where('labels.users_id', '=', userId)
+      .select([
+        'albums.artists_hired_id',
+        'albums.name',
+        'albums.sales',
+        'albums.money_earned',
+        'artists.firstname as artist_firstname',
+        'artists.lastname as artist_lastname',
+        'artists.alias as artist_alias',
+        'albums.notoriety_gain',
+        'albums.score',
+      ])
+      .execute();
+
+    res.json(albums);
+    return;
+  } catch (error) {
+    console.error('Error fetching albums:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

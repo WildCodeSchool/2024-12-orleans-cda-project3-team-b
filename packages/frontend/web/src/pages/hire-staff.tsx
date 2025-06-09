@@ -6,13 +6,7 @@ import SeeMoreButton from '@/components/see-more-button';
 import StaffCardHire from '@/components/staff-card-hire';
 import { useAuth } from '@/contexts/auth-context';
 
-export type Staff = {
-  id: number;
-  job: string;
-  bonus: number;
-  price: number;
-  image: string;
-};
+import type { Staff } from '../../../../backend/api/src/games/get-staff';
 
 export type InfoLabel = {
   label: number;
@@ -98,12 +92,11 @@ export default function HireArtist() {
       setStaff((prev) => prev.filter((staff) => staff.id !== staffId));
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Error hiring artist. Please try again.');
     }
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
+    <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
         <button type='button'>
           <ArrowLeft />

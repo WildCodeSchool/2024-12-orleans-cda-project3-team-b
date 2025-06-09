@@ -1,63 +1,254 @@
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import AddButton from '@/components/add-button';
-import AddSingle from '@/components/add-single';
-import RemoveSingle from '@/components/remove-single';
+import AddArtist from '@/components/add-artist';
+import AddMarketing from '@/components/add-marketing';
+import { ArrowLeft } from '@/components/arrow-left';
+import ArtistCard from '@/components/artist-card';
+import ChooseName from '@/components/choose-name';
+import ChooseSingle from '@/components/choose.single';
+import MarketingCard from '@/components/marketing-card';
+import type { Singles } from '@/components/modal-singles';
+import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+
 export default function CreateAlbum() {
+  const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
+  const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
+  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+    null,
+  );
+  const [chosenSingles, setChosenSingles] = useState<Singles[]>([]);
   const navigate = useNavigate();
+  const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const [singleName, setSingleName] = useState('');
+  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSingleName(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    setHasTriedSubmit(true);
+    if (
+      !selectedArtistId ||
+      !singleName.trim() ||
+      selectedSinglesId.length !== 0
+    )
+      try {
+        const res = await fetch('/api/albums/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            artistHiredId: selectedArtistId,
+            singleName: singleName.trim(),
+            singleId: selectedSinglesId,
+            genreId: artistsHired.find(
+              (a) => a.artist_hired_id === selectedArtistId,
+            )?.genre_id,
+          }),
+        });
+
+        setSubmitted(true);
+      } catch (error) {
+        console.error('Submission failed:', error);
+      }
+  };
+
+  useEffect(() => {
+    const fetchArtists = async () => {
+      try {
+        if (selectedArtistId != null) {
+          const resArtistsHired = await fetch('/api/artists-hired');
+          if (!resArtistsHired.ok)
+            throw new Error(`Artist error: ${resArtistsHired.status}`);
+          const artistsData: ArtistHired[] = await resArtistsHired.json();
+          const selectedArtistHired = artistsData.find(
+            (a) => a.artist_hired_id === selectedArtistId,
+          );
+          setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
+        } else {
+          setArtistsHired([]);
+        }
+      } catch (error) {
+        console.error('Error fetching artists:', error);
+        setArtistsHired([]);
+      }
+    };
+
+    void fetchArtists();
+  }, [selectedArtistId]);
+
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
+        if (selectedMarketingId != null) {
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing error: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
+          );
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
+        } else {
+          setMarketing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
+
+    void fetchMarketing();
+  }, [selectedMarketingId]);
+
+  useEffect(() => {
+    const fetchSingles = async () => {
+      try {
+        if (selectedSinglesId.length > 0) {
+          const resSingles = await fetch('/api/singles');
+          if (!resSingles.ok)
+            throw new Error(`Singles error: ${resSingles.status}`);
+          const singlesData: Singles[] = await resSingles.json();
+          const selected = singlesData.filter((s) =>
+            selectedSinglesId.includes(s.id),
+          );
+          setChosenSingles(selected.slice(0, 3));
+        } else {
+          setChosenSingles([]);
+        }
+      } catch (error) {
+        console.error('Error fetching singles:', error);
+        setChosenSingles([]);
+      }
+    };
+
+    void fetchSingles();
+  }, [selectedSinglesId]);
+
   return (
-    <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
-      <div className='mb-4 flex w-full items-center justify-between'>
-        <button
-          type='button'
-          className='text-secondary hover:text-orange-500'
-          onClick={async () => {
-            await navigate(-1);
-          }}
-        >
-          <img
-            src='/assets/arrow-left.png'
-            alt='arrow left'
-            className='W-10 h-10'
+    <form action='' method='post'>
+      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
+        <div className='mb-4 flex w-full items-center justify-between'>
+          <div>
+            <ArrowLeft />
+          </div>
+          <h1 className='text-secondary text-center text-2xl font-bold'>
+            {'RECORDING A NEW ALBUM'}
+          </h1>
+          <div className='h-6 w-6' />
+        </div>
+        <img className='h-22 w-22' src='/assets/album.png' alt='' />
+        <div className='mt-6'>
+          {artistsHired.length > 0 ? (
+            artistsHired.map((artist) => (
+              <ArtistCard key={artist.artists_id} artist={artist} />
+            ))
+          ) : (
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No artist selected'}
+            </p>
+          )}
+          <AddArtist
+            onArtistSelected={(id) => {
+              setSelectedArtistId(id);
+            }}
           />
-        </button>
-        <h1 className='text-secondary text-center text-2xl font-bold'>
-          {'RECORDING A NEW ALBUM'}
-        </h1>
-        <div className='h-6 w-6' />
+        </div>
+        <div className='flex flex-col items-center justify-center'>
+          <ChooseName
+            name="Choose your album's name"
+            placeholder="Album's name"
+            value={singleName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className='mt-12 flex w-full flex-col items-center gap-2'>
+          {chosenSingles.length > 0 ? (
+            chosenSingles.map((single) => (
+              <SingleCard
+                key={single.id}
+                id={single.id}
+                name={single.name}
+                score={single.score}
+                onToggleSelect={(id) => {
+                  setSelectedSinglesId((prevIds) =>
+                    prevIds.filter((prevId) => prevId !== id),
+                  );
+                }}
+              />
+            ))
+          ) : (
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No single selected'}
+            </p>
+          )}
+          <ChooseSingle
+            onSingleSelected={(id) => {
+              setSelectedSinglesId((prev) =>
+                prev.includes(id) ? prev : [...prev, id].slice(0, 3),
+              );
+            }}
+            artistId={selectedArtistId}
+          />
+        </div>
+        <div className='mt-6'>
+          {marketing.length > 0 ? (
+            marketing.map((campaign) => (
+              <MarketingCard key={campaign.id} marketing={campaign} />
+            ))
+          ) : (
+            <p className='text-secondary text-s mt-4 text-center'>
+              {'No Marketing Campaign selected'}
+            </p>
+          )}
+          <AddMarketing
+            onMarketingSelected={(id) => {
+              setSelectedMarketingId(id);
+            }}
+          />
+        </div>
+        <div className='mt-6'>
+          {hasTriedSubmit &&
+          (!selectedArtistId ||
+            !singleName.trim() ||
+            selectedSinglesId.length === 0) ? (
+            <p className='text-center text-sm text-red-500'>
+              {
+                'Please select an artist, enter a name for the album and choose at least 1 single.'
+              }
+            </p>
+          ) : null}
+        </div>
+
+        <div className='mt-12 flex items-center justify-between gap-x-16'>
+          <VerifyButton
+            color='bg-secondary active:scale-95 transition-transform'
+            image='/assets/not-check.png'
+            onClick={async () => {
+              await navigate(-1);
+            }}
+          >
+            {'Cancel'}
+          </VerifyButton>
+          <VerifyButton
+            color='bg-orange-500 active:scale-95 transition-transform'
+            image='/assets/check.png'
+            onClick={handleSubmit}
+          >
+            {'Confirm'}
+          </VerifyButton>
+        </div>
       </div>
-      <img className='h-22 w-22' src='/assets/album.png' alt='' />
-      <div className='flex flex-col items-center justify-center'>
-        <h2 className='text-secondary mt-8 text-center text-xl'>
-          {"Choose your album's name:"}
-        </h2>
-        <input
-          className='mt-3 w-full max-w-md rounded-lg border border-gray-200 bg-white px-4 py-2 text-gray-700 shadow-[1px_4px_6px_rgba(0,0,0,0.30)]'
-          type='text'
-          placeholder="Album's name"
-        />
-      </div>
-      <span className='mt-12 flex w-full flex-col items-center gap-2'>
-        <RemoveSingle />
-        <AddSingle />
-        <AddSingle />
-      </span>
-      <span className='mt-12 flex w-full flex-col items-center justify-between'>
-        <AddButton>{'+'}</AddButton>
-        <h2 className='text-secondary mt-1 text-center text-xl'>
-          {'MARKETING CAMPAIGN'}
-        </h2>
-      </span>
-      <span className='mt-12 flex items-center justify-between gap-x-16'>
-        <VerifyButton color='bg-secondary' image='/assets/not-check.png'>
-          {'Cancel'}
-        </VerifyButton>
-        <VerifyButton color='bg-orange-500' image='/assets/check.png'>
-          {'Confirm'}
-        </VerifyButton>
-      </span>
-    </div>
+    </form>
   );
 }
