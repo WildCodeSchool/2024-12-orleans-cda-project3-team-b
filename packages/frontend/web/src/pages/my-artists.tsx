@@ -21,12 +21,11 @@ export default function MyArtists() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-
+        const data: ArtistHired[] = await response.json();
         setArtists(data);
       } catch (error) {
-        console.error('Error details:', error);
-        setArtists([]); // Reset artists on error
+        console.error('Error fetching artists:', error);
+        setArtists([]);
       }
     };
 
@@ -44,11 +43,12 @@ export default function MyArtists() {
           <ArrowLeft />
         </button>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
-          {'MyArtists'}
+          {'My Artists'}
         </h1>
         <div className='h-6 w-6' />
       </div>
 
+      {/* Title */}
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
@@ -57,7 +57,11 @@ export default function MyArtists() {
           <ArtistCard key={artist.id} artist={artist} budget={0} />
         ))}
       </div>
-      <SeeMoreButton onClick={handleSeeMore}> {'See More'}</SeeMoreButton>
+
+      {/* See More */}
+      {visibleCount < artists.length && (
+        <SeeMoreButton onClick={handleSeeMore}>{'See More'}</SeeMoreButton>
+      )}
     </div>
   );
 }

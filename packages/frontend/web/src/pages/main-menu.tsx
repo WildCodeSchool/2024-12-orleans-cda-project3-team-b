@@ -1,31 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import ArtistCardHire from '@/components/artist-card-hire';
+import AddButton from '@/components/add-button';
+import ArtistCardHire from '@/components/artist-card';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import AddButton from '../components/add-button';
-
-// import type { Artist } from '../../../../backend/api/src/artists/artists';
-
-type StaffHired = {
-  id: number;
-  job: string;
-  bonus: number;
-  price: number;
-  image: string;
-};
+import type { StaffLabel } from '../../../../backend/api/src/games/get-staff-labels';
 
 export default function MainMenu() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
-  const [staff, setStaff] = useState<StaffHired[]>([]);
+  const [staff, setStaff] = useState<StaffLabel[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     const fetchArtistsHired = async () => {
       try {
-        const response = await fetch('/api/artists-hired');
+        const response = await fetch(`/api/artists-hired`);
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -53,11 +44,9 @@ export default function MainMenu() {
     void fetchStaff();
   }, []);
 
-  console.log(artists);
-
   return (
-    <div className='bg-primary mx-auto pt-13 text-center'>
-      <div className='flex h-70 flex-col items-center justify-center'>
+    <div className='bg-primary mx-auto px-4 pt-13 text-center sm:px-8'>
+      <div className='flex flex-col items-center justify-center'>
         <h2 className='text-secondary pb-7 text-3xl underline'>
           {'MyARTISTS'}
         </h2>
@@ -67,10 +56,11 @@ export default function MainMenu() {
             <ArtistCardHire key={artist.id} artist={artist} budget={0} />
           ))}
         </div>
+
         <Link to='/my-artists'>
           <button
             type='button'
-            className='bg-secondary mt-5 mb-4 flex h-8 w-29 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+            className='bg-secondary mt-5 mb-4 flex h-8 w-36 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
           >
             {'See full list'}
           </button>
@@ -82,18 +72,20 @@ export default function MainMenu() {
 
         <h2 className='text-secondary pt-1 text-xl'>{'Hire a new artist'}</h2>
       </div>
-      <div className='h-50 pt-7'>
-        <h2 className='text-secondary mt-4 text-3xl underline'>{' RECORD'}</h2>
 
-        <div className='mt-8 flex h-15 items-center justify-center'>
-          <div className='flex flex-col items-center justify-center'>
-            <Link to={'/create-single-menu'}>
+      {/* RECORD Section */}
+      <div className='pt-10'>
+        <h2 className='text-secondary text-3xl underline'>{'RECORD'}</h2>
+
+        <div className='mt-6 flex flex-col items-center justify-center gap-8 sm:flex-row'>
+          <div className='flex flex-col items-center'>
+            <Link to='/create-single'>
               <AddButton>{'+'}</AddButton>
             </Link>
             <h2 className='text-secondary ml-1 text-xl'>{'Create a single'}</h2>
           </div>
-          <div className='flex flex-col items-center justify-center pl-10'>
-            <Link to={'/create-album-menu'}>
+          <div className='flex flex-col items-center'>
+            <Link to='/create-album'>
               <AddButton>{'+'}</AddButton>
             </Link>
             <h3 className='text-secondary mr-1 pt-1 text-xl'>
@@ -107,8 +99,8 @@ export default function MainMenu() {
         <h2 className='text-secondary text-3xl underline'>{' STAFF'}</h2>
 
         <div className='mt-5 flex flex-wrap justify-center gap-2'>
-          {staff.slice(0, visibleCount).map((staf) => (
-            <StaffLabelsCard key={staf.id} staf={staf} />
+          {staff.slice(0, visibleCount).map((staff) => (
+            <StaffLabelsCard key={staff.id} staff={staff} />
           ))}
         </div>
 

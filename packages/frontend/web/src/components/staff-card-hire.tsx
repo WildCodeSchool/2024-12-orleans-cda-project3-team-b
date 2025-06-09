@@ -1,4 +1,4 @@
-import type { Staff } from '@/pages/hire-staff';
+import type { Staff } from '../../../../backend/api/src/games/get-staff';
 
 type StaffCardHireProps = {
   readonly staff: Staff;

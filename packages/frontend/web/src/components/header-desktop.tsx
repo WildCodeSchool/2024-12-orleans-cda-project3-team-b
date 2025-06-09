@@ -60,7 +60,7 @@ export default function HeaderDesktop() {
               <Link to='/my-artists'>{'MyArtists'}</Link>
             </li>
             <li>
-              <Link to=''>{'MyAlbums'}</Link>
+              <Link to='/my-albums'>{'MyAlbums'}</Link>
             </li>
             <li>
               <img
