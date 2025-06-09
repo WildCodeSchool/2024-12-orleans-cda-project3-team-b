@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 
+// import type { HiredArtist } from '../../../../backend/api/src/artists-hired/artists-hired';
+
 type ArtistCardHireProps = {
   readonly artist: Artist;
   readonly onHire: (artistId: number) => void;
@@ -30,7 +32,7 @@ export default function ArtistCardHire({
           <h2 className='ml-2'>
             {artist.firstname} {artist.lastname} {artist.alias}
           </h2>
-          <h3>{artist.name}</h3>
+          <h3>{artist.genre}</h3>
         </div>
         <div className='flex items-center'>
           <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>
@@ -44,7 +46,7 @@ export default function ArtistCardHire({
           <button
             type='button'
             onClick={() => {
-              onHire(artist.id);
+              onHire(artist.id ?? 0);
             }}
             disabled={isDisabled}
             className={`flex h-8 w-18 items-center justify-center rounded-sm pl-2 text-xl font-bold shadow-[3px_5px_6px_rgba(0,0,0,0.30)] ${

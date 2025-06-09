@@ -23,6 +23,7 @@ export default function ArtistHirePage() {
       setArtistsHired([]);
     }
   }, [id]);
+  console.log(artistsHired);
 
   useEffect(() => {
     (async () => {

@@ -1,8 +1,9 @@
+import type { HiredArtist } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 import AddButton from './add-button';
 
 type ArtistProfileCardProps = {
-  readonly artist: Artist;
+  readonly artist: Artist | HiredArtist;
   readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
   readonly isAddButton?: boolean;
 };
@@ -48,12 +49,14 @@ export default function ArtistProfileCard({
             {artist.firstname} {artist.lastname} {artist.alias}
           </h2>
           <h3 className='text-primary text-xl font-extralight'>
-            {artist.name}
+            {artist.genre}
           </h3>
           <div className='ml-4 flex items-center text-sm'>
             <h2 className='text-primary flex text-xl'>{artist.notoriety}</h2>
             <img className='mt-1 h-7 w-7' src='/assets/star-sign.png' alt='' />
-            <h2 className='text-primary ml-2 text-xl'>{artist.milestones}</h2>
+            <h2 className='text-primary ml-2 text-xl'>
+              {artist.milestones_name}
+            </h2>
           </div>
         </div>
       </div>
@@ -62,7 +65,7 @@ export default function ArtistProfileCard({
         <ul className='text-primary flex flex-col'>
           {artist.skills.map((competence) => (
             <div
-              key={competence.skills_id}
+              key={competence.skillsId}
               className='item-center flex flex-row'
             >
               <li className='flex items-center gap-4'>
@@ -70,13 +73,13 @@ export default function ArtistProfileCard({
                 {' :'}
                 {competence.grade}
                 {' /25'}
-                {isAddButton ? (
+                {(isAddButton ?? false) ? (
                   <AddButton
                     key={competence.artistsHiredSkillsId}
                     onClick={() =>
                       addPoint(
                         competence.artistsHiredSkillsId ?? 0,
-                        competence.skills_id,
+                        competence.skillsId ?? 0,
                       )
                     }
                     disabled={(competence.grade ?? 0) >= 25}

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 
-import type { ArtistHired } from '@/pages/main-menu';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+
+// import type { Artist } from '../../../../backend/api/src/artists/artists';
 
 type ArtistCardHireProps = {
   readonly artist: ArtistHired;
@@ -10,10 +12,10 @@ type ArtistCardHireProps = {
 export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
   return (
     <div
-      key={artist.artist_hired_id}
+      key={artist.id}
       className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
     >
-      <Link to={`/artists-hired/${artist.artist_hired_id}`}>
+      <Link to={`/artists-hired/${artist.id}`}>
         <img
           className='h-10 w-10 rounded-4xl'
           src={`/assets/${artist.image}`}
@@ -24,7 +26,7 @@ export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
         <h2 className='ml-2'>
           {artist.firstname} {artist.lastname} {artist.alias}
         </h2>
-        <h3 className='text-sm md:text-lg'>{artist.genre_name}</h3>
+        <h3 className='text-sm md:text-lg'>{artist.genre}</h3>
       </div>
       <div className='flex items-center text-sm'>
         <h2 className='flex items-center font-bold'>{artist.notoriety}</h2>

@@ -1,24 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import ArtistCard from '@/components/artist-card-hire';
+import ArtistCardHire from '@/components/artist-card-hire';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import AddButton from '../components/add-button';
 
-export type ArtistHired = {
-  artist_hired_id: number;
-  artist_id: number;
-  artists_id: number;
-  milestones_id: number;
-  firstname: string;
-  lastname: string;
-  alias: string;
-  image: string;
-  notoriety: number;
-  genre_name: string;
-  price: number;
-};
+// import type { Artist } from '../../../../backend/api/src/artists/artists';
+
 type StaffHired = {
   id: number;
   job: string;
@@ -63,6 +53,8 @@ export default function MainMenu() {
     void fetchStaff();
   }, []);
 
+  console.log(artists);
+
   return (
     <div className='bg-primary mx-auto pt-13 text-center'>
       <div className='flex h-70 flex-col items-center justify-center'>
@@ -72,11 +64,7 @@ export default function MainMenu() {
 
         <div className='mt-5 grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => (
-            <ArtistCard
-              key={artist.artist_hired_id}
-              artist={artist}
-              budget={0}
-            />
+            <ArtistCardHire key={artist.id} artist={artist} budget={0} />
           ))}
         </div>
         <Link to='/my-artists'>
