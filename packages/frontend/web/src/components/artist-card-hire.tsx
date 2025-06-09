@@ -6,7 +6,6 @@ import type { ArtistHired } from '../../../../backend/api/src/artists-hired/arti
 
 type ArtistCardHireProps = {
   readonly artist: ArtistHired;
-  readonly budget: number;
 };
 export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
   return (

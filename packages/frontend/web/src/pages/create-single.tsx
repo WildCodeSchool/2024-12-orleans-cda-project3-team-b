@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCard from '@/components/artist-card';
+import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
@@ -42,8 +42,8 @@ export default function CreateSingle() {
         body: JSON.stringify({
           artistHiredId: selectedArtistId,
           singleName: singleName.trim(),
-          genreId: artistsHired.find(
-            (a) => a.artist_hired_id === selectedArtistId,
+          genreId: artistsHired.find((a) =>
+            a.skills.some((items) => items.artistsHiredSkillsId != null),
           )?.genre_id,
         }),
       });
@@ -66,8 +66,8 @@ export default function CreateSingle() {
           if (!resArtistHired.ok)
             throw new Error(`Artist fetch failed: ${resArtistHired.status}`);
           const artistsData: ArtistHired[] = await resArtistHired.json();
-          const selectedArtistHired = artistsData.find(
-            (a) => a.artist_hired_id === selectedArtistId,
+          const selectedArtistHired = artistsData.find((a) =>
+            a.skills.some((items) => items.artistsHiredSkillsId != null),
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
@@ -131,7 +131,7 @@ export default function CreateSingle() {
         <div className='mt-6 w-full max-w-md'>
           {artistsHired.length > 0 ? (
             artistsHired.map((artist) => (
-              <ArtistCard key={artist.artists_id} artist={artist} />
+              <ArtistCardHire key={artist.artists_id} artist={artist} />
             ))
           ) : (
             <p className='text-secondary mt-4 text-center text-sm'>
