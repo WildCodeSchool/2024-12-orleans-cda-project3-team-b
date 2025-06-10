@@ -76,10 +76,6 @@ artistsRouter.get('/', async (req: Request, res) => {
   }
 });
 
-export type ArtistId = Awaited<
-  ReturnType<ReturnType<typeof getArtists>['execute']>
->[number];
-
 artistsRouter.get('/:id', async (req: Request, res) => {
   const { id } = req.params;
   const userId = req.userId;

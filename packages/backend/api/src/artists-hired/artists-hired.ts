@@ -164,10 +164,6 @@ artistsHiredRouter.get('/', async (req: Request, res) => {
   }
 });
 
-export type HiredArtist = Awaited<
-  ReturnType<ReturnType<typeof getArtistsHired>['execute']>
->[number];
-
 artistsHiredRouter.get('/:id', async (req: Request, res) => {
   const { id } = req.params;
   const userId = req.userId;

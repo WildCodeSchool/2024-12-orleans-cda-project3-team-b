@@ -43,7 +43,7 @@ export default function CreateSingle() {
           artistHiredId: selectedArtistId,
           singleName: singleName.trim(),
           genreId: artistsHired.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId != null),
+            a.skills.some((items) => items.artistsHiredSkillsId !== null),
           )?.genre_id,
         }),
       });
@@ -67,7 +67,7 @@ export default function CreateSingle() {
             throw new Error(`Artist fetch failed: ${resArtistHired.status}`);
           const artistsData: ArtistHired[] = await resArtistHired.json();
           const selectedArtistHired = artistsData.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId != null),
+            a.skills.some((items) => items.artistsHiredSkillsId !== null),
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {

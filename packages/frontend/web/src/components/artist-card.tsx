@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 
-// import type { HiredArtist } from '../../../../backend/api/src/artists-hired/artists-hired';
-
 type ArtistCardHireProps = {
   readonly artist: Artist;
   readonly onHire: (artistId: number) => void;

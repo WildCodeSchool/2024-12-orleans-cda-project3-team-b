@@ -51,7 +51,7 @@ export default function CreateAlbum() {
             singleName: singleName.trim(),
             singleId: selectedSinglesId,
             genreId: artistsHired.find((a) =>
-              a.skills.some((items) => items.artistsHiredSkillsId != null),
+              a.skills.some((items) => items.artistsHiredSkillsId !== null),
             )?.genre_id,
           }),
         });
@@ -71,7 +71,7 @@ export default function CreateAlbum() {
             throw new Error(`Artist error: ${resArtistsHired.status}`);
           const artistsData: ArtistHired[] = await resArtistsHired.json();
           const selectedArtistHired = artistsData.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId != null),
+            a.skills.some((items) => items.artistsHiredSkillsId !== null),
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
