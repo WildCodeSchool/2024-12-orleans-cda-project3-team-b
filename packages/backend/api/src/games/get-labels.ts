@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const getLabelRouter = Router();
 
-async function getLabels(userId: number) {
+function getLabels(userId: number) {
   return db
     .selectFrom('labels')
     .selectAll()
