@@ -31,20 +31,13 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       return;
     }
 
-    await db
+    const artistsHiredId = await db
       .insertInto('artists_hired')
       .values({
         artists_id: artistId,
         milestones_id: artist.milestones_id,
         notoriety: artist.notoriety,
       })
-      .execute();
-
-    const artistsHiredId = await db
-      .selectFrom('artists_hired')
-      .select('id')
-      .where('artists_hired.artists_id', '=', artistId)
-      .limit(1)
       .executeTakeFirst();
 
     if (!artistsHiredId) {
@@ -58,7 +51,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       .insertInto('label_artists')
       .values({
         label_id: labelId,
-        artists_hired_id: Number(artistsHiredId.id),
+        artists_hired_id: Number(artistsHiredId.insertId),
       })
       .execute();
 
