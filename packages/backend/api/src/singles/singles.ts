@@ -93,7 +93,6 @@ singlesRouter.get('/', async (req: Request, res) => {
 
 singlesRouter.post('/', async (req: Request, res) => {
   const { artistHiredId, singleName, genreId } = req.body;
-  console.log(req.body);
 
   const userId = req.userId;
   if (userId === undefined) {
@@ -155,7 +154,6 @@ singlesRouter.post('/', async (req: Request, res) => {
       .orderBy('id', 'desc')
       .limit(1)
       .execute();
-    console.log(newMilestone);
 
     await db
       .updateTable('artists_hired')
