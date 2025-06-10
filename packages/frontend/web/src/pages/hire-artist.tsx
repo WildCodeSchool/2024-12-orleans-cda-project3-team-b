@@ -106,7 +106,7 @@ export default function HireArtist() {
   };
 
   return (
-    <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
+    <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
         <ArrowLeft />
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>

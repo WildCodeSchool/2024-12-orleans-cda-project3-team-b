@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './pages/app.tsx';
-import CreateAlbumMenu from './pages/create-album-menu.tsx';
+import CreateAlbumMenu from './pages/create-album.tsx';
 import CreateAlbum from './pages/create-album.tsx';
-import CreateSingleMenu from './pages/create-single-menu.tsx';
+import CreateSingleMenu from './pages/create-single.tsx';
 import CreateSingle from './pages/create-single.tsx';
 import ErrorPage from './pages/error-page.tsx';
 import HireArtist from './pages/hire-artist.tsx';
@@ -13,6 +13,7 @@ import HomeGame from './pages/home-game';
 import InGame from './pages/in-game';
 import Login from './pages/login';
 import MainMenu from './pages/main-menu';
+import MyAlbums from './pages/my-albums.tsx';
 import MyArtists from './pages/my-artists.tsx';
 import Register from './pages/register';
 import HttpError from './utils/http-error.ts';
@@ -60,18 +61,12 @@ const router = createBrowserRouter([
         path: '/create-single',
         element: <CreateSingle />,
       },
-      {
-        path: '/create-single-menu',
-        element: <CreateSingleMenu />,
-      },
+
       {
         path: '/create-album',
         element: <CreateAlbum />,
       },
-      {
-        path: '/create-album-menu',
-        element: <CreateAlbumMenu />,
-      },
+
       {
         path: '/hire-staff',
         element: <HireStaff />,
@@ -79,6 +74,10 @@ const router = createBrowserRouter([
       {
         path: '/my-artists',
         element: <MyArtists />,
+      },
+      {
+        path: '/my-albums',
+        element: <MyAlbums />,
       },
     ],
   },

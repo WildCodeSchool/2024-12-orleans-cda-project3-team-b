@@ -5,16 +5,9 @@ import { db } from '@app/backend-shared';
 
 const getStaffRouter = Router();
 
-getStaffRouter.get('/staff', async (req: Request, res) => {
-  const userId = req.userId;
-  if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
-    return;
-  }
-  try {
-    const staff = await db
+async function getStaff(userId: number) {
+  return (
+    db
       .selectFrom('staff')
       // .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
       // .leftJoin('staff','staff.id','staff_label.staff_id')
@@ -37,8 +30,47 @@ getStaffRouter.get('/staff', async (req: Request, res) => {
           ),
         ),
       )
-      .execute();
+      .execute()
+  );
+}
 
+// getStaffRouter.get('/staff', async (req: Request, res) => {
+//   const userId = req.userId;
+//   if (userId === undefined) {
+//     res.json({
+//       ok: false,
+//     });
+//     return;
+//   }
+
+// async function getStaff() {
+//   return db
+
+//     .selectFrom('staff')
+//     .leftJoin('staff_label', 'staff_label.staff_id', 'staff.id')
+//     .select([
+//       'staff.id',
+//       'staff.job',
+//       'staff.bonus',
+//       'staff.price',
+//       'staff.image',
+//     ])
+//     .where('staff_label.staff_id', 'is', null)
+//     .execute();
+// }
+export type Staff = Awaited<ReturnType<typeof getStaff>>[number];
+
+getStaffRouter.get('/staff', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const staff = await getStaff(userId);
     res.json({ ok: true, staff });
     return;
   } catch (error) {

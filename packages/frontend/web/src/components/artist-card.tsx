@@ -1,13 +1,13 @@
-import type { Artist } from '../pages/hire-artist';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 
 type ArtistCardProps = {
-  readonly artist: Artist;
+  readonly artist: ArtistHired;
 };
 
 export default function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <div
-      key={artist.artist_id}
+      key={artist.artist_hired_id}
       className='bg-secondary flex h-12 w-45 items-center justify-between gap-2 rounded-sm p-2 text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)] sm:h-12 sm:w-60 sm:flex-row sm:gap-0 md:w-60'
     >
       <img
@@ -19,7 +19,7 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
         <h2>
           {artist.firstname} {artist.lastname} {artist.alias}
         </h2>
-        <h3>{artist.genre_name}</h3>
+        <h3 className='font-extralight'>{artist.genre_name}</h3>
       </div>
       <div className='flex items-center text-xs md:text-sm'>
         <h2 className='font-bold'>{artist.notoriety}</h2>

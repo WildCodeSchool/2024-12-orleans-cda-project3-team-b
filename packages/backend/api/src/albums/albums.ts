@@ -1,0 +1,63 @@
+import { type Request, Router } from 'express';
+
+import { db } from '@app/backend-shared';
+
+const albumsRouter = Router();
+
+albumsRouter.post('/create', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+  const { artistHiredId, singleName, singleId, genreId } = req.body;
+  try {
+    if (!Number(artistHiredId)) {
+      res.status(400).json({ error: 'artistId is required' });
+      return;
+    }
+
+    const bonus = await db
+      .selectFrom('labels')
+      .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+      .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
+      .select([db.fn.sum('staff.bonus').as('staff_xp')])
+      .where('labels.users_id', '=', userId)
+      .execute();
+    console.log(bonus[0].staff_xp);
+
+    const albumId = await db
+      .insertInto('albums')
+      .values({
+        artists_hired_id: artistHiredId,
+        name: singleName.trim(),
+        genres_id: genreId,
+        exp_value: 100,
+        sales: 0,
+        money_earned: 6000 * (Number(bonus[0].staff_xp) / 100 + 1),
+        score: 0,
+      })
+      .executeTakeFirst();
+
+    await db
+      .insertInto('singles_albums')
+      .values(
+        singleId.map((singleId: number) => ({
+          singles_id: singleId,
+          albums_id: albumId.insertId,
+        })),
+      )
+      .execute();
+
+    res.status(201).json({ success: true });
+    return;
+  } catch (err) {
+    console.error('Insert failed:', err);
+    res.status(500).json({ error: 'Failed to insert album' });
+    return;
+  }
+});
+
+export default albumsRouter;

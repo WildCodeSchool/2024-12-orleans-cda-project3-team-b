@@ -1,10 +1,10 @@
 name: '2024-12-orleans-cda-project3-dev'
 
 services:
-  # api:
-  #   build:
-  #     dockerfile: ./packages/backend/api/Dockerfile
-  #     context: ../
+  api:
+    build:
+      dockerfile: ./packages/backend/api/Dockerfile
+      context: ../
   migrations:
     build:
       dockerfile: ./packages/backend/migrations/Dockerfile

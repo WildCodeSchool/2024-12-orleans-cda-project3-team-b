@@ -6,13 +6,7 @@ import SeeMoreButton from '@/components/see-more-button';
 import StaffCardHire from '@/components/staff-card-hire';
 import { useAuth } from '@/contexts/auth-context';
 
-export type Staff = {
-  id: number;
-  job: string;
-  bonus: number;
-  price: number;
-  image: string;
-};
+import type { Staff } from '../../../../backend/api/src/games/get-staff';
 
 export type InfoLabel = {
   label: number;
@@ -98,7 +92,6 @@ export default function HireArtist() {
       setStaff((prev) => prev.filter((staff) => staff.id !== staffId));
     } catch (error) {
       console.error('Error hiring artist:', error);
-      alert('Error hiring artist. Please try again.');
     }
   };
 
