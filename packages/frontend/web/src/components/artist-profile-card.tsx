@@ -1,9 +1,9 @@
-import type { HiredArtist } from '../../../../backend/api/src/artists-hired/artists-hired';
+import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 import AddButton from './add-button';
 
 type ArtistProfileCardProps = {
-  readonly artist: Artist | HiredArtist;
+  readonly artist: Artist | ArtistHired;
   readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
   readonly isAddButton?: boolean;
 };

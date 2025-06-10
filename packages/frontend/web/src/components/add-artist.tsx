@@ -4,7 +4,7 @@ import AddButton from './add-button';
 import ModalMyArtists from './modal-my-artists';
 
 type Props = {
-  readonly onArtistSelected: (id: number) => void;
+  readonly onArtistSelected: (id: number | null) => void;
 };
 
 export default function AddArtist({ onArtistSelected }: Props) {
