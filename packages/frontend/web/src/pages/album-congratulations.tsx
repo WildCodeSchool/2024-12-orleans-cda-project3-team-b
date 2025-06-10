@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { GoBackToMenu } from '@/components/go-back-to-menu';
 
-import type { Albums } from '../../../../backend/api/src/albums/albums';
-import type { SinglesAlbums } from '../../../../backend/api/src/singles-albums.ts/singles-albums';
+import type { Album } from '../../../../backend/api/src/albums/albums';
+import type { SingleAlbum } from '../../../../backend/api/src/singles-albums.ts/singles-albums';
 
 export default function AlbumCongratulations() {
-  const [albums, setAlbums] = useState<Albums[]>([]);
-  const [singlesAlbums, setSinglesAlbums] = useState<SinglesAlbums[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [singlesAlbums, setSinglesAlbums] = useState<SingleAlbum[]>([]);
 
   // Fetch albums
   useEffect(() => {
@@ -44,7 +44,6 @@ export default function AlbumCongratulations() {
       } catch (error) {
         console.error('Error fetching singles:', error);
         setSinglesAlbums([]);
-        console.log(setSinglesAlbums);
       }
     };
 

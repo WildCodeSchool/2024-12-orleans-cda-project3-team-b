@@ -20,7 +20,7 @@ async function getSinglesAlbum(albumId: number) {
     .execute();
 }
 
-export type SinglesAlbums = Awaited<ReturnType<typeof getSinglesAlbum>>[number];
+export type SingleAlbum = Awaited<ReturnType<typeof getSinglesAlbum>>[number];
 
 singlesAlbumRouter.get('/:id', async (req: Request, res) => {
   const albumId = Number(req.params.id);
