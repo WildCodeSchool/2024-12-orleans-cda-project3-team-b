@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCard from '@/components/artist-card';
+import ArtistCard from '@/components/artist-card-h';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';

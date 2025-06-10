@@ -25,8 +25,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
       .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
       .select([db.fn.sum('staff.bonus').as('staff_xp')])
       .where('labels.users_id', '=', userId)
-      .execute();
-    console.log(bonus[0].staff_xp);
+      .executeTakeFirst();
 
     const albumId = await db
       .insertInto('albums')
@@ -36,7 +35,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
         genres_id: genreId,
         exp_value: 100,
         sales: 0,
-        money_earned: 6000 * (Number(bonus[0].staff_xp) / 100 + 1),
+        money_earned: 6000 * (Number(bonus?.staff_xp) / 100 + 1),
         score: 0,
       })
       .executeTakeFirst();

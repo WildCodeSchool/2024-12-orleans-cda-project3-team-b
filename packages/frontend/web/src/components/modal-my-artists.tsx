@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import ArtistCard from '@/components/artist-card';
+import ArtistCard from '@/components/artist-card-h';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 

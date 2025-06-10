@@ -96,7 +96,6 @@ async function getArtistsHired(userId: number) {
       'artists.lastname',
       'artists.alias',
       'artists.image',
-      'artists.notoriety',
       'milestones.name as milestone_name',
       'genres.name as genre_name',
       'genres.id as genre_id',

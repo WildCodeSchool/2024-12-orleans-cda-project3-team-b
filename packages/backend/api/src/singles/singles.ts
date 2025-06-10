@@ -121,17 +121,33 @@ singlesRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
-    const labels = await db
+    const milestones = await db
       .selectFrom('milestones')
       .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
       .select('milestones.value')
       .where('artists_hired.id', '=', artistHiredId)
       .execute();
 
-    const gain = labels.map((label) => {
+    const gain = milestones.map((label) => {
       const newGain = Number(label.value) / 100;
       return newGain;
     });
+
+    const notoriety = await db
+      .selectFrom('artists_hired')
+      .select('artists_hired.notoriety')
+      .where('artists_hired.id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    if (!notoriety) {
+      res.status(400).json({ error: 'No milestone found' });
+      return;
+    }
+
+    if (notoriety.notoriety >= 5) {
+      res.json({ message: 'max 5' });
+      return;
+    }
 
     await db
       .updateTable('artists_hired')
@@ -141,23 +157,33 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('artists_hired.id', '=', artistHiredId)
       .execute();
 
-    const noto = await db
-      .selectFrom('artists_hired')
-      .select('notoriety')
-      .where('id', '=', artistHiredId)
-      .execute();
+    // const noto = await db
+    //   .selectFrom('artists_hired')
+    //   .select('notoriety')
+    //   .where('id', '=', artistHiredId)
+    //   .execute();
 
     const newMilestone = await db
       .selectFrom('milestones')
       .select('id')
-      .where('id', '<=', Number(noto[0].notoriety))
+      .where('value', '<=', Number(notoriety.notoriety) * 10)
       .orderBy('id', 'desc')
       .limit(1)
-      .execute();
+      .executeTakeFirst();
+
+    if (!newMilestone) {
+      res.status(400).json({ error: 'No milestone found' });
+      return;
+    }
+
+    if (newMilestone.id >= 5) {
+      res.json({ message: 'max 5' });
+      return;
+    }
 
     await db
       .updateTable('artists_hired')
-      .set({ milestones_id: newMilestone[0].id })
+      .set({ milestones_id: newMilestone.id })
       .where('id', '=', artistHiredId)
       .execute();
 
