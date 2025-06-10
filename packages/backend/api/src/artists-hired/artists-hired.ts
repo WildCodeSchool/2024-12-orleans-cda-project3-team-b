@@ -32,7 +32,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       return;
     }
 
-    await db
+    const artistsHiredId = await db
       .insertInto('artists_hired')
       .values({
         artists_id: artistId,
@@ -40,14 +40,6 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         notoriety: artist.notoriety,
       })
       .execute();
-
-    const artistsHiredId = await db
-      .selectFrom('artists_hired')
-      .select('id')
-      .where('artists_hired.artists_id', '=', artistId)
-      .orderBy('artists_hired.id', 'desc')
-      .limit(1)
-      .executeTakeFirst();
 
     if (!artistsHiredId) {
       res
@@ -59,7 +51,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       .insertInto('label_artists')
       .values({
         label_id: labelId,
-        artists_hired_id: Number(artistsHiredId.id),
+        artists_hired_id: Number(artistsHiredId[0].insertId),
       })
       .execute();
 
@@ -69,7 +61,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         skills.map((skill: { skillsId: number; grade: number }) => ({
           skills_id: skill.skillsId,
           grade: skill.grade,
-          artists_hired_id: Number(artistsHiredId.id),
+          artists_hired_id: Number(artistsHiredId[0].insertId),
         })),
       )
       .execute();
