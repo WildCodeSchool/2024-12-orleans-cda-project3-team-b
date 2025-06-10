@@ -38,6 +38,8 @@ export default function HireArtist() {
         setArtists([]); // Reset artists on error
       }
     };
+    console.log(artists);
+
     const fetchInfoLabel = async () => {
       try {
         const res = await fetch('/api/games/label');
@@ -63,7 +65,7 @@ export default function HireArtist() {
   ) => {
     try {
       const userId = auth?.user?.id;
-      const hireResponse = await fetch('/api/artists', {
+      const hireResponse = await fetch('/api/artists-hired', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +102,7 @@ export default function HireArtist() {
       </div>
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         {sortedArtists.slice(0, visibleCount).map((artist) => (
-          <ArtistCardHire
+          <ArtistCard
             key={artist.id}
             artist={artist}
             onHire={async () => {

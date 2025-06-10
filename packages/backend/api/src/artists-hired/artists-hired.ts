@@ -166,7 +166,7 @@ artistsHiredRouter.get('/:id', async (req: Request, res) => {
     return;
   }
   try {
-    const artistHired = await getArtistsHired(Number(id))
+    const artistHired = await getArtistsHired(userId)
       .where('artists_hired.id', '=', Number(id))
       .execute();
 
