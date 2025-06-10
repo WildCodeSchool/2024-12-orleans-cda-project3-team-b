@@ -12,7 +12,7 @@ async function getLabels(userId: number) {
     .execute();
 }
 
-export type Labels = Awaited<ReturnType<typeof getLabels>>[number];
+export type Label = Awaited<ReturnType<typeof getLabels>>[number];
 
 getLabelRouter.get('/labels', async (req: Request, res) => {
   const userId = req.userId;
