@@ -122,6 +122,47 @@ singlesRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
+    const labels = await db
+      .selectFrom('milestones')
+      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
+      .select('milestones.value')
+      .where('artists_hired.id', '=', artistHiredId)
+      .execute();
+
+    const gain = labels.map((label) => {
+      const newGain = Number(label.value) / 100;
+      return newGain;
+    });
+
+    await db
+      .updateTable('artists_hired')
+      .set((eb) => ({
+        notoriety: eb('notoriety', '+', Number(gain)),
+      }))
+      .where('artists_hired.id', '=', artistHiredId)
+      .execute();
+
+    const noto = await db
+      .selectFrom('artists_hired')
+      .select('notoriety')
+      .where('id', '=', artistHiredId)
+      .execute();
+
+    const newMilestone = await db
+      .selectFrom('milestones')
+      .select('id')
+      .where('id', '<=', Number(noto[0].notoriety))
+      .orderBy('id', 'desc')
+      .limit(1)
+      .execute();
+    console.log(newMilestone);
+
+    await db
+      .updateTable('artists_hired')
+      .set({ milestones_id: newMilestone[0].id })
+      .where('id', '=', artistHiredId)
+      .execute();
+
     res.status(201).json({ success: true });
     return;
   } catch (err) {

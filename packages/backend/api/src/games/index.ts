@@ -7,7 +7,6 @@ import getStaffRouter from './get-staff';
 import staffLabelsRouter from './get-staff-labels';
 import getLabelInfoRouter from './label-info';
 import postRegisterLabelRouter from './register-label';
-import staffBonusRouter from './staff-bonus';
 import staffHiredRouter from './staff-hired';
 
 const gamesRouter = express.Router();
@@ -19,6 +18,5 @@ gamesRouter.use(getStaffRouter);
 gamesRouter.use(staffHiredRouter);
 gamesRouter.use(staffLabelsRouter);
 gamesRouter.use(deleteStaffRouter);
-gamesRouter.use(staffBonusRouter);
 
 export default gamesRouter;
