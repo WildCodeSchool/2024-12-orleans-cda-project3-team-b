@@ -53,7 +53,6 @@ export default function CreateSingle() {
       }
 
       setSubmitted(true);
-      void navigate('/single-congrats');
     } catch (error) {
       console.error('Submission failed:', error);
     }
@@ -194,7 +193,7 @@ export default function CreateSingle() {
             {'Cancel'}
           </VerifyButton>
           <VerifyButton
-            color='bg-orange-500 active:scale-95 transition-transform hover:scale-95'
+            color='bg-orange-500 active:scale-95 transition-transform'
             image='/assets/check.png'
             onClick={handleSubmit}
           >

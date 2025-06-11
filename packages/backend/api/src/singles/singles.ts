@@ -100,7 +100,6 @@ singlesRouter.get('/', async (req: Request, res) => {
 
 singlesRouter.post('/', async (req: Request, res) => {
   const { artistHiredId, singleName, genreId } = req.body;
-  console.log(req.body);
 
   const userId = req.userId;
   if (userId === undefined) {
@@ -127,6 +126,66 @@ singlesRouter.post('/', async (req: Request, res) => {
         money_earned: 2000,
         score: 0,
       })
+      .execute();
+
+    const milestones = await db
+      .selectFrom('milestones')
+      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
+      .select('milestones.value')
+      .where('artists_hired.id', '=', artistHiredId)
+      .execute();
+
+    const gain = milestones.map((label) => {
+      const newGain = Number(label.value) / 100;
+      return newGain;
+    });
+
+    const notoriety = await db
+      .selectFrom('artists_hired')
+      .select('artists_hired.notoriety')
+      .where('artists_hired.id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    if (!notoriety) {
+      res.status(400).json({ error: 'No milestone found' });
+      return;
+    }
+
+    if (notoriety.notoriety >= 5) {
+      res.json({ message: 'max 5' });
+      return;
+    }
+
+    await db
+      .updateTable('artists_hired')
+      .set((eb) => ({
+        notoriety: eb('notoriety', '+', Number(gain)),
+      }))
+      .where('artists_hired.id', '=', artistHiredId)
+      .execute();
+
+    const newMilestone = await db
+      .selectFrom('milestones')
+      .select('id')
+      .where('value', '<=', Number(notoriety.notoriety) * 10)
+      .orderBy('id', 'desc')
+      .limit(1)
+      .executeTakeFirst();
+
+    if (!newMilestone) {
+      res.status(400).json({ error: 'No milestone found' });
+      return;
+    }
+
+    if (newMilestone.id >= 5) {
+      res.json({ message: 'max 5' });
+      return;
+    }
+
+    await db
+      .updateTable('artists_hired')
+      .set({ milestones_id: newMilestone.id })
+      .where('id', '=', artistHiredId)
       .execute();
 
     res.status(201).json({ success: true });
