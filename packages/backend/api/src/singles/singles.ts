@@ -76,7 +76,7 @@ async function getSingles(userId: number) {
     .execute();
 }
 
-export type Single = Awaited<ReturnType<typeof getSingles>>[number];
+export type Singles = Awaited<ReturnType<typeof getSingles>>[number];
 
 singlesRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;

@@ -13,7 +13,7 @@ import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
-import type { Single } from '../../../../backend/api/src/singles/singles';
+import type { Singles } from '../../../../backend/api/src/singles/singles';
 
 export default function CreateAlbum() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
@@ -21,7 +21,7 @@ export default function CreateAlbum() {
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
   );
-  const [chosenSingles, setChosenSingles] = useState<Single[]>([]);
+  const [chosenSingles, setChosenSingles] = useState<Singles[]>([]);
   const navigate = useNavigate();
   const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
   const [marketing, setMarketing] = useState<Marketing[]>([]);
@@ -118,7 +118,7 @@ export default function CreateAlbum() {
           const resSingles = await fetch('/api/singles');
           if (!resSingles.ok)
             throw new Error(`Singles error: ${resSingles.status}`);
-          const singlesData: Single[] = await resSingles.json();
+          const singlesData: Singles[] = await resSingles.json();
           const selected = singlesData.filter((s) =>
             selectedSinglesId.includes(s.id),
           );

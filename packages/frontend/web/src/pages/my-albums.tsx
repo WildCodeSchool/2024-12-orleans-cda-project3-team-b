@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { ArrowLeft } from '@/components/arrow-left';
 
-import type { Album } from '../../../../backend/api/src/albums/albums';
+import type { Albums } from '../../../../backend/api/src/albums/albums';
 
 export default function MyAlbums() {
   const [visibleCount, setVisibleCount] = useState(4);
-  const [albums, setAlbums] = useState<Album[]>([]);
+  const [albums, setAlbums] = useState<Albums[]>([]);
 
   useEffect(() => {
     const fetchAlbums = async () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import type { Single } from '../../../../backend/api/src/singles/singles';
+import type { Singles } from '../../../../backend/api/src/singles/singles';
 
 export type ModalSinglesProps = {
   readonly isOpen: boolean;
@@ -15,13 +15,13 @@ export function ModalSingles({
   artistId,
   onSelectSingle,
 }: ModalSinglesProps) {
-  const [singles, setSingles] = useState<Single[]>([]);
+  const [singles, setSingles] = useState<Singles[]>([]);
 
   useEffect(() => {
     const fetchSingles = async () => {
       try {
         const res = await fetch(`/api/singles`);
-        const data: Single[] = await res.json();
+        const data: Singles[] = await res.json();
 
         if (artistId != null) {
           const filtered = data.filter(
