@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import App from './pages/app.tsx';
+import ArtistHirePage from './pages/artist-hire-profile-page.tsx';
+import ArtistPage from './pages/artist-profile-page.tsx';
 import CreateAlbumMenu from './pages/create-album.tsx';
 import CreateAlbum from './pages/create-album.tsx';
 import CreateSingleMenu from './pages/create-single.tsx';
@@ -74,6 +76,14 @@ const router = createBrowserRouter([
       {
         path: '/my-artists',
         element: <MyArtists />,
+      },
+      {
+        path: '/artists-hired/:id',
+        element: <ArtistHirePage />,
+      },
+      {
+        path: '/artists/:id',
+        element: <ArtistPage />,
       },
       {
         path: '/my-albums',

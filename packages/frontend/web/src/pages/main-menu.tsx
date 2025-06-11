@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import AddButton from '@/components/add-button';
-import ArtistCardHire from '@/components/artist-card-h';
+import ArtistCardHire from '@/components/artist-card-hire';
 import StaffLabelsCard from '@/components/staff-labels-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
@@ -51,9 +51,9 @@ export default function MainMenu() {
           {'MyARTISTS'}
         </h2>
 
-        <div className='mt-5 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2'>
+        <div className='mt-5 grid grid-cols-2 gap-4'>
           {artists.slice(0, visibleCount).map((artist) => (
-            <ArtistCardHire key={artist.artists_id} artist={artist} />
+            <ArtistCardHire key={artist.id} artist={artist} />
           ))}
         </div>
 

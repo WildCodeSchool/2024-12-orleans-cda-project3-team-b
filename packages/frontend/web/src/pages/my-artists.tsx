@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCard from '@/components/artist-card-h';
+import ArtistCard from '@/components/artist-card-hire';
 import SeeMoreButton from '@/components/see-more-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+import { ArrowLeft } from '../components/arrow-left';
 
 export default function MyArtists() {
   const [artists, setArtists] = useState<ArtistHired[]>([]);
@@ -52,10 +52,10 @@ export default function MyArtists() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
-        {artists.slice(0, visibleCount).map((artist) => {
-          return <ArtistCard key={artist.artists_id} artist={artist} />;
-        })}
+      <div className='mt-5 grid grid-cols-2 gap-4'>
+        {artists.slice(0, visibleCount).map((artist) => (
+          <ArtistCard key={artist.id} artist={artist} />
+        ))}
       </div>
 
       {/* See More */}
