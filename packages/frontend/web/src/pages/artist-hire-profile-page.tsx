@@ -34,15 +34,6 @@ export default function ArtistHirePage() {
     })();
   }, [fetchArtistsHired, id]);
 
-  const fetchInfoLabel = async () => {
-    try {
-      const res = await fetch('/api/games/label');
-      const data: InfoLabel = await res.json();
-      setInfoLabel(data);
-    } catch (error) {
-      console.error('Error fetching budget:', error);
-    }
-  };
   useEffect(() => {
     const fetchPriceSingle = async () => {
       try {
@@ -53,6 +44,15 @@ export default function ArtistHirePage() {
         setPrice(data);
       } catch (error) {
         console.error('Error fetching single price:', error);
+      }
+    };
+    const fetchInfoLabel = async () => {
+      try {
+        const res = await fetch('/api/games/label');
+        const data: InfoLabel = await res.json();
+        setInfoLabel(data);
+      } catch (error) {
+        console.error('Error fetching budget:', error);
       }
     };
 
@@ -74,7 +74,6 @@ export default function ArtistHirePage() {
           isAddButton
           price={price}
           isDisabled={isDisabledPrice}
-          fetchInfoLabel={fetchInfoLabel}
         />
       ))}
     </div>

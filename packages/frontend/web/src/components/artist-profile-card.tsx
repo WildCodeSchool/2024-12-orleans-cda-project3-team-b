@@ -38,9 +38,8 @@ export default function ArtistProfileCard({
     } catch (error) {
       console.error('Failed to fetch points:', error);
     }
-    if (fetchArtistsHired && fetchInfoLabel) {
+    if (fetchArtistsHired) {
       await fetchArtistsHired();
-      await fetchInfoLabel();
     }
   }
 
