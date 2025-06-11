@@ -287,7 +287,7 @@ export default function CreateAlbum() {
             >
               {'Confirm'}
             </VerifyButton>
-            {price ? `${price.price} $` : 'Chargement...'}
+            {price ? `${price.price} $` : ''}
           </div>
         </div>
       </div>
