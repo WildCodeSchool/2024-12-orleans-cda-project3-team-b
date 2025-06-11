@@ -39,7 +39,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         milestones_id: artist.milestones_id,
         notoriety: artist.notoriety,
       })
-      .execute();
+      .executeTakeFirst();
 
     if (!artistsHiredId) {
       res
@@ -51,7 +51,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       .insertInto('label_artists')
       .values({
         label_id: labelId,
-        artists_hired_id: Number(artistsHiredId[0].insertId),
+        artists_hired_id: Number(artistsHiredId.insertId),
       })
       .execute();
 
@@ -61,7 +61,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         skills.map((skill: { skillsId: number; grade: number }) => ({
           skills_id: skill.skillsId,
           grade: skill.grade,
-          artists_hired_id: Number(artistsHiredId[0].insertId),
+          artists_hired_id: Number(artistsHiredId.insertId),
         })),
       )
       .execute();

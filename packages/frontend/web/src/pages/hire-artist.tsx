@@ -38,7 +38,6 @@ export default function HireArtist() {
         setArtists([]); // Reset artists on error
       }
     };
-    console.log(artists);
 
     const fetchInfoLabel = async () => {
       try {
