@@ -13,6 +13,8 @@ import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
+import type { Price } from '../../../../backend/api/src/games/price';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateAlbum() {
@@ -28,6 +30,8 @@ export default function CreateAlbum() {
   const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+  const [price, setPrice] = useState<Price>();
+  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -53,6 +57,7 @@ export default function CreateAlbum() {
             genreId: artistsHired.find(
               (a) => a.artist_hired_id === selectedArtistId,
             )?.genre_id,
+            price: price?.price,
           }),
         });
 
@@ -133,6 +138,35 @@ export default function CreateAlbum() {
 
     void fetchSingles();
   }, [selectedSinglesId]);
+
+  useEffect(() => {
+    const fetchPriceSingle = async () => {
+      try {
+        const res = await fetch('/api/games/price-albums');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: Price = await res.json();
+
+        setPrice(data);
+      } catch (error) {
+        console.error('Error fetching single price:', error);
+      }
+    };
+    const fetchInfoLabel = async () => {
+      try {
+        const res = await fetch('/api/games/label');
+        const data: InfoLabel = await res.json();
+        setInfoLabel(data);
+      } catch (error) {
+        console.error('Error fetching budget:', error);
+      }
+    };
+    void fetchInfoLabel();
+
+    void fetchPriceSingle();
+  }, []);
+  const budget = infoLabel?.budget ?? 0;
+
+  const isDisabled = price?.price == null || budget < price.price;
 
   return (
     <form action='' method='post'>
@@ -230,7 +264,7 @@ export default function CreateAlbum() {
           ) : null}
         </div>
 
-        <div className='mt-12 flex items-center justify-between gap-x-16'>
+        <div className='mt-12 flex items-start justify-between gap-x-16'>
           <VerifyButton
             color='bg-secondary active:scale-95 transition-transform'
             image='/assets/not-check.png'
@@ -240,13 +274,21 @@ export default function CreateAlbum() {
           >
             {'Cancel'}
           </VerifyButton>
-          <VerifyButton
-            color='bg-orange-500 active:scale-95 transition-transform'
-            image='/assets/check.png'
-            onClick={handleSubmit}
-          >
-            {'Confirm'}
-          </VerifyButton>
+          <div className='justify-center text-center'>
+            <VerifyButton
+              color={
+                isDisabled
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-orange-500 active:scale-95 transition-transform'
+              }
+              image='/assets/check.png'
+              onClick={handleSubmit}
+              disabled={isDisabled}
+            >
+              {'Confirm'}
+            </VerifyButton>
+            {price ? `${price.price} $` : 'Chargement...'}
+          </div>
         </div>
       </div>
     </form>

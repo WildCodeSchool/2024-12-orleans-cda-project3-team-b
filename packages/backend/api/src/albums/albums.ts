@@ -1,11 +1,18 @@
-import express from 'express';
+import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
 
-const albumsRouter = express.Router();
+const albumsRouter = Router();
 
-albumsRouter.post('/create', async (req, res) => {
-  const { artistHiredId, singleName, singleId, genreId } = req.body;
+albumsRouter.post('/create', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+  const { artistHiredId, singleName, singleId, genreId, price } = req.body;
   try {
     if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
@@ -24,6 +31,22 @@ albumsRouter.post('/create', async (req, res) => {
         score: 0,
       })
       .executeTakeFirst();
+
+    const moneyEarn = await db
+      .selectFrom('albums')
+      .select('money_earned')
+      .where('artists_hired_id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    const newMoney = Number(moneyEarn?.money_earned) - price;
+
+    await db
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '+', Number(newMoney)),
+      }))
+      .where('users_id', '=', userId)
+      .execute();
 
     await db
       .insertInto('singles_albums')

@@ -125,6 +125,11 @@ export interface Milestones {
   value: number;
 }
 
+export interface Price {
+  id: Generated<number>;
+  price: number | null;
+}
+
 export interface Singles {
   artists_hired_id: number;
   exp_value: number;
@@ -193,6 +198,7 @@ export interface DB {
   logos: Logos;
   marketing: Marketing;
   milestones: Milestones;
+  price: Price;
   singles: Singles;
   singles_albums: SinglesAlbums;
   singles_marketing: SinglesMarketing;

@@ -73,7 +73,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
   }
 });
 
-async function getArtistsHired(userId: number) {
+function getArtistsHired(userId: number) {
   return db
     .selectFrom('artists_hired')
     .leftJoin(

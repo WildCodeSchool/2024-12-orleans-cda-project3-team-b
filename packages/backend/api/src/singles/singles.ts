@@ -92,8 +92,7 @@ singlesRouter.get('/', async (req: Request, res) => {
 });
 
 singlesRouter.post('/', async (req: Request, res) => {
-  const { artistHiredId, singleName, genreId } = req.body;
-  console.log(req.body);
+  const { artistHiredId, singleName, genreId, price } = req.body;
 
   const userId = req.userId;
   if (userId === undefined) {
@@ -120,6 +119,22 @@ singlesRouter.post('/', async (req: Request, res) => {
         money_earned: 2000,
         score: 0,
       })
+      .execute();
+
+    const moneyEarn = await db
+      .selectFrom('singles')
+      .select('money_earned')
+      .where('artists_hired_id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    const newMoney = Number(moneyEarn?.money_earned) - price;
+
+    await db
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '+', Number(newMoney)),
+      }))
+      .where('users_id', '=', userId)
       .execute();
 
     res.status(201).json({ success: true });
