@@ -60,7 +60,6 @@ export default function AlbumCongratulations() {
       </div>
     );
   }
-
   return (
     <div className='mt-5 flex flex-col items-center'>
       <h1 className='text-secondary text-2xl font-bold'>

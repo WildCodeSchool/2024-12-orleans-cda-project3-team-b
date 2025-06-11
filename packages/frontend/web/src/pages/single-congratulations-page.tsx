@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { GoBackToMenu } from '@/components/go-back-to-menu';
 
-import type { Singles } from '../../../../backend/api/src/singles/singles';
+import type { Single } from '../../../../backend/api/src/singles/singles';
 
 export default function SingleCongratulations() {
-  const [singles, setSingles] = useState<Singles[]>([]);
-
+  const [singles, setSingles] = useState<Single[]>([]);
   // Fetch albums
   useEffect(() => {
     const fetchSingles = async () => {
@@ -24,7 +23,6 @@ export default function SingleCongratulations() {
 
     void fetchSingles();
   }, []);
-
   // Fetch singles of first single
 
   const sortedSingles = [...singles].sort((a, b) => b.id - a.id);
@@ -82,7 +80,6 @@ export default function SingleCongratulations() {
           </h3>
         </div>
       </div>
-
       <div className='flex items-center'>
         <GoBackToMenu />
       </div>
