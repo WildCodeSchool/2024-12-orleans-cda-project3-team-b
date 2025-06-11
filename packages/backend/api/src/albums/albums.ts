@@ -36,7 +36,7 @@ async function getAlbums(userId: number) {
     .execute();
 }
 
-export type Album = Awaited<ReturnType<typeof getAlbums>>[number];
+export type Albums = Awaited<ReturnType<typeof getAlbums>>[number];
 
 albumsRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
