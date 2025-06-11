@@ -23,7 +23,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
       .selectFrom('labels')
       .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
       .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
-      .select([db.fn.sum('staff.bonus').as('staff_xp')])
+      .select([db.fn.sum('staff.bonus').as('staff_bonus')])
       .where('labels.users_id', '=', userId)
       .executeTakeFirst();
 
@@ -35,7 +35,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
         genres_id: genreId,
         exp_value: 100,
         sales: 0,
-        money_earned: 6000 * (Number(bonus?.staff_xp) / 100 + 1),
+        money_earned: 6000 * (Number(bonus?.staff_bonus) / 100 + 1),
         score: 0,
       })
       .executeTakeFirst();

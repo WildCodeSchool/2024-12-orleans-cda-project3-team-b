@@ -157,12 +157,6 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('artists_hired.id', '=', artistHiredId)
       .execute();
 
-    // const noto = await db
-    //   .selectFrom('artists_hired')
-    //   .select('notoriety')
-    //   .where('id', '=', artistHiredId)
-    //   .execute();
-
     const newMilestone = await db
       .selectFrom('milestones')
       .select('id')
