@@ -1,4 +1,3 @@
-// import express from 'express';
 import { type Request, Router } from 'express';
 import { jsonArrayFrom } from 'kysely/helpers/mysql';
 
