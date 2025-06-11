@@ -30,7 +30,7 @@ export default function CreateAlbum() {
   const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-  const [price, setPrice] = useState<Price>();
+  const [price, setPrice] = useState<Price | undefined>(undefined);
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,7 +166,8 @@ export default function CreateAlbum() {
   }, []);
   const budget = infoLabel?.budget ?? 0;
 
-  const isDisabled = price?.price == null || budget < price.price;
+  const isDisabled =
+    price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
     <form action='' method='post'>

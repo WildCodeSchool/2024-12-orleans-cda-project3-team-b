@@ -1,4 +1,3 @@
-// import express from 'express';
 import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
@@ -31,7 +30,6 @@ pointRouter.post('/point', async (req: Request, res) => {
       }))
       .where('users_id', '=', userId)
       .executeTakeFirst();
-    console.log(budget);
 
     res.status(200).json({
       message: 'Point ajouté avec succès',

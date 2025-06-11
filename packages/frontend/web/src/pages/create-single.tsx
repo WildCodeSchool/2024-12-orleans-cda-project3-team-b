@@ -114,7 +114,7 @@ export default function CreateSingle() {
   useEffect(() => {
     const fetchPriceSingle = async () => {
       try {
-        const res = await fetch('/api/games/price-single');
+        const res = await fetch('/api/games/price-singles');
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data: Price = await res.json();
 
@@ -138,7 +138,8 @@ export default function CreateSingle() {
   }, []);
   const budget = infoLabel?.budget ?? 0;
 
-  const isDisabled = price?.price == null || budget < price.price;
+  const isDisabled =
+    price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
     <form>
@@ -209,7 +210,7 @@ export default function CreateSingle() {
 
         <div className='mt-6'>
           {hasTriedSubmit &&
-          (selectedArtistId == null || !singleName.trim()) ? (
+          (selectedArtistId === null || !singleName.trim()) ? (
             <p className='text-center text-sm text-red-500'>
               {'Please select an artist and enter a name for the single.'}
             </p>

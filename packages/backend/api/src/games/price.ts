@@ -9,9 +9,11 @@ function getPrice() {
 export type Price = Awaited<
   ReturnType<ReturnType<typeof getPrice>['execute']>
 >[number];
-getPriceRouter.get('/price-single', async (req, res) => {
+getPriceRouter.get('/price-singles', async (req, res) => {
   try {
-    const price = await getPrice().where('id', '=', 2).executeTakeFirst();
+    const price = await getPrice()
+      .where('name', '=', 'singles')
+      .executeTakeFirst();
     res.json(price);
   } catch (_error) {
     res.json({
@@ -21,7 +23,9 @@ getPriceRouter.get('/price-single', async (req, res) => {
 });
 getPriceRouter.get('/price-albums', async (req, res) => {
   try {
-    const price = await getPrice().where('id', '=', 3).executeTakeFirst();
+    const price = await getPrice()
+      .where('name', '=', 'albums')
+      .executeTakeFirst();
     res.json(price);
   } catch (_error) {
     res.json({
@@ -31,7 +35,9 @@ getPriceRouter.get('/price-albums', async (req, res) => {
 });
 getPriceRouter.get('/price-stats', async (req, res) => {
   try {
-    const price = await getPrice().where('id', '=', 1).executeTakeFirst();
+    const price = await getPrice()
+      .where('name', '=', 'stats')
+      .executeTakeFirst();
     res.json(price);
   } catch (_error) {
     res.json({
