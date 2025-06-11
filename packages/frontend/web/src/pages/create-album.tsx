@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCard from '@/components/artist-card';
+import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
 import MarketingCard from '@/components/marketing-card';
@@ -50,8 +50,8 @@ export default function CreateAlbum() {
             artistHiredId: selectedArtistId,
             singleName: singleName.trim(),
             singleId: selectedSinglesId,
-            genreId: artistsHired.find(
-              (a) => a.artist_hired_id === selectedArtistId,
+            genreId: artistsHired.find((a) =>
+              a.skills.some((items) => items.artistsHiredSkillsId !== null),
             )?.genre_id,
           }),
         });
@@ -70,8 +70,8 @@ export default function CreateAlbum() {
           if (!resArtistsHired.ok)
             throw new Error(`Artist error: ${resArtistsHired.status}`);
           const artistsData: ArtistHired[] = await resArtistsHired.json();
-          const selectedArtistHired = artistsData.find(
-            (a) => a.artist_hired_id === selectedArtistId,
+          const selectedArtistHired = artistsData.find((a) =>
+            a.skills.some((items) => items.artistsHiredSkillsId !== null),
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
@@ -150,7 +150,7 @@ export default function CreateAlbum() {
         <div className='mt-6'>
           {artistsHired.length > 0 ? (
             artistsHired.map((artist) => (
-              <ArtistCard key={artist.artists_id} artist={artist} />
+              <ArtistCardHire key={artist.artists_id} artist={artist} />
             ))
           ) : (
             <p className='text-secondary text-s mt-4 text-center'>
