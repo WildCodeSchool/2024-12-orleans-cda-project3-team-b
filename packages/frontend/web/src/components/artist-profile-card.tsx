@@ -1,23 +1,34 @@
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Artist } from '../../../../backend/api/src/artists/artists';
+import type { Price } from '../../../../backend/api/src/games/price';
 import AddButton from './add-button';
 
 type ArtistProfileCardProps = {
   readonly artist: Artist | ArtistHired;
   readonly fetchArtistsHired?: (() => Promise<void>) | undefined;
   readonly isAddButton?: boolean;
+  readonly price?: Price;
+  readonly isDisabled?: boolean;
+  readonly fetchInfoLabel?: (() => Promise<void>) | undefined;
 };
 
 export default function ArtistProfileCard({
   artist,
   isAddButton,
   fetchArtistsHired,
+  price,
+  isDisabled,
+  fetchInfoLabel,
 }: ArtistProfileCardProps) {
-  async function addPoint(artistsHiredSkillsId: number, skills_id: number) {
+  async function addPoint(
+    artistsHiredSkillsId: number,
+    skills_id: number,
+    price: number,
+  ) {
     try {
       const response = await fetch(`/api/games/point`, {
         method: 'POST',
-        body: JSON.stringify({ artistsHiredSkillsId, skills_id }),
+        body: JSON.stringify({ artistsHiredSkillsId, skills_id, price }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
@@ -27,8 +38,9 @@ export default function ArtistProfileCard({
     } catch (error) {
       console.error('Failed to fetch points:', error);
     }
-    if (fetchArtistsHired) {
+    if (fetchArtistsHired && fetchInfoLabel) {
       await fetchArtistsHired();
+      await fetchInfoLabel();
     }
   }
 
@@ -74,18 +86,26 @@ export default function ArtistProfileCard({
                 {competence.grade}
                 {' /25'}
                 {(isAddButton ?? false) ? (
-                  <AddButton
-                    key={competence.artistsHiredSkillsId}
-                    onClick={() =>
-                      addPoint(
-                        competence.artistsHiredSkillsId ?? 0,
-                        competence.skillsId ?? 0,
-                      )
-                    }
-                    disabled={(competence.grade ?? 0) >= 25}
-                  >
-                    {'+'}
-                  </AddButton>
+                  <>
+                    <AddButton
+                      key={competence.artistsHiredSkillsId}
+                      onClick={() =>
+                        addPoint(
+                          competence.artistsHiredSkillsId ?? 0,
+                          competence.skillsId ?? 0,
+                          price?.price ?? 0,
+                        )
+                      }
+                      disabled={(competence.grade ?? 0) >= 25 || isDisabled}
+                    >
+                      {'+'}
+                    </AddButton>
+                    {price?.price != null && (
+                      <span className='ml-2 text-sm text-green-500'>
+                        {price.price} {'$'}
+                      </span>
+                    )}
+                  </>
                 ) : (
                   ''
                 )}
