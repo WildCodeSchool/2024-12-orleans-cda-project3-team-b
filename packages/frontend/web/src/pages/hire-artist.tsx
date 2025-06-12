@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCardHire from '@/components/artist-card';
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 import { useAuth } from '@/contexts/auth-context';
