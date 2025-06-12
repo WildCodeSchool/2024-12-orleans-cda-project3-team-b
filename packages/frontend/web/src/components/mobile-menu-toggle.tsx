@@ -16,7 +16,6 @@ export default function MobileMenuToggle({
       <img
         src={isOpen ? '/assets/cross.png' : '/assets/burger-bar.png'}
         alt='menu burger'
-        className='M'
       />
     </div>
   );
