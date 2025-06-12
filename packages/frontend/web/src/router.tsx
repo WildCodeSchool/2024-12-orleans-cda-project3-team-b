@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
+import AlbumCongratulations from './pages/album-congratulations.tsx';
 import App from './pages/app.tsx';
 import ArtistHirePage from './pages/artist-hire-profile-page.tsx';
 import ArtistPage from './pages/artist-profile-page.tsx';
@@ -16,6 +17,7 @@ import MainMenu from './pages/main-menu';
 import MyAlbums from './pages/my-albums.tsx';
 import MyArtists from './pages/my-artists.tsx';
 import Register from './pages/register';
+import SingleCongratulations from './pages/single-congratulations-page.tsx';
 import HttpError from './utils/http-error.ts';
 
 const router = createBrowserRouter([
@@ -33,6 +35,7 @@ const router = createBrowserRouter([
         path: 'register',
         element: <Register />,
       },
+
       {
         path: '*',
         loader: () => {
@@ -61,7 +64,14 @@ const router = createBrowserRouter([
         path: '/create-single',
         element: <CreateSingle />,
       },
-
+      {
+        path: 'album-congrats',
+        element: <AlbumCongratulations />,
+      },
+      {
+        path: 'single-congrats',
+        element: <SingleCongratulations />,
+      },
       {
         path: '/create-album',
         element: <CreateAlbum />,
