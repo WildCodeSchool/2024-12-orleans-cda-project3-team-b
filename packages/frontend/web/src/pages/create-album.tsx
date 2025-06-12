@@ -66,8 +66,6 @@ export default function CreateAlbum() {
             price: price?.price,
           }),
         });
-
-        setSubmitted(true);
         void navigate('/album-congrats');
       } catch (error) {
         console.error('Submission failed:', error);
