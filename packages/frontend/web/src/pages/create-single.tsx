@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
@@ -22,44 +23,43 @@ export default function CreateSingle() {
   );
   const navigate = useNavigate();
   const [marketing, setMarketing] = useState<Marketing[]>([]);
-  const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const [price, setPrice] = useState<Price>();
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
+  const [messageError, setMessageError] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    setHasTriedSubmit(true);
-
-    if (!selectedArtistId || !singleName.trim()) {
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setMessageError('');
+    if (selectedArtistId === null || !singleName.trim()) {
+      setMessageError(
+        'Please select an artist and enter a name for the single.',
+      );
       return;
-    }
+    } else {
+      try {
+        const res = await fetch('/api/singles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            artistHiredId: selectedArtistId,
+            singleName: singleName.trim(),
+            genreId: artistsHired.find((a) => a.id === selectedArtistId)
+              ?.genre_id,
+            price: price?.price,
+          }),
+        });
 
-    try {
-      const res = await fetch('/api/singles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          artistHiredId: selectedArtistId,
-          singleName: singleName.trim(),
-          genreId: artistsHired.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId !== null),
-          )?.genre_id,
-          price: price?.price,
-        }),
-      });
-
-      if (!res.ok) {
-        return;
+        if (!res.ok) {
+          return;
+        }
+      } catch (error) {
+        console.error('Submission failed:', error);
       }
-
-      setSubmitted(true);
-    } catch (error) {
-      console.error('Submission failed:', error);
     }
   };
 
@@ -71,8 +71,8 @@ export default function CreateSingle() {
           if (!resArtistHired.ok)
             throw new Error(`Artist fetch failed: ${resArtistHired.status}`);
           const artistsData: ArtistHired[] = await resArtistHired.json();
-          const selectedArtistHired = artistsData.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId !== null),
+          const selectedArtistHired = artistsData.find(
+            (a) => a.id === selectedArtistId,
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
@@ -142,7 +142,7 @@ export default function CreateSingle() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
         {/* Header */}
         <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
@@ -209,39 +209,40 @@ export default function CreateSingle() {
         </div>
 
         <div className='mt-6'>
-          {hasTriedSubmit &&
-          (selectedArtistId === null || !singleName.trim()) ? (
-            <p className='text-center text-sm text-red-500'>
-              {'Please select an artist and enter a name for the single.'}
-            </p>
-          ) : null}
-        </div>
+          <div className='mt-6'>
+            {messageError ? (
+              <p className='text-center text-sm text-red-500'>{messageError}</p>
+            ) : (
+              ''
+            )}
+          </div>
 
-        {/* Buttons */}
-        <div className='mt-12 flex items-start justify-between gap-x-16'>
-          <VerifyButton
-            color='bg-secondary active:scale-95 transition-transform'
-            image='/assets/not-check.png'
-            onClick={async () => {
-              await navigate(-1);
-            }}
-          >
-            {'Cancel'}
-          </VerifyButton>
-          <div className='justify-center text-center'>
+          {/* Buttons */}
+          <div className='mt-12 flex items-start justify-between gap-x-16'>
             <VerifyButton
-              color={
-                isDisabled
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-500 active:scale-95 transition-transform'
-              }
-              image='/assets/check.png'
-              onClick={handleSubmit}
-              disabled={isDisabled}
+              color='bg-secondary active:scale-95 transition-transform'
+              image='/assets/not-check.png'
+              onClick={async () => {
+                await navigate(-1);
+              }}
             >
-              {'Confirm'}
+              {'Cancel'}
             </VerifyButton>
-            {price ? `${price.price} $` : ''}
+            <div className='justify-center text-center'>
+              <VerifyButton
+                color={
+                  isDisabled
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-orange-500 active:scale-95 transition-transform'
+                }
+                image='/assets/check.png'
+                disabled={isDisabled}
+                type={'submit'}
+              >
+                {'Confirm'}
+              </VerifyButton>
+              {price ? `${price.price} $` : ''}
+            </div>
           </div>
         </div>
       </div>

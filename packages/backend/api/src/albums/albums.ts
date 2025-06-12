@@ -43,7 +43,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
     const moneyEarn = await db
       .selectFrom('albums')
       .select('money_earned')
-      .where('artists_hired_id', '=', artistHiredId)
+      .where('artists_hired_id', '=', artistHiredId.id)
       .executeTakeFirst();
 
     const newMoney = Number(moneyEarn?.money_earned) - price;
