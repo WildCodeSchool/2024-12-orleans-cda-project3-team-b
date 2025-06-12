@@ -55,7 +55,7 @@ export default function ModalMyArtists({
           </button>
         </div>
 
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+        <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
           {artists.map((artist) => (
             <div
               key={artist.id}

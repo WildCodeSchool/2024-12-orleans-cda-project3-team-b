@@ -21,6 +21,7 @@ export default function MainMenu() {
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         setArtists(data);
+        console.log(data);
       } catch (error) {
         console.error('Error fetching artists:', error);
         setArtists([]);
