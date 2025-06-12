@@ -16,12 +16,6 @@ export default function MobileNav({ isOpen, closeMenu }: MobileNavProps) {
         <li>
           <Link to='/my-albums'>{'MyAlbums'}</Link>
         </li>
-        <li>
-          <Link to=''>{'Legal Mentions'}</Link>
-        </li>
-        <li>
-          <Link to=''>{'Confidentiality policy'}</Link>
-        </li>
         <li className='flex items-center justify-center space-x-2'>
           <Link to=''>
             <img className='w-8' src='/assets/log-out.png' alt='log out logo' />
