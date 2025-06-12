@@ -48,7 +48,7 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
             <Link to='/my-artists'>{'MyArtists'}</Link>
           </li>
           <li>
-            <Link to=''>{'MyAlbums'}</Link>
+            <Link to='/my-albums'>{'MyAlbums'}</Link>
           </li>
         </div>
         <li>
@@ -74,9 +74,6 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
         </li>
         <li>
           <Link to=''>{'Confidentiality policy'}</Link>
-        </li>
-        <li>
-          <Link to=''>{'Profile'}</Link>
         </li>
         <li className='flex items-center'>
           <div onClick={logout}>

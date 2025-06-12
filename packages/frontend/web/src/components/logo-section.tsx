@@ -30,14 +30,16 @@ export default function LogoSection() {
     <div className='flex flex-wrap gap-4'>
       <div className='flex items-center' key={labelInfo?.id}>
         <img
-          className='max-m-16 mr- ml-2 max-h-16 min-h-10 min-w-10'
+          className='max-m-16 ml-2 max-h-16 min-h-10 min-w-10'
           src={
             labelInfo?.logo_img != null ? `/assets/${labelInfo.logo_img}` : Logo
           }
           alt="Label's logo"
         />
-        <div className='h-14 border-r-white pr-4 text-sm text-xl sm:flex sm:border-r-4 sm:text-xl'>
-          <p className='mr-2'>{labelInfo?.name}</p>
+        <div className='mt-4 h-14 border-r-white pr-4 text-sm sm:flex sm:border-r-4 sm:text-xl md:mt-0'>
+          <p className='items-center md:mr-8 md:ml-2 md:flex'>
+            {labelInfo?.name}
+          </p>
           <div
             className={
               labelInfo?.logo_img != null ? 'flex items-center' : 'hidden'
