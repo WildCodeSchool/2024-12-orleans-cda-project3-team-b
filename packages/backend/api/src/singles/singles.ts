@@ -116,7 +116,7 @@ singlesRouter.post('/', async (req: Request, res) => {
         genres_id: genreId,
         exp_value: 100,
         listeners: 0,
-        money_earned: 2000,
+        money_earned: 2500,
         score: 0,
       })
       .execute();
