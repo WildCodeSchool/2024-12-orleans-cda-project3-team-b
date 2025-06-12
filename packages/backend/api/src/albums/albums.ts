@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const albumsRouter = Router();
 
-async function getAlbums(userId: number) {
+function getAlbums(userId: number) {
   return db
     .selectFrom('albums')
     .leftJoin('artists_hired', 'artists_hired.id', 'albums.artists_hired_id')
@@ -24,7 +24,7 @@ async function getAlbums(userId: number) {
       'albums.exp_value',
       'albums.genres_id',
       'albums.money_earned',
-      'albums.name as album_name',
+      'albums.name as name',
       'albums.notoriety_gain',
       'albums.sales',
       'albums.score',
@@ -32,11 +32,12 @@ async function getAlbums(userId: number) {
       'artists.firstname as artist_firstname',
       'artists.lastname as artist_lastname',
       'genres.name as genre_name',
-    ])
-    .execute();
+    ]);
 }
 
-export type Albums = Awaited<ReturnType<typeof getAlbums>>[number];
+export type Album = Awaited<
+  ReturnType<ReturnType<typeof getAlbums>['execute']>
+>[number];
 
 albumsRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
@@ -48,7 +49,29 @@ albumsRouter.get('/', async (req: Request, res) => {
   }
 
   try {
-    const albums = await getAlbums(userId);
+    const albums = await getAlbums(userId).execute();
+
+    res.json(albums);
+    return;
+  } catch (error) {
+    console.error('Error fetching albums :', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+albumsRouter.get('/filter', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const albums = await getAlbums(userId)
+      .orderBy('id', 'desc')
+      .executeTakeFirst();
 
     res.json(albums);
     return;
