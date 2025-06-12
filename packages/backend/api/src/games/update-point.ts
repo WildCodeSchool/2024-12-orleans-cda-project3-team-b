@@ -15,7 +15,6 @@ pointRouter.post('/point', async (req, res) => {
       .where('artists_hired_skills.id', '=', artistsHiredSkillsId)
       .where('artists_hired_skills.skills_id', '=', skills_id)
       .execute();
-    console.log(artistsHiredSkillsId, skills_id);
 
     res.status(200).json({
       message: 'Point ajouté avec succès',

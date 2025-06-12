@@ -2,27 +2,21 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCardHire from '@/components/artist-card';
 import ArtistCard from '@/components/artist-card';
 import SeeMoreButton from '@/components/see-more-button';
 import { useAuth } from '@/contexts/auth-context';
+import { useLabel } from '@/contexts/label-context';
 
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 
-export type InfoLabel = {
-  label: number;
-  budget: number;
-};
 export default function HireArtist() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageBudget, setMessageBudget] = useState('');
   const navigate = useNavigate();
   const auth = useAuth();
-  const labelId = infoLabel?.label;
-  const budget = infoLabel?.budget ?? 0;
+  const { label, refreshLabel } = useLabel();
   useEffect(() => {
     const fetchArtists = async () => {
       try {
@@ -38,18 +32,7 @@ export default function HireArtist() {
         setArtists([]); // Reset artists on error
       }
     };
-
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
     void fetchArtists();
-    void fetchInfoLabel();
   }, []);
   const handleSeeMore = () => {
     setVisibleCount((prev) => prev + 4);
@@ -85,6 +68,9 @@ export default function HireArtist() {
     }
   };
 
+  const labelId = label?.id ?? 0;
+  const budget = label?.budget ?? 0;
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
@@ -112,6 +98,7 @@ export default function HireArtist() {
               try {
                 await handleHireArtist(artist, labelId, budget);
                 await navigate('/main-menu'); // only after successful hire
+                await refreshLabel();
               } catch {
                 setMessageBudget('redirection not working');
               }

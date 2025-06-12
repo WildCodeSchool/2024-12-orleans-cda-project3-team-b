@@ -127,6 +127,7 @@ export interface Milestones {
 
 export interface Price {
   id: Generated<number>;
+  name: string;
   price: number | null;
 }
 
