@@ -5,25 +5,19 @@ import { ArrowLeft } from '@/components/arrow-left';
 import SeeMoreButton from '@/components/see-more-button';
 import StaffCardHire from '@/components/staff-card-hire';
 import { useAuth } from '@/contexts/auth-context';
+import { useLabel } from '@/contexts/label-context';
 
 import type { Staff } from '../../../../backend/api/src/games/get-staff';
-
-export type InfoLabel = {
-  label: number;
-  budget: number;
-};
 
 export default function HireArtist() {
   const [staff, setStaff] = useState<Staff[]>([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageBudget, setMessageBudget] = useState('');
   const navigate = useNavigate();
+  const { label, refreshLabel } = useLabel();
 
   const auth = useAuth();
-  const labelId = infoLabel?.label;
-  const budget = infoLabel?.budget ?? 0;
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -45,17 +39,7 @@ export default function HireArtist() {
       }
     };
 
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
     void fetchStaff();
-    void fetchInfoLabel();
   }, []);
 
   const handleSeeMore = () => {
@@ -94,6 +78,8 @@ export default function HireArtist() {
       console.error('Error hiring artist:', error);
     }
   };
+  const labelId = label?.id ?? 0;
+  const budget = label?.budget ?? 0;
 
   return (
     <>
@@ -124,6 +110,7 @@ export default function HireArtist() {
                     budget,
                   );
                   await navigate('/main-menu');
+                  await refreshLabel();
                 } catch {
                   setMessageBudget('redirection not working');
                 }
