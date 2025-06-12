@@ -4,6 +4,77 @@ import { db } from '@app/backend-shared';
 
 const singlesRouter = Router();
 
+function getSingles(userId: number) {
+  return db
+    .selectFrom('singles')
+    .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
+    .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .leftJoin(
+      'label_artists',
+      'label_artists.artists_hired_id',
+      'artists_hired.id',
+    )
+    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
+    .where('labels.users_id', '=', userId)
+    .select([
+      'singles.id',
+      'singles.artists_hired_id',
+      'singles.name as name',
+      'singles.listeners',
+      'singles.money_earned',
+      'singles.score',
+      'artists.firstname as artist_firstname',
+      'artists.lastname as artist_lastname',
+      'artists.alias as artist_alias',
+    ]);
+}
+export type Single = Awaited<
+  ReturnType<ReturnType<typeof getSingles>['execute']>
+>[number];
+
+singlesRouter.get('/', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const singles = await getSingles(userId).execute();
+
+    res.json(singles);
+    return;
+  } catch (error) {
+    console.error('Error fetching singles:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+singlesRouter.get('/filter', async (req: Request, res) => {
+  const userId = req.userId;
+  if (userId === undefined) {
+    res.json({
+      ok: false,
+    });
+    return;
+  }
+
+  try {
+    const singles = await getSingles(userId)
+      .orderBy('id', 'desc')
+      .executeTakeFirst();
+
+    res.json(singles);
+    return;
+  } catch (error) {
+    console.error('Error fetching singles:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 singlesRouter.get('/:id', async (req: Request, res) => {
   const singleId = Number(req.params.id);
   const userId = req.userId;
@@ -47,50 +118,6 @@ singlesRouter.get('/:id', async (req: Request, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-singlesRouter.get('/', async (req: Request, res) => {
-  const userId = req.userId;
-  if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
-    return;
-  }
-
-  try {
-    const singles = await db
-      .selectFrom('singles')
-      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .leftJoin('users', 'users.id', 'labels.users_id')
-      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .select([
-        'singles.id as id',
-        'singles.artists_hired_id',
-        'singles.name',
-        'singles.listeners',
-        'singles.money_earned',
-        'singles.score',
-        'artists.firstname as artist_firstname',
-        'artists.lastname as artist_lastname',
-        'artists.alias as artist_alias',
-      ])
-      .where('labels.users_id', '=', userId)
-      .execute();
-
-    res.json(singles);
-    return;
-  } catch (error) {
-    console.error('Error fetching singles:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
 singlesRouter.post('/', async (req: Request, res) => {
   const { artistHiredId, singleName, genreId, price } = req.body;
 

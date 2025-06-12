@@ -2,22 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { ArrowLeft } from '@/components/arrow-left';
 
-export type Albums = {
-  id: number;
-  name: string;
-  sales: number;
-  money_earned: number;
-  genre_name: string;
-  artist_firstname: string;
-  artist_lastname: string;
-  artist_alias: string;
-  exp_value: number;
-  notoriety_gain: number;
-};
+import type { Album } from '../../../../backend/api/src/albums/albums';
 
 export default function MyAlbums() {
   const [visibleCount, setVisibleCount] = useState(4);
-  const [albums, setAlbums] = useState<Albums[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -88,7 +77,7 @@ export default function MyAlbums() {
             <h3 className='font-semibold'>{album.name}</h3>
             <p className='text-sm font-light'>
               {'by '}
-              {album.artist_alias
+              {album.artist_alias?.trim()
                 ? album.artist_alias
                 : `${album.artist_firstname} ${album.artist_lastname}`}
             </p>
