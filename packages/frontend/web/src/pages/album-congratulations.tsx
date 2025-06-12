@@ -32,7 +32,7 @@ export default function AlbumCongratulations() {
       if (!items) return;
       const albumId = items.id;
       try {
-        const response = await fetch(`/api/singles-albums/${albumId}`);
+        const response = await fetch(`/api/albums/${albumId}/singles`);
         if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
