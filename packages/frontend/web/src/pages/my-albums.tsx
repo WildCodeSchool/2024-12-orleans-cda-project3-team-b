@@ -36,7 +36,6 @@ export default function MyAlbums() {
     void fetchAlbums();
   }, []);
 
-  const totalSales = albums.reduce((sum, album) => sum + album.sales, 0);
   const totalMoney = albums.reduce((sum, album) => sum + album.money_earned, 0);
   const averageNotoriety =
     albums.length > 0
@@ -68,13 +67,6 @@ export default function MyAlbums() {
             {averageNotoriety}
           </h3>
           <img className='mt-0.5 h-6 w-6' src='/assets/star-sign.png' alt='' />
-        </div>
-        <div className='flex items-center'>
-          <h2>{'Total sales:'}</h2>
-          <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {totalSales}
-          </h3>
-          <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
         </div>
         <div className='flex items-center'>
           <h2>{'Total earned money:'}</h2>
