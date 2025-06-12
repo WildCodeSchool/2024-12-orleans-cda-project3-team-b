@@ -10,7 +10,6 @@ import demoRouter from './demo';
 import gamesRouter from './games';
 import marketingRouter from './marketing/marketing';
 import authMiddleware from './middlewares/auth.middleware';
-import singlesAlbumRouter from './singles-albums.ts/singles-albums';
 import singlesRouter from './singles/singles';
 
 const router = express.Router();
@@ -25,7 +24,6 @@ router.use('/artists-skills', artistsSkillsRouter);
 router.use('/marketing', marketingRouter);
 router.use('/albums', albumsRouter);
 router.use('/singles', singlesRouter);
-router.use('/singles-albums', singlesAlbumRouter);
 router.use('/demo', demoRouter);
 
 export default router;

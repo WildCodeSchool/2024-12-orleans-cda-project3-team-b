@@ -4,11 +4,11 @@ import Congratulations from '@/components/congratulations';
 import { GoBackToMenu } from '@/components/go-back-to-menu';
 
 import type { Album } from '../../../../backend/api/src/albums/albums';
-import type { SinglesAlbums } from '../../../../backend/api/src/singles-albums.ts/singles-albums';
+import type { SingleAlbum } from '../../../../backend/api/src/albums/albums';
 
 export default function AlbumCongratulations() {
   const [items, setItems] = useState<Album>();
-  const [singlesAlbums, setSinglesAlbums] = useState<SinglesAlbums[]>([]);
+  const [singlesAlbums, setSinglesAlbums] = useState<SingleAlbum[]>([]);
 
   useEffect(() => {
     const fetchAlbums = async () => {
