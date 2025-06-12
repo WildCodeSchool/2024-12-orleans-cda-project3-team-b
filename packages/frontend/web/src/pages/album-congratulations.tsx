@@ -49,7 +49,7 @@ export default function AlbumCongratulations() {
   if (!items) {
     return (
       <div className='mt-10 text-center'>
-        <p className='text-secondary'>{'Loading your album...'}</p>
+        <p className='text-secondary'>{'album not found'}</p>
       </div>
     );
   }

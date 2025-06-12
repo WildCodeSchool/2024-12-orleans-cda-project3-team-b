@@ -7,7 +7,6 @@ import type { Single } from '../../../../backend/api/src/singles/singles';
 
 export default function SingleCongratulations() {
   const [items, setItems] = useState<Single>();
-
   // Fetch albums
   useEffect(() => {
     const fetchSingles = async () => {
@@ -29,7 +28,7 @@ export default function SingleCongratulations() {
   if (!items) {
     return (
       <div className='mt-10 text-center'>
-        <p className='text-secondary'>{'Loading your single...'}</p>
+        <p className='text-secondary'>{'single not found'}</p>
       </div>
     );
   }
