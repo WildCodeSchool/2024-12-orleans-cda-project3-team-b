@@ -14,13 +14,13 @@ export default function LogoSection() {
           src={label?.logo_img != null ? `/assets/${label.logo_img}` : Logo}
           alt="Label's logo"
         />
-        <div className='h-14 border-r-white pr-4 text-xl sm:flex sm:border-r-4 sm:text-xl'>
+        <div className='h-14 border-r-white pr-4 text-sm sm:flex sm:border-r-4 sm:text-xl'>
           <p className='mr-2'>{label?.name}</p>
           <div
             className={label?.logo_img != null ? 'flex items-center' : 'hidden'}
           >
-            <p className='font-bold'>{'Level:'}</p>
-            <p className='bg-primary mx-2 h-6 w-6 rounded-xs text-center font-bold text-orange-500'>
+            <p className='text-sm font-bold md:text-xl'>{'Level:'}</p>
+            <p className='bg-primary mx-2 h-5 w-5 rounded-xs text-center font-bold text-orange-500 md:h-6 md:w-6'>
               {label?.level}
             </p>
           </div>

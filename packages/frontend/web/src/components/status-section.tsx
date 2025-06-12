@@ -13,11 +13,11 @@ export default function StatusSection() {
         }
         key={label?.id}
       >
-        <div className='sm:flex'>
+        <div className='text-sm sm:flex md:text-xl'>
           <p className='flex items-center font-bold'>
             {label?.notoriety}
             <img
-              className='h-6 w-6'
+              className='mt-0.5 h-4 md:h-6 md:w-6'
               src='/assets/star-sign.png'
               alt='star sign'
             />
@@ -25,7 +25,7 @@ export default function StatusSection() {
           <p className='flex items-center font-bold'>
             {label?.budget}
             <img
-              className='mt-0.5 h-5 w-6 pl-1'
+              className='h-3 md:mt-0.5 md:h-5 md:w-6 md:pl-1'
               src='/assets/dollar-icon.png'
               alt='dollar sign'
             />
