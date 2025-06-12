@@ -1,4 +1,3 @@
-// import { useEffect, useState } from 'react';
 import { useLabel } from '@/contexts/label-context';
 
 import Logo from '../../public/assets/logo.png';
@@ -14,8 +13,8 @@ export default function LogoSection() {
           src={label?.logo_img != null ? `/assets/${label.logo_img}` : Logo}
           alt="Label's logo"
         />
-        <div className='h-14 border-r-white pr-4 text-sm sm:flex sm:border-r-4 sm:text-xl'>
-          <p className='mr-2'>{label?.name}</p>
+        <div className='mt-4 h-14 border-r-white pr-4 text-sm sm:flex sm:border-r-4 sm:text-xl md:mt-0'>
+          <p className='items-center md:mr-8 md:ml-2 md:flex'>{label?.name}</p>
           <div
             className={label?.logo_img != null ? 'flex items-center' : 'hidden'}
           >

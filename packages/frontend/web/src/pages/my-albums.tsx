@@ -2,22 +2,11 @@ import { useEffect, useState } from 'react';
 
 import { ArrowLeft } from '@/components/arrow-left';
 
-export type Albums = {
-  id: number;
-  name: string;
-  sales: number;
-  money_earned: number;
-  genre_name: string;
-  artist_firstname: string;
-  artist_lastname: string;
-  artist_alias: string;
-  exp_value: number;
-  notoriety_gain: number;
-};
+import type { Album } from '../../../../backend/api/src/albums/albums';
 
 export default function MyAlbums() {
   const [visibleCount, setVisibleCount] = useState(4);
-  const [albums, setAlbums] = useState<Albums[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -36,7 +25,6 @@ export default function MyAlbums() {
     void fetchAlbums();
   }, []);
 
-  const totalSales = albums.reduce((sum, album) => sum + album.sales, 0);
   const totalMoney = albums.reduce((sum, album) => sum + album.money_earned, 0);
   const averageNotoriety =
     albums.length > 0
@@ -70,13 +58,6 @@ export default function MyAlbums() {
           <img className='mt-0.5 h-6 w-6' src='/assets/star-sign.png' alt='' />
         </div>
         <div className='flex items-center'>
-          <h2>{'Total sales:'}</h2>
-          <h3 className='ml-2 flex items-center text-xl font-bold'>
-            {totalSales}
-          </h3>
-          <img className='mt-0.5 h-6 w-6' src='/assets/album.png' alt='' />
-        </div>
-        <div className='flex items-center'>
           <h2>{'Total earned money:'}</h2>
           <h3 className='ml-2 flex items-center text-xl font-bold'>
             {totalMoney.toLocaleString()}
@@ -96,7 +77,7 @@ export default function MyAlbums() {
             <h3 className='font-semibold'>{album.name}</h3>
             <p className='text-sm font-light'>
               {'by '}
-              {album.artist_alias
+              {album.artist_alias?.trim()
                 ? album.artist_alias
                 : `${album.artist_firstname} ${album.artist_lastname}`}
             </p>

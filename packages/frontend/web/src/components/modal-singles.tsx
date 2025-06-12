@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type Singles = {
-  readonly id: number;
-  readonly name: string;
-  readonly score: number;
-  readonly artists_hired_id: number;
-};
+import type { Singles } from '../../../../backend/api/src/singles/singles';
 
 export type ModalSinglesProps = {
   readonly isOpen: boolean;

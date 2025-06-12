@@ -8,7 +8,6 @@ import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
 import MarketingCard from '@/components/marketing-card';
-import type { Singles } from '@/components/modal-singles';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
@@ -16,6 +15,7 @@ import type { ArtistHired } from '../../../../backend/api/src/artists-hired/arti
 import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+import type { Single } from '../../../../backend/api/src/singles/singles';
 
 export default function CreateAlbum() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
@@ -23,7 +23,7 @@ export default function CreateAlbum() {
   const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
     null,
   );
-  const [chosenSingles, setChosenSingles] = useState<Singles[]>([]);
+  const [chosenSingles, setChosenSingles] = useState<Single[]>([]);
   const navigate = useNavigate();
   const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
   const [marketing, setMarketing] = useState<Marketing[]>([]);
@@ -62,6 +62,7 @@ export default function CreateAlbum() {
         });
 
         setSubmitted(true);
+        void navigate('/album-congrats');
       } catch (error) {
         console.error('Submission failed:', error);
       }
@@ -122,7 +123,7 @@ export default function CreateAlbum() {
           const resSingles = await fetch('/api/singles');
           if (!resSingles.ok)
             throw new Error(`Singles error: ${resSingles.status}`);
-          const singlesData: Singles[] = await resSingles.json();
+          const singlesData: Single[] = await resSingles.json();
           const selected = singlesData.filter((s) =>
             selectedSinglesId.includes(s.id),
           );
