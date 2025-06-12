@@ -3,7 +3,8 @@ import { type Request, Router } from 'express';
 import { db } from '@app/backend-shared';
 
 const getLabelRouter = Router();
-function getLabel(userId: number) {
+
+function getLabels(userId: number) {
   return db
     .selectFrom('labels')
     .selectAll()
@@ -11,7 +12,8 @@ function getLabel(userId: number) {
     .execute();
 }
 
-export type Label = Awaited<ReturnType<typeof getLabel>>[number];
+export type Label = Awaited<ReturnType<typeof getLabels>>[number];
+
 getLabelRouter.get('/labels', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
@@ -21,8 +23,7 @@ getLabelRouter.get('/labels', async (req: Request, res) => {
     return;
   }
   try {
-    const labels = await getLabel(userId);
-
+    const labels = await getLabels(userId);
     res.json({ labels });
   } catch (_error) {
     res.json({

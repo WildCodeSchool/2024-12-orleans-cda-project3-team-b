@@ -12,7 +12,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
     });
     return;
   }
-  const { artistHiredId, singleName, singleId, genreId } = req.body;
+  const { artistHiredId, singleName, singleId, genreId, price } = req.body;
   try {
     if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
@@ -39,6 +39,22 @@ albumsRouter.post('/create', async (req: Request, res) => {
         score: 0,
       })
       .executeTakeFirst();
+
+    const moneyEarn = await db
+      .selectFrom('albums')
+      .select('money_earned')
+      .where('artists_hired_id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    const newMoney = Number(moneyEarn?.money_earned) - price;
+
+    await db
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '+', Number(newMoney)),
+      }))
+      .where('users_id', '=', userId)
+      .execute();
 
     await db
       .insertInto('singles_albums')

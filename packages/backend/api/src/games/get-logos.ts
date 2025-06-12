@@ -4,9 +4,15 @@ import { db } from '@app/backend-shared';
 
 const getLogosRouter = express.Router();
 
+async function getLogos() {
+  return db.selectFrom('logos').selectAll().execute();
+}
+
+export type Logo = Awaited<ReturnType<typeof getLogos>>[number];
+
 getLogosRouter.get('/logos', async (req, res) => {
   try {
-    const logos = await db.selectFrom('logos').selectAll().execute();
+    const logos = await getLogos();
 
     res.json({ logos });
   } catch (_error) {
