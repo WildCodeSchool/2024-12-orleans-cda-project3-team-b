@@ -10,6 +10,8 @@ import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
+import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
+import type { Price } from '../../../../backend/api/src/games/price';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateSingle() {
@@ -23,6 +25,8 @@ export default function CreateSingle() {
   const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+  const [price, setPrice] = useState<Price>();
+  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -45,6 +49,7 @@ export default function CreateSingle() {
           genreId: artistsHired.find((a) =>
             a.skills.some((items) => items.artistsHiredSkillsId !== null),
           )?.genre_id,
+          price: price?.price,
         }),
       });
 
@@ -106,6 +111,36 @@ export default function CreateSingle() {
 
     void fetchMarketing();
   }, [selectedMarketingId]);
+
+  useEffect(() => {
+    const fetchPriceSingle = async () => {
+      try {
+        const res = await fetch('/api/games/price-singles');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: Price = await res.json();
+
+        setPrice(data);
+      } catch (error) {
+        console.error('Error fetching single price:', error);
+      }
+    };
+    const fetchInfoLabel = async () => {
+      try {
+        const res = await fetch('/api/games/label');
+        const data: InfoLabel = await res.json();
+        setInfoLabel(data);
+      } catch (error) {
+        console.error('Error fetching budget:', error);
+      }
+    };
+    void fetchInfoLabel();
+
+    void fetchPriceSingle();
+  }, []);
+  const budget = infoLabel?.budget ?? 0;
+
+  const isDisabled =
+    price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
     <form>
@@ -175,7 +210,8 @@ export default function CreateSingle() {
         </div>
 
         <div className='mt-6'>
-          {hasTriedSubmit && (!selectedArtistId || !singleName.trim()) ? (
+          {hasTriedSubmit &&
+          (selectedArtistId === null || !singleName.trim()) ? (
             <p className='text-center text-sm text-red-500'>
               {'Please select an artist and enter a name for the single.'}
             </p>
@@ -183,7 +219,7 @@ export default function CreateSingle() {
         </div>
 
         {/* Buttons */}
-        <div className='mt-12 flex w-full max-w-md flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between'>
+        <div className='mt-12 flex items-start justify-between gap-x-16'>
           <VerifyButton
             color='bg-secondary active:scale-95 transition-transform'
             image='/assets/not-check.png'
@@ -193,13 +229,21 @@ export default function CreateSingle() {
           >
             {'Cancel'}
           </VerifyButton>
-          <VerifyButton
-            color='bg-orange-500 active:scale-95 transition-transform'
-            image='/assets/check.png'
-            onClick={handleSubmit}
-          >
-            {'Confirm'}
-          </VerifyButton>
+          <div className='justify-center text-center'>
+            <VerifyButton
+              color={
+                isDisabled
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-orange-500 active:scale-95 transition-transform'
+              }
+              image='/assets/check.png'
+              onClick={handleSubmit}
+              disabled={isDisabled}
+            >
+              {'Confirm'}
+            </VerifyButton>
+            {price ? `${price.price} $` : ''}
+          </div>
         </div>
       </div>
     </form>

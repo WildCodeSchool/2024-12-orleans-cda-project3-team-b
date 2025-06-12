@@ -2,28 +2,20 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import type { Logo } from './label';
+import type { Label as MusicLabel } from '../../../../backend/api/src/games/get-labels';
+import type { Logo } from '../../../../backend/api/src/games/get-logos';
 import Label from './label';
 
 type Logos = {
   logos: Logo[];
 };
 
-type Labels = {
-  budget: number;
-  id: number;
-  levels_id: number;
-  logos_id: number;
-  name: string;
-  notoriety: number;
-  score_xp: number;
-};
 export default function RegisterLabel() {
   const [logos, setLogos] = useState<Logo[]>([]);
   const [input, setInput] = useState<string>('');
   const [selectedLogo, setSelectedLogo] = useState<number>();
   const [message, setMessage] = useState('');
-  const [labels, setLabels] = useState<Labels[]>([]);
+  const [labels, setLabels] = useState<MusicLabel[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,36 +55,53 @@ export default function RegisterLabel() {
 
   const register = async (event: FormEvent) => {
     event.preventDefault();
+
     if (!input.trim() || selectedLogo === undefined) {
       setMessage('All fields are required');
       return;
     }
 
-    const res = await fetch(`/api/games/register-label`, {
-      method: 'POST',
-      body: JSON.stringify({
-        name: input,
-        logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    });
-    const data = res;
-    if (data.ok) {
-      await navigate('/main-menu');
-    } else {
-      setMessage('Something went wrong. Please try again.');
+    try {
+      const res = await fetch(`/api/games/register-label`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: input,
+          logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
+        }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      });
+
+      if (res.ok) {
+        await navigate('/main-menu');
+      } else {
+        setMessage('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error registering label:', error);
+      setMessage('Network error. Please try again.');
     }
   };
 
   return (
-    <>
-      <h1 className='mb-20 text-center'>{'CONGRATULATIONS'}</h1>
-      <div className='mb-10 text-center'>
-        <p className='m-4'>{'on creating your new music label! '}</p>
-        <p className='m-4'>
+    <div className='flex flex-col items-center'>
+      <div className='mt-4 flex flex-col items-center'>
+        <h1 className='text-secondary text-center font-bold md:text-2xl'>
+          {'CONGRATULATIONS!!'}
+        </h1>
+        <p className='text-secondary md:text-lg'>
+          {'on creating your new music label!'}
+        </p>
+      </div>
+      <div className='mb-10 w-60 text-center md:w-150'>
+        <p className='text-secondary md:text-xm mt-4 text-sm'>
           {
-            'Are you ready to reach the heights of success? Will you live up to it? To take the first step towards success, define a name for your label!'
+            'Are you ready to reach the heights of success? Will you live up to it?'
+          }
+        </p>
+        <p className='text-secondary md:text-xm text-sm'>
+          {
+            'To take the first step towards success, define a name for your label!'
           }
         </p>
       </div>
@@ -110,12 +119,12 @@ export default function RegisterLabel() {
         />
         <button
           type='submit'
-          className='rounded border-2 border-gray-500 bg-gray-500'
+          className='bg-orange text-primary h-10 w-24 rounded text-lg shadow-[3px_5px_6px_rgba(0,0,0,0.30)] transition-transform active:scale-95'
         >
-          {'register'}
+          {'APPLY'}
         </button>
       </form>
       {message ? <p className='text-center'>{message}</p> : null}
-    </>
+    </div>
   );
 }

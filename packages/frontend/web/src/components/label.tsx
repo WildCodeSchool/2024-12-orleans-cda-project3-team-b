@@ -1,9 +1,6 @@
 import type { ChangeEvent } from 'react';
 
-export type Logo = {
-  id: number;
-  logo_img: string;
-};
+import type { Logo } from '../../../../backend/api/src/games/get-logos';
 
 type LabelProps = {
   readonly setValue: (value: string) => void;
@@ -28,28 +25,33 @@ export default function Label({
 
   return (
     <div className='flex flex-col items-center text-center'>
-      <label htmlFor='label'>{'Choose your name of label : '}</label>
+      <label className='text-secondary mb-1 font-semibold' htmlFor='label'>
+        {'Choose the name of your label: '}
+      </label>
       <input
         type='text'
         id='label'
         placeholder='max 32 characters'
-        className='w-52 border-2 border-gray-600'
+        className='placeholder-secondary h-8 rounded-sm border-1 border-gray-200 px-2 text-center text-sm shadow-[3px_5px_6px_rgba(0,0,0,0.30)] inset-ring-2 inset-ring-white outline-none md:w-78'
         onChange={handleInputChange}
       />
+      <label className='text-secondary mt-5 font-semibold' htmlFor='label'>
+        {'Choose your logo: '}
+      </label>
       <div className='mt-4 flex'>
         {logos.map((logo) => (
           <label
             key={logo.id}
-            className={`m-2 cursor-pointer rounded border p-2 ${
+            className={`mb-2 cursor-pointer rounded border p-2 ${
               selectedLogo === logo.id
-                ? 'border-blue-500'
+                ? 'border-orange border-2'
                 : 'border-transparent'
             }`}
           >
             <img
               src={`/assets/${logo.logo_img}`}
               alt={`Logo ${logo.id}`}
-              className='m-auto w-10'
+              className='m-auto w-20'
             />
             <input
               type='radio'
