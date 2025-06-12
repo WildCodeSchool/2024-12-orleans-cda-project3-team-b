@@ -106,7 +106,6 @@ function getArtistsHired(userId: number) {
       'artists.lastname',
       'artists.alias',
       'artists.image',
-      // 'artists.notoriety',
       'milestones.name as milestones_name',
       'genres.name as genre',
       'genres.id as genre_id',

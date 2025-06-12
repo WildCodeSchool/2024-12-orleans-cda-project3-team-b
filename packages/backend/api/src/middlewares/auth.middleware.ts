@@ -57,7 +57,7 @@ export default async function authMiddleware(
         .setIssuedAt()
         .setIssuer(FRONTEND_HOST)
         .setAudience(FRONTEND_HOST)
-        .setExpirationTime('10s')
+        .setExpirationTime('60s')
         .sign(accessTokenSecret);
 
       res.cookie('accessToken', newAccessToken, {
