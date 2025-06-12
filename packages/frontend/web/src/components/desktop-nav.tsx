@@ -1,9 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '@/contexts/auth-context';
-
-import type { Info } from './status-section';
+import { useLabel } from '@/contexts/label-context';
 
 type DesktopNavProps = {
   readonly isOpen: boolean;
@@ -11,22 +9,7 @@ type DesktopNavProps = {
 };
 
 export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
-  const [labelInfo, setLabelInfo] = useState<Info>();
-  useEffect(() => {
-    const fetchLabels = async () => {
-      try {
-        const apiUrl = '/api/games/label';
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        setLabelInfo(data);
-      } catch (error) {
-        console.error('Error details:', error);
-      }
-    };
-
-    void fetchLabels();
-  }, []);
+  const { label } = useLabel();
 
   const auth = useAuth();
   const logout = async () => {
@@ -43,7 +26,7 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
   return (
     <nav className='hidden items-center md:flex'>
       <ul className='flex items-center justify-end space-x-4 text-xl font-bold'>
-        <div className={labelInfo?.id != null ? 'hidden' : 'flex gap-4'}>
+        <div className={label?.id != null ? 'hidden' : 'flex gap-4'}>
           <li>
             <Link to='/my-artists'>{'MyArtists'}</Link>
           </li>

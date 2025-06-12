@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import HeaderInGame from '@/components/header-in-game';
 import { useAuth } from '@/contexts/auth-context';
+import { LabelProvider } from '@/contexts/label-context';
 
 export default function InGame() {
   const auth = useAuth();
@@ -15,9 +16,9 @@ export default function InGame() {
   }
 
   return (
-    <>
+    <LabelProvider>
       <HeaderInGame />
       <Outlet />
-    </>
+    </LabelProvider>
   );
 }
