@@ -83,6 +83,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 function getArtistsHired(userId: number) {
   return db
     .selectFrom('users')
