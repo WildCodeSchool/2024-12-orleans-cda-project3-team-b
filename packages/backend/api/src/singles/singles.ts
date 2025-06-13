@@ -182,7 +182,7 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('artists_hired.id', '=', artistHiredId)
       .executeTakeFirst();
 
-    if (notoriety?.notoriety == null) {
+    if (!notoriety?.notoriety) {
       res.status(400).json({ error: 'No milestone found' });
       return;
     }
