@@ -26,7 +26,7 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
   return (
     <nav className='hidden items-center md:flex'>
       <ul className='flex items-center justify-end space-x-4 text-xl font-bold'>
-        <div className={label?.id != null ? 'hidden' : 'flex gap-4'}>
+        <div className={label?.id !== null ? 'flex gap-4' : 'hidden'}>
           <li>
             <Link to='/my-artists'>{'MyArtists'}</Link>
           </li>

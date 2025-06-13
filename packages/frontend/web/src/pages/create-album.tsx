@@ -1,35 +1,36 @@
+import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
-import AddMarketing from '@/components/add-marketing';
+// import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
-import MarketingCard from '@/components/marketing-card';
+// import MarketingCard from '@/components/marketing-card';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
-import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+// import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 import type { Single } from '../../../../backend/api/src/singles/singles';
 
 export default function CreateAlbum() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
-    null,
-  );
+  // const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+  //   null,
+  // );
   const [chosenSingles, setChosenSingles] = useState<Single[]>([]);
   const navigate = useNavigate();
   const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
-  const [marketing, setMarketing] = useState<Marketing[]>([]);
-  const [submitted, setSubmitted] = useState(false);
+  // const [marketing, setMarketing] = useState<Marketing[]>([]);
+  // const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
+  const [messageError, setMessageError] = useState('');
   const [price, setPrice] = useState<Price | undefined>(undefined);
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
 
@@ -37,15 +38,21 @@ export default function CreateAlbum() {
     setSingleName(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    setHasTriedSubmit(true);
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setMessageError('');
     if (
-      !selectedArtistId ||
+      selectedArtistId === null ||
       !singleName.trim() ||
-      selectedSinglesId.length !== 0
-    )
+      selectedSinglesId.length < 3
+    ) {
+      setMessageError(
+        'Please select an artist, enter a name for the album and choose minimun 3 singles.',
+      );
+      return;
+    } else {
       try {
-        const res = await fetch('/api/albums/create', {
+        await fetch('/api/albums/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -54,18 +61,16 @@ export default function CreateAlbum() {
             artistHiredId: selectedArtistId,
             singleName: singleName.trim(),
             singleId: selectedSinglesId,
-            genreId: artistsHired.find((a) =>
-              a.skills.some((items) => items.artistsHiredSkillsId !== null),
-            )?.genre_id,
+            genreId: artistsHired.find((a) => a.id === selectedArtistId)
+              ?.genre_id,
             price: price?.price,
           }),
         });
-
-        setSubmitted(true);
         void navigate('/album-congrats');
       } catch (error) {
         console.error('Submission failed:', error);
       }
+    }
   };
 
   useEffect(() => {
@@ -76,8 +81,8 @@ export default function CreateAlbum() {
           if (!resArtistsHired.ok)
             throw new Error(`Artist error: ${resArtistsHired.status}`);
           const artistsData: ArtistHired[] = await resArtistsHired.json();
-          const selectedArtistHired = artistsData.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId !== null),
+          const selectedArtistHired = artistsData.find(
+            (a) => a.id === selectedArtistId,
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
@@ -92,29 +97,29 @@ export default function CreateAlbum() {
     void fetchArtists();
   }, [selectedArtistId]);
 
-  useEffect(() => {
-    const fetchMarketing = async () => {
-      try {
-        if (selectedMarketingId != null) {
-          const resMarketing = await fetch('/api/marketing');
-          if (!resMarketing.ok)
-            throw new Error(`Marketing error: ${resMarketing.status}`);
-          const marketingData: Marketing[] = await resMarketing.json();
-          const selectedMarketing = marketingData.find(
-            (m) => m.id === selectedMarketingId,
-          );
-          setMarketing(selectedMarketing ? [selectedMarketing] : []);
-        } else {
-          setMarketing([]);
-        }
-      } catch (error) {
-        console.error('Error fetching marketing:', error);
-        setMarketing([]);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMarketing = async () => {
+  //     try {
+  //       if (selectedMarketingId != null) {
+  //         const resMarketing = await fetch('/api/marketing');
+  //         if (!resMarketing.ok)
+  //           throw new Error(`Marketing error: ${resMarketing.status}`);
+  //         const marketingData: Marketing[] = await resMarketing.json();
+  //         const selectedMarketing = marketingData.find(
+  //           (m) => m.id === selectedMarketingId,
+  //         );
+  //         setMarketing(selectedMarketing ? [selectedMarketing] : []);
+  //       } else {
+  //         setMarketing([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching marketing:', error);
+  //       setMarketing([]);
+  //     }
+  //   };
 
-    void fetchMarketing();
-  }, [selectedMarketingId]);
+  //   void fetchMarketing();
+  // }, [selectedMarketingId]);
 
   useEffect(() => {
     const fetchSingles = async () => {
@@ -171,7 +176,11 @@ export default function CreateAlbum() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form action='' method='post'>
+    <form
+      onSubmit={(event) => {
+        void handleSubmit(event);
+      }}
+    >
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
         <div className='mb-4 flex w-full items-center justify-between'>
           <div>
@@ -208,7 +217,7 @@ export default function CreateAlbum() {
           />
         </div>
 
-        <div className='mt-12 flex w-full flex-col items-center gap-2'>
+        <div className='mt-6 flex w-full flex-col items-center gap-2'>
           {chosenSingles.length > 0 ? (
             chosenSingles.map((single) => (
               <SingleCard
@@ -237,7 +246,7 @@ export default function CreateAlbum() {
             artistId={selectedArtistId}
           />
         </div>
-        <div className='mt-6'>
+        {/* <div className='mt-6'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (
               <MarketingCard key={campaign.id} marketing={campaign} />
@@ -252,21 +261,16 @@ export default function CreateAlbum() {
               setSelectedMarketingId(id);
             }}
           />
-        </div>
-        <div className='mt-6'>
-          {hasTriedSubmit &&
-          (!selectedArtistId ||
-            !singleName.trim() ||
-            selectedSinglesId.length === 0) ? (
-            <p className='text-center text-sm text-red-500'>
-              {
-                'Please select an artist, enter a name for the album and choose at least 1 single.'
-              }
-            </p>
-          ) : null}
-        </div>
+        </div> */}
+        {messageError ? (
+          <p className='mt-4 text-center text-sm text-red-500'>
+            {messageError}
+          </p>
+        ) : (
+          ''
+        )}
 
-        <div className='mt-12 flex items-start justify-between gap-x-16'>
+        <div className='mt-6 flex items-start justify-between gap-x-16'>
           <VerifyButton
             color='bg-secondary active:scale-95 transition-transform'
             image='/assets/not-check.png'
@@ -283,8 +287,8 @@ export default function CreateAlbum() {
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-orange-500 active:scale-95 transition-transform'
               }
+              type={'submit'}
               image='/assets/check.png'
-              onClick={handleSubmit}
               disabled={isDisabled}
             >
               {'Confirm'}

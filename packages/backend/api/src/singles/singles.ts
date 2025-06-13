@@ -176,18 +176,18 @@ singlesRouter.post('/', async (req: Request, res) => {
       return newGain;
     });
 
-    const notoriety = await db
+    const artistHired = await db
       .selectFrom('artists_hired')
       .select('artists_hired.notoriety')
       .where('artists_hired.id', '=', artistHiredId)
       .executeTakeFirst();
 
-    if (!notoriety) {
+    if (!artistHired) {
       res.status(400).json({ error: 'No milestone found' });
       return;
     }
 
-    if (notoriety.notoriety >= 5) {
+    if (artistHired.notoriety >= 5) {
       res.json({ message: 'max 5' });
       return;
     }
@@ -203,7 +203,7 @@ singlesRouter.post('/', async (req: Request, res) => {
     const newMilestone = await db
       .selectFrom('milestones')
       .select('id')
-      .where('value', '<=', Number(notoriety.notoriety) * 10)
+      .where('value', '<=', Number(artistHired.notoriety) * 10)
       .orderBy('id', 'desc')
       .limit(1)
       .executeTakeFirst();

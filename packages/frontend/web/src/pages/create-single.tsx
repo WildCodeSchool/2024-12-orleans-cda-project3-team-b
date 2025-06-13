@@ -1,66 +1,67 @@
 import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
-import AddMarketing from '@/components/add-marketing';
+// import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
-import MarketingCard from '@/components/marketing-card';
+// import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
-import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+
+// import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateSingle() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
-    null,
-  );
+  // const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+  //   null,
+  // );
   const navigate = useNavigate();
-  const [marketing, setMarketing] = useState<Marketing[]>([]);
-  const [submitted, setSubmitted] = useState(false);
+  // const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [singleName, setSingleName] = useState('');
-  const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
   const [price, setPrice] = useState<Price>();
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
+  const [messageError, setMessageError] = useState('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    setHasTriedSubmit(true);
-
-    if (!selectedArtistId || !singleName.trim()) {
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setMessageError('');
+    if (selectedArtistId === null || !singleName.trim()) {
+      setMessageError(
+        'Please select an artist and enter a name for the single.',
+      );
       return;
-    }
+    } else {
+      try {
+        const res = await fetch('/api/singles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            artistHiredId: selectedArtistId,
+            singleName: singleName.trim(),
+            genreId: artistsHired.find((a) => a.id === selectedArtistId)
+              ?.genre_id,
+            price: price?.price,
+          }),
+        });
 
-    try {
-      const res = await fetch('/api/singles', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          artistHiredId: selectedArtistId,
-          singleName: singleName.trim(),
-          genreId: artistsHired.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId !== null),
-          )?.genre_id,
-          price: price?.price,
-        }),
-      });
-
-      if (!res.ok) {
-        return;
+        if (!res.ok) {
+          return;
+        }
+        void navigate('/single-congrats');
+      } catch (error) {
+        console.error('Submission failed:', error);
       }
-
-      setSubmitted(true);
-      void navigate('/single-congrats');
-    } catch (error) {
-      console.error('Submission failed:', error);
     }
   };
 
@@ -72,8 +73,8 @@ export default function CreateSingle() {
           if (!resArtistHired.ok)
             throw new Error(`Artist fetch failed: ${resArtistHired.status}`);
           const artistsData: ArtistHired[] = await resArtistHired.json();
-          const selectedArtistHired = artistsData.find((a) =>
-            a.skills.some((items) => items.artistsHiredSkillsId !== null),
+          const selectedArtistHired = artistsData.find(
+            (a) => a.id === selectedArtistId,
           );
           setArtistsHired(selectedArtistHired ? [selectedArtistHired] : []);
         } else {
@@ -88,29 +89,29 @@ export default function CreateSingle() {
     void fetchArtists();
   }, [selectedArtistId]);
 
-  useEffect(() => {
-    const fetchMarketing = async () => {
-      try {
-        if (selectedMarketingId != null) {
-          const resMarketing = await fetch('/api/marketing');
-          if (!resMarketing.ok)
-            throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
-          const marketingData: Marketing[] = await resMarketing.json();
-          const selectedMarketing = marketingData.find(
-            (m) => m.id === selectedMarketingId,
-          );
-          setMarketing(selectedMarketing ? [selectedMarketing] : []);
-        } else {
-          setMarketing([]);
-        }
-      } catch (error) {
-        console.error('Error fetching marketing:', error);
-        setMarketing([]);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchMarketing = async () => {
+  //     try {
+  //       if (selectedMarketingId != null) {
+  //         const resMarketing = await fetch('/api/marketing');
+  //         if (!resMarketing.ok)
+  //           throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
+  //         const marketingData: Marketing[] = await resMarketing.json();
+  //         const selectedMarketing = marketingData.find(
+  //           (m) => m.id === selectedMarketingId,
+  //         );
+  //         setMarketing(selectedMarketing ? [selectedMarketing] : []);
+  //       } else {
+  //         setMarketing([]);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching marketing:', error);
+  //       setMarketing([]);
+  //     }
+  //   };
 
-    void fetchMarketing();
-  }, [selectedMarketingId]);
+  //   void fetchMarketing();
+  // }, [selectedMarketingId]);
 
   useEffect(() => {
     const fetchPriceSingle = async () => {
@@ -143,7 +144,7 @@ export default function CreateSingle() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
         {/* Header */}
         <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
@@ -192,7 +193,7 @@ export default function CreateSingle() {
         </div>
 
         {/* Marketing */}
-        <div className='mt-6 w-full max-w-md'>
+        {/* <div className='mt-6 w-full max-w-md'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (
               <MarketingCard key={campaign.id} marketing={campaign} />
@@ -207,19 +208,18 @@ export default function CreateSingle() {
               setSelectedMarketingId(id);
             }}
           />
-        </div>
+        </div> */}
 
-        <div className='mt-6'>
-          {hasTriedSubmit &&
-          (selectedArtistId === null || !singleName.trim()) ? (
-            <p className='text-center text-sm text-red-500'>
-              {'Please select an artist and enter a name for the single.'}
-            </p>
-          ) : null}
-        </div>
+        {messageError ? (
+          <p className='mt-4 text-center text-sm text-red-500'>
+            {messageError}
+          </p>
+        ) : (
+          ''
+        )}
 
         {/* Buttons */}
-        <div className='mt-12 flex items-start justify-between gap-x-16'>
+        <div className='mt-6 flex items-start justify-between gap-x-16'>
           <VerifyButton
             color='bg-secondary active:scale-95 transition-transform'
             image='/assets/not-check.png'
@@ -237,8 +237,8 @@ export default function CreateSingle() {
                   : 'bg-orange-500 active:scale-95 transition-transform'
               }
               image='/assets/check.png'
-              onClick={handleSubmit}
               disabled={isDisabled}
+              type={'submit'}
             >
               {'Confirm'}
             </VerifyButton>

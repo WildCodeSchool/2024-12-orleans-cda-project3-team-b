@@ -11,7 +11,7 @@ export default function AddArtist({ onArtistSelected }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className='mt-8 flex flex-col items-center justify-center hover:scale-95'>
+    <div className='mt-8 flex flex-col items-center justify-center'>
       <button
         type='button'
         onClick={() => {
