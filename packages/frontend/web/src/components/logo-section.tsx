@@ -18,8 +18,8 @@ export default function LogoSection() {
           <div
             className={label?.logo_img != null ? 'flex items-center' : 'hidden'}
           >
-            <p className='font-bold'>{'Level:'}</p>
-            <p className='bg-primary mx-2 h-6 w-6 rounded-xs text-center font-bold text-orange-500'>
+            <p className='text-sm font-bold md:text-xl'>{'Level:'}</p>
+            <p className='bg-primary mx-2 h-5 w-5 rounded-xs text-center font-bold text-orange-500 md:h-6 md:w-6'>
               {label?.level}
             </p>
           </div>
