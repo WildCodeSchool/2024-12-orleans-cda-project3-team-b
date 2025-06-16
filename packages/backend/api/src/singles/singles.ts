@@ -186,35 +186,25 @@ singlesRouter.post('/', async (req: Request, res) => {
       res.status(400).json({ error: 'No milestone found' });
       return;
     }
-
-    if (artistHired.notoriety >= 5) {
-      res.json({ message: 'max 5' });
-      return;
-    }
+    const currentNotoriety = Number(artistHired.notoriety);
+    const newNotoriety = Math.min(Number(currentNotoriety) + Number(gain), 5);
 
     await db
       .updateTable('artists_hired')
-      .set((eb) => ({
-        notoriety: eb('notoriety', '+', Number(gain)),
-      }))
+      .set({ notoriety: newNotoriety })
       .where('artists_hired.id', '=', artistHiredId)
       .execute();
 
     const newMilestone = await db
       .selectFrom('milestones')
       .select('id')
-      .where('value', '<=', Number(artistHired.notoriety) * 10)
+      .where('value', '<=', Number(newNotoriety) * 10)
       .orderBy('id', 'desc')
       .limit(1)
       .executeTakeFirst();
 
     if (!newMilestone) {
       res.status(400).json({ error: 'No milestone found' });
-      return;
-    }
-
-    if (newMilestone.id >= 5) {
-      res.json({ message: 'max 5' });
       return;
     }
 
