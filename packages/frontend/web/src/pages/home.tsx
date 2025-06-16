@@ -1,37 +1,44 @@
-import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import type { SomeInterface } from '@app/shared';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import Vinyl from '@/components/vinyl';
 
 export default function Home() {
-  const [someData, setSomeData] = useState<SomeInterface>({
-    someProperty: 'someValue',
-  });
-
-  useEffect(() => {
-    const abortController = new AbortController();
-
-    (async () => {
-      const response = await fetch(`${API_URL}/api/demo`, {
-        signal: abortController.signal,
-      });
-      const data = await response.json();
-      setSomeData(data);
-    })();
-
-    return () => {
-      abortController.abort();
-    };
-  }, []);
-
+  const navigate = useNavigate();
   return (
-    <div className='font-display flex h-screen w-screen flex-col items-center justify-center gap-4'>
-      <div className='rounded-2xl bg-red-500 p-1 px-2 text-white transition-all hover:bg-green-400 active:bg-amber-500'>
-        {'Edit pages/home.tsx to edit this screen'}
-      </div>
+    <div className='bg-secondary flex min-h-screen flex-col pt-12'>
+      <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
+        <div className='text-primary top-0 z-2 w-full max-w-3xl self-start bg-transparent'>
+          <div className='relative top-0 flex flex-col items-center gap-4 text-center'>
+            <div className='flex items-center'>
+              <p className='md:text-lg'>
+                {` Become the boss of your own music empire!
+In this music label management game, you take control of a rising record label. Sign talented artists, produce hit albums, release singles,to dominate the charts. Choose your strategy carefully — will you focus on niche talent, or chase mainstream success?
+Your decisions shape the future of your label. Fame, fortune, or failure — it's all in your hands.`}
+              </p>
+            </div>
+            <div className='mt-4 flex flex-col items-center gap-1 text-sm'>
+              <button
+                type='button'
+                className='bg-orange text-primary h-10 w-36 rounded-2xl text-lg shadow-[3px_5px_6px_rgba(0,0,0,0.30)] transition-transform active:scale-95'
+                onClick={() => navigate('/login')}
+              >
+                {'LOG IN'}
+              </button>
 
-      <div>{someData.someProperty}</div>
+              <Link
+                to='/register'
+                className='group hover:text-primary mt-3 hover:underline'
+              >
+                {' No account yet ? '}
+                <span className='group-hover:text-primary text-orange'>
+                  {'Sign up'}
+                </span>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <Vinyl />
+      </div>
     </div>
   );
 }
