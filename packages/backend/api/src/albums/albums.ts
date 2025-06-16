@@ -81,7 +81,7 @@ albumsRouter.get('/filter', async (req: Request, res) => {
   }
 });
 
-async function getSinglesAlbum(albumId: number) {
+function getSinglesAlbum(albumId: number) {
   return db
     .selectFrom('singles_albums')
     .leftJoin('singles', 'singles.id', 'singles_albums.singles_id')

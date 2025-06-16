@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const marketingRouter = express.Router();
 
-async function getMarketing() {
+function getMarketing() {
   return db
     .selectFrom('marketing')
     .select([
