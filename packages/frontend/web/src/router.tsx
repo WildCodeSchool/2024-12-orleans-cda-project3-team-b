@@ -65,11 +65,11 @@ const router = createBrowserRouter([
         element: <CreateSingle />,
       },
       {
-        path: 'album-congrats',
+        path: '/album-congrats',
         element: <AlbumCongratulations />,
       },
       {
-        path: 'single-congrats',
+        path: '/single-congrats',
         element: <SingleCongratulations />,
       },
       {
