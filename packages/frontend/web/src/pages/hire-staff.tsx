@@ -92,7 +92,7 @@ export default function HireArtist() {
         <div className='mb-8 w-full text-center text-xl font-medium text-teal-800'>
           {'STAFF'}
         </div>
-        <div className='grid grid-cols-2 gap-4'>
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
           {sortedStaff.slice(0, visibleCount).map((staff) => (
             <StaffCardHire
               key={staff.id}
