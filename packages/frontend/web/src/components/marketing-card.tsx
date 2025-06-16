@@ -18,8 +18,8 @@ export default function MarketingCard({
   return (
     <button
       type='button'
-      disabled={isDisabled}
       onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
       className={`${
         isDisabled
           ? 'cursor-not-allowed bg-gray-400'

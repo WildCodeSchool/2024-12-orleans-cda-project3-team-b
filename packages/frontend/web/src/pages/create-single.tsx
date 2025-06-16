@@ -202,7 +202,6 @@ export default function CreateSingle() {
                 key={campaign.id}
                 marketing={campaign}
                 budget={budget}
-                // price={price?.price}
               />
             ))
           ) : (
