@@ -74,7 +74,7 @@ export default function Register() {
   return (
     <div className='bg-secondary flex min-h-screen flex-col'>
       <div className='flex flex-1 items-center justify-center pr-8 pl-8'>
-        <div className='text-primary top-0 z-2 w-full max-w-3xl self-start bg-transparent'>
+        <div className='text-primary top-0 z-2 w-full max-w-3xl self-start bg-transparent text-center'>
           <div className='relative top-0 flex flex-col items-center gap-4 text-center'>
             <img
               className='h-32 w-auto md:h-42'
@@ -156,55 +156,54 @@ export default function Register() {
               </div>
             </form>
           </div>
+          {/* Critères de mot de passe */}
+          <div className='mt-2'>
+            <p
+              className={
+                passwordCriteria.minLength ? 'text-green-600' : 'text-red-600'
+              }
+            >
+              {passwordCriteria.minLength ? '✅' : '❌'}
+              {' Minimum 8 characters'}
+            </p>
+            <p
+              className={
+                passwordCriteria.lowercase ? 'text-green-600' : 'text-red-600'
+              }
+            >
+              {passwordCriteria.lowercase ? '✅' : '❌'}{' '}
+              {'At least one lowercase letter'}
+            </p>
+            <p
+              className={
+                passwordCriteria.uppercase ? 'text-green-600' : 'text-red-600'
+              }
+            >
+              {passwordCriteria.uppercase ? '✅' : '❌'}
+              {' At least one uppercase letter'}
+            </p>
+            <p
+              className={
+                passwordCriteria.number ? 'text-green-600' : 'text-red-600'
+              }
+            >
+              {passwordCriteria.number ? '✅' : '❌'} {'At least one number'}
+            </p>
+            <p
+              className={
+                passwordCriteria.specialChar ? 'text-green-600' : 'text-red-600'
+              }
+            >
+              {passwordCriteria.specialChar ? '✅' : '❌'}{' '}
+              {'At least one special character'}
+            </p>
+          </div>
         </div>
         <img
           className='lg:w-1xl pointer-events-none fixed right-0 bottom-0 w-md md:w-xl'
           src='/assets/vinyl.png'
           alt='Vinyle'
         />
-      </div>
-
-      {/* Critères de mot de passe */}
-      <div className='z-1 mb-8 ml-2 text-sm'>
-        <p
-          className={
-            passwordCriteria.minLength ? 'text-green-600' : 'text-red-600'
-          }
-        >
-          {passwordCriteria.minLength ? '✅' : '❌'}
-          {' Minimum 8 characters'}
-        </p>
-        <p
-          className={
-            passwordCriteria.lowercase ? 'text-green-600' : 'text-red-600'
-          }
-        >
-          {passwordCriteria.lowercase ? '✅' : '❌'}{' '}
-          {'At least one lowercase letter'}
-        </p>
-        <p
-          className={
-            passwordCriteria.uppercase ? 'text-green-600' : 'text-red-600'
-          }
-        >
-          {passwordCriteria.uppercase ? '✅' : '❌'}
-          {' At least one uppercase letter'}
-        </p>
-        <p
-          className={
-            passwordCriteria.number ? 'text-green-600' : 'text-red-600'
-          }
-        >
-          {passwordCriteria.number ? '✅' : '❌'} {'At least one number'}
-        </p>
-        <p
-          className={
-            passwordCriteria.specialChar ? 'text-green-600' : 'text-red-600'
-          }
-        >
-          {passwordCriteria.specialChar ? '✅' : '❌'}{' '}
-          {'At least one special character'}
-        </p>
       </div>
     </div>
   );

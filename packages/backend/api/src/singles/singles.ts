@@ -16,7 +16,6 @@ function getSingles(userId: number) {
     )
     .leftJoin('labels', 'labels.id', 'label_artists.label_id')
     .leftJoin('users', 'users.id', 'labels.users_id')
-    .where('labels.users_id', '=', userId)
     .select([
       'singles.id',
       'singles.artists_hired_id',
@@ -24,10 +23,11 @@ function getSingles(userId: number) {
       'singles.listeners',
       'singles.money_earned',
       'singles.score',
-      'artists.firstname as artist_firstname',
-      'artists.lastname as artist_lastname',
-      'artists.alias as artist_alias',
-    ]);
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
+    ])
+    .where('labels.users_id', '=', userId);
 }
 export type Single = Awaited<
   ReturnType<ReturnType<typeof getSingles>['execute']>
@@ -105,9 +105,9 @@ singlesRouter.get('/:id', async (req: Request, res) => {
         'singles.listeners',
         'singles.money_earned',
         'singles.score',
-        'artists.firstname as artist_firstname',
-        'artists.lastname as artist_lastname',
-        'artists.alias as artist_alias',
+        'artists.firstname',
+        'artists.lastname',
+        'artists.alias',
       ])
       .execute();
 

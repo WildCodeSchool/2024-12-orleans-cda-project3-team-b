@@ -14,15 +14,14 @@ export default function Congratulations({ text, items }: CongratulationsProps) {
       </h1>
 
       <h2 className='text-secondary mt-2 text-xl'>
-        {`${items.artist_alias ?? `${items.artist_firstname} ${items.artist_lastname}`} just made a new ${text}!`}
+        {`${items.alias ?? `${items.firstname} ${items.lastname}`} just made a new ${text}!`}
       </h2>
 
       <div className='mt-10 flex flex-col items-center'>
         <h3 className='text-secondary text-2xl'>{items.name}</h3>
         <p className='text-secondary text-sm font-light'>
           {'by '}
-          {items.artist_alias ??
-            `${items.artist_firstname} ${items.artist_lastname}`}
+          {items.alias ?? `${items.firstname} ${items.lastname}`}
         </p>
         <img
           className='mt-4 h-22 w-22'

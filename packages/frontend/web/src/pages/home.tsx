@@ -19,7 +19,7 @@ Your decisions shape the future of your label. Fame, fortune, or failure — it'
             <div className='mt-4 flex flex-col items-center gap-1 text-sm'>
               <button
                 type='button'
-                className='bg-orange text-primary h-10 w-36 rounded rounded-2xl text-lg shadow-[3px_5px_6px_rgba(0,0,0,0.30)] transition-transform active:scale-95'
+                className='bg-orange text-primary h-10 w-36 rounded-2xl text-lg shadow-[3px_5px_6px_rgba(0,0,0,0.30)] transition-transform active:scale-95'
                 onClick={() => navigate('/login')}
               >
                 {'LOG IN'}

@@ -28,10 +28,10 @@ function getAlbums(userId: number) {
       'albums.notoriety_gain',
       'albums.sales',
       'albums.score',
-      'artists.alias as artist_alias',
-      'artists.firstname as artist_firstname',
-      'artists.lastname as artist_lastname',
-      'genres.name as genre_name',
+      'artists.alias',
+      'artists.firstname',
+      'artists.lastname',
+      'genres.name',
     ]);
 }
 

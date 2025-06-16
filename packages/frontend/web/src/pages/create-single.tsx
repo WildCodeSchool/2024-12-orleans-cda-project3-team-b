@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import AddArtist from '@/components/add-artist';
 // import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCardHire from '@/components/artist-card-hire';
+import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 // import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
+import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
 
 // import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
@@ -26,8 +26,8 @@ export default function CreateSingle() {
   // const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [singleName, setSingleName] = useState('');
   const [price, setPrice] = useState<Price>();
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageError, setMessageError] = useState('');
+  const { label, refreshLabel } = useLabel();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -58,7 +58,8 @@ export default function CreateSingle() {
         if (!res.ok) {
           return;
         }
-        void navigate('/single-congrats');
+        await navigate('/single-congrats');
+        await refreshLabel();
       } catch (error) {
         console.error('Submission failed:', error);
       }
@@ -125,20 +126,10 @@ export default function CreateSingle() {
         console.error('Error fetching single price:', error);
       }
     };
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data: InfoLabel = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
-    void fetchInfoLabel();
 
     void fetchPriceSingle();
   }, []);
-  const budget = infoLabel?.budget ?? 0;
+  const budget = label?.budget ?? 0;
 
   const isDisabled =
     price?.price === null || budget < (price?.price ?? Infinity);
@@ -148,9 +139,9 @@ export default function CreateSingle() {
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
         {/* Header */}
         <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
-          <button type='button'>
+          <div>
             <ArrowLeft />
-          </button>
+          </div>
           <h1 className='text-secondary text-center text-xl font-bold sm:text-2xl'>
             {' RECORDING A NEW SINGLE'}
           </h1>
@@ -168,7 +159,7 @@ export default function CreateSingle() {
         <div className='mt-6 w-full max-w-md'>
           {artistsHired.length > 0 ? (
             artistsHired.map((artist) => (
-              <ArtistCardHire key={artist.artists_id} artist={artist} />
+              <ArtistCard key={artist.artists_id} artist={artist} />
             ))
           ) : (
             <p className='text-secondary mt-4 text-center text-sm'>
