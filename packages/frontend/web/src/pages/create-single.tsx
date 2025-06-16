@@ -147,11 +147,11 @@ export default function CreateSingle() {
     <form onSubmit={handleSubmit}>
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
         {/* Header */}
-        <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
-          <button type='button'>
+        <div className='mb-4 flex items-center gap-2'>
+          <div>
             <ArrowLeft />
-          </button>
-          <h1 className='text-secondary text-center text-xl font-bold sm:text-2xl'>
+          </div>
+          <h1 className='text-secondary text-center text-lg font-bold sm:text-2xl md:text-xl'>
             {' RECORDING A NEW SINGLE'}
           </h1>
           <div className='h-6 w-6' />
@@ -165,7 +165,7 @@ export default function CreateSingle() {
         />
 
         {/* Artist */}
-        <div className='mt-6 w-full max-w-md'>
+        <div className='mt-6 max-w-md'>
           {artistsHired.length > 0 ? (
             artistsHired.map((artist) => (
               <ArtistCardHire key={artist.artists_id} artist={artist} />

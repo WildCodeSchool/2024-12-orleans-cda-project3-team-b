@@ -9,7 +9,7 @@ export default function ArtistCardHire({ artist }: ArtistCardHireProps) {
   return (
     <div
       key={artist.id}
-      className='bg-secondary flex h-12 w-60 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+      className='bg-secondary flex h-14 w-50 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)] md:h-12 md:w-60'
     >
       <Link to={`/artists-hired/${artist.id}`}>
         <img
