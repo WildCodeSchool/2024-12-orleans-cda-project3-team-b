@@ -28,6 +28,8 @@ export default function CreateSingle() {
   const [price, setPrice] = useState<Price>();
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageError, setMessageError] = useState('');
+  const selectedArtist = artistsHired.find((a) => a.id === selectedArtistId);
+  const selectedSkills = selectedArtist?.skills ?? [];
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -52,6 +54,7 @@ export default function CreateSingle() {
             genreId: artistsHired.find((a) => a.id === selectedArtistId)
               ?.genre_id,
             price: price?.price,
+            skills: selectedSkills,
           }),
         });
 
