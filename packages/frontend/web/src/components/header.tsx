@@ -18,15 +18,9 @@ export default function Header() {
       </div>
       <nav className='m-auto'>
         <ul className='mb-10 hidden flex-row gap-12 sm:flex'>
-          <li>
-            <Link to='/register'>{'SIGN UP'}</Link>
-          </li>
-          <li>
-            <Link to='/login'>{'LOGIN'}</Link>
-          </li>
-          <li>
-            <Link to=''>{'PRIVACY POLICY'}</Link>
-          </li>
+          <CustomLink to={'/register'}>{'SIGN UP'}</CustomLink>
+          <CustomLink to={'/login'}>{'LOGIN'}</CustomLink>
+          <CustomLink to={'/register'}>{'Privacy Policy'}</CustomLink>
         </ul>
       </nav>
       <div
@@ -48,10 +42,11 @@ export default function Header() {
       <nav
         className={`bg-blue absolute top-18 z-3 h-62 w-full items-start justify-center text-2xl shadow-[0_5px_5px_rgba(0,0,0,0.25)] ${isOpen ? 'flex' : 'hidden'}`}
       >
-        <ul onClick={closeMenu} className='text-center'>
-          <CustomLink to='/'>{'Home'}</CustomLink>
-          <CustomLink to=''>{'Privacy Policy'}</CustomLink>
-          <CustomLink to='/'>{'Sign up'}</CustomLink>
+        <ul onClick={closeMenu} className='flex flex-col items-center'>
+          <Link to='/'>{'Home'}</Link>
+          <Link to=''>{'Privacy Policy'}</Link>
+          <Link to='/register'>{'Sign up'}</Link>
+          <Link to='/login'>{'Login'}</Link>
         </ul>
       </nav>
     </header>

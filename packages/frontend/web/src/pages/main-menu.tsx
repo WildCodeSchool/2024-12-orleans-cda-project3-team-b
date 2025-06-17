@@ -45,9 +45,9 @@ export default function MainMenu() {
   }, []);
 
   return (
-    <div className='bg-primary mx-auto px-4 pt-13 text-center sm:px-8'>
+    <div className='bg-primary mx-auto px-4 pt-2 text-center sm:px-8'>
       <div className='flex flex-col items-center justify-center'>
-        <h2 className='text-secondary pb-7 text-3xl underline'>
+        <h2 className='text-secondary pb-2 text-3xl underline'>
           {'MyARTISTS'}
         </h2>
 
@@ -65,7 +65,7 @@ export default function MainMenu() {
         <Link to='/my-artists'>
           <button
             type='button'
-            className='bg-secondary mt-5 mb-4 flex h-8 w-36 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
+            className='bg-secondary mt-4 mb-2 flex h-8 w-36 items-center justify-center rounded-sm text-xl text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)]'
           >
             {'See full list'}
           </button>
@@ -79,10 +79,10 @@ export default function MainMenu() {
       </div>
 
       {/* RECORD Section */}
-      <div className='pt-10'>
+      <div className='pt-2'>
         <h2 className='text-secondary text-3xl underline'>{'RECORD'}</h2>
 
-        <div className='mt-6 flex flex-col items-center justify-center gap-8 sm:flex-row'>
+        <div className='mt-2 flex flex-col items-center justify-center gap-4 sm:flex-row'>
           <div className='flex flex-col items-center'>
             <Link to='/create-single'>
               <AddButton>{'+'}</AddButton>

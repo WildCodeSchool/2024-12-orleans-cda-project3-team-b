@@ -167,7 +167,11 @@ export default function CreateAlbum() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(event) => {
+        void handleSubmit(event);
+      }}
+    >
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
         <div className='mb-4 flex w-full items-center justify-between'>
           <div>
@@ -204,7 +208,7 @@ export default function CreateAlbum() {
           />
         </div>
 
-        <div className='mt-6 flex h-30 flex-col items-center gap-2 overflow-y-scroll'>
+        <div className='mt-2 flex w-full flex-col items-center gap-2'>
           {chosenSingles.length > 0 ? (
             chosenSingles.map((single) => (
               <SingleCard
@@ -220,19 +224,19 @@ export default function CreateAlbum() {
               />
             ))
           ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
+            <p className='text-secondary text-s mt-2 text-center'>
               {'No single selected'}
             </p>
           )}
+          <ChooseSingle
+            onSingleSelected={(id) => {
+              setSelectedSinglesId((prev) =>
+                prev.includes(id) ? prev : [...prev, id].slice(0, 3),
+              );
+            }}
+            artistId={selectedArtistId}
+          />
         </div>
-        <ChooseSingle
-          onSingleSelected={(id) => {
-            setSelectedSinglesId((prev) =>
-              prev.includes(id) ? prev : [...prev, id].slice(0, 10),
-            );
-          }}
-          artistId={selectedArtistId}
-        />
         {/* <div className='mt-6'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (

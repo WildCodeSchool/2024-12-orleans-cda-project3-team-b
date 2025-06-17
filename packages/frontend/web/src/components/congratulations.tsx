@@ -1,8 +1,9 @@
 import type { Album } from '../../../../backend/api/src/albums/albums';
-import type { Single } from '../../../../backend/api/src/singles/singles';
+
+// import type { Single } from '../../../../backend/api/src/singles/singles';
 
 type CongratulationsProps = {
-  readonly items: Single | Album;
+  readonly items: Album;
   readonly text: string;
 };
 
@@ -18,7 +19,7 @@ export default function Congratulations({ text, items }: CongratulationsProps) {
       </h2>
 
       <div className='mt-10 flex flex-col items-center'>
-        <h3 className='text-secondary text-2xl'>{items.name}</h3>
+        <h3 className='text-secondary text-2xl'>{items.albumName}</h3>
         <p className='text-secondary text-sm font-light'>
           {'by '}
           {items.alias ?? `${items.firstname} ${items.lastname}`}

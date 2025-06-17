@@ -24,7 +24,7 @@ function getAlbums(userId: number) {
       'albums.exp_value',
       'albums.genres_id',
       'albums.money_earned',
-      'albums.name as name',
+      'albums.name as albumName',
       'albums.notoriety_gain',
       'albums.sales',
       'albums.score',
@@ -42,19 +42,15 @@ export type Album = Awaited<
 albumsRouter.get('/', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
+    res.json({ ok: false });
     return;
   }
 
   try {
     const albums = await getAlbums(userId).execute();
-
     res.json(albums);
-    return;
   } catch (error) {
-    console.error('Error fetching albums :', error);
+    console.error('Error fetching albums:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -62,21 +58,17 @@ albumsRouter.get('/', async (req: Request, res) => {
 albumsRouter.get('/filter', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
+    res.json({ ok: false });
     return;
   }
 
   try {
-    const albums = await getAlbums(userId)
+    const album = await getAlbums(userId)
       .orderBy('id', 'desc')
       .executeTakeFirst();
-
-    res.json(albums);
-    return;
+    res.json(album);
   } catch (error) {
-    console.error('Error fetching albums :', error);
+    console.error('Error filtering albums:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -101,14 +93,16 @@ export type SingleAlbum = Awaited<ReturnType<typeof getSinglesAlbum>>[number];
 
 albumsRouter.get('/:albumId/singles', async (req: Request, res) => {
   const albumId = Number(req.params.albumId);
+  if (isNaN(albumId)) {
+    res.status(400).json({ error: 'Invalid album ID' });
+    return;
+  }
 
   try {
     const singlesAlbums = await getSinglesAlbum(albumId);
-
     res.json(singlesAlbums);
-    return;
   } catch (error) {
-    console.error('Error fetching singles :', error);
+    console.error('Error fetching singles:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -116,101 +110,105 @@ albumsRouter.get('/:albumId/singles', async (req: Request, res) => {
 albumsRouter.post('/create', async (req: Request, res) => {
   const userId = req.userId;
   if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
+    res.json({ ok: false });
     return;
   }
+
   const { artistHiredId, singleName, singleId, genreId, price } = req.body;
+
   try {
     if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
       return;
     }
 
-    const bonus = await db
-      .selectFrom('labels')
-      .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
-      .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
-      .select([db.fn.sum('staff.bonus').as('staff_bonus')])
-      .where('labels.users_id', '=', userId)
-      .executeTakeFirst();
+    await db.transaction().execute(async (trx) => {
+      const bonus = await trx
+        .selectFrom('labels')
+        .leftJoin('staff_label', 'staff_label.labels_id', 'labels.id')
+        .leftJoin('staff', 'staff.id', 'staff_label.staff_id')
+        .select([trx.fn.sum('staff.bonus').as('staff_bonus')])
+        .where('labels.users_id', '=', userId)
+        .executeTakeFirst();
 
-    const albumId = await db
-      .insertInto('albums')
-      .values({
-        artists_hired_id: artistHiredId,
-        name: singleName.trim(),
-        genres_id: genreId,
-        exp_value: 100,
-        sales: 0,
-        money_earned: 6000 * (Number(bonus?.staff_bonus) / 100 + 1),
-        score: 0,
-      })
-      .executeTakeFirst();
+      const albumId = await trx
+        .insertInto('albums')
+        .values({
+          artists_hired_id: artistHiredId,
+          name: singleName.trim(),
+          genres_id: genreId,
+          exp_value: 100,
+          sales: 0,
+          money_earned: 6000 * ((Number(bonus?.staff_bonus) || 0) / 100 + 1),
+          score: 0,
+        })
+        .executeTakeFirst();
 
-    const moneyEarn = await db
-      .selectFrom('albums')
-      .select('money_earned')
-      .where('artists_hired_id', '=', artistHiredId)
-      .executeTakeFirst();
+      const moneyEarn = await trx
+        .selectFrom('albums')
+        .select('money_earned')
+        .where('artists_hired_id', '=', artistHiredId)
+        .executeTakeFirst();
 
-    const newMoney = Number(moneyEarn?.money_earned) - price;
+      const newMoney = Number(moneyEarn?.money_earned ?? 0) - price;
 
-    await db
-      .updateTable('labels')
-      .set((eb) => ({
-        budget: eb('budget', '+', Number(newMoney)),
-      }))
-      .where('users_id', '=', userId)
-      .execute();
+      await trx
+        .updateTable('labels')
+        .set((eb) => ({
+          budget: eb('budget', '+', newMoney),
+        }))
+        .where('users_id', '=', userId)
+        .execute();
 
-    await db
-      .insertInto('singles_albums')
-      .values(
-        singleId.map((singleId: number) => ({
-          singles_id: singleId,
-          albums_id: albumId.insertId,
-        })),
-      )
-      .execute();
+      await trx
+        .insertInto('singles_albums')
+        .values(
+          singleId.map((id: number) => ({
+            singles_id: id,
+            albums_id: albumId.insertId,
+          })),
+        )
+        .execute();
 
-    const milestones = await db
-      .selectFrom('milestones')
-      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .select('milestones.value')
-      .where('labels.users_id', '=', userId)
-      .executeTakeFirst();
+      const milestones = await trx
+        .selectFrom('milestones')
+        .leftJoin(
+          'artists_hired',
+          'artists_hired.milestones_id',
+          'milestones.id',
+        )
+        .leftJoin(
+          'label_artists',
+          'label_artists.artists_hired_id',
+          'artists_hired.id',
+        )
+        .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+        .select('milestones.value')
+        .where('labels.users_id', '=', userId)
+        .executeTakeFirst();
 
-    const gain = Number(milestones?.value) / 1000;
+      const gain = Number(milestones?.value ?? 0) / 1000;
 
-    const labels = await db
-      .selectFrom('labels')
-      .select('labels.notoriety')
-      .where('labels.users_id', '=', userId)
-      .executeTakeFirst();
+      const labelInfo = await trx
+        .selectFrom('labels')
+        .select('labels.notoriety')
+        .where('labels.users_id', '=', userId)
+        .executeTakeFirst();
 
-    const currentNotoriety = Number(labels?.notoriety);
-    const newNotoriety = Math.min(Number(currentNotoriety) + Number(gain), 5);
+      const currentNotoriety = Number(labelInfo?.notoriety ?? 0);
+      const newNotoriety = Math.min(currentNotoriety + gain, 5);
 
-    await db
-      .updateTable('labels')
-      .set({ notoriety: Number(newNotoriety) })
-      .where('labels.id', '=', userId)
-      .execute();
+      await trx
+        .updateTable('labels')
+        .set({ notoriety: newNotoriety })
+        .where('users_id', '=', userId)
+        .execute();
+    });
 
     res.status(201).json({ success: true });
-    return;
-  } catch (err) {
-    console.error('Insert failed:', err);
+  } catch (error) {
+    console.error('Transaction failed:', error);
     res.status(500).json({ error: 'Failed to insert album' });
-    return;
   }
 });
 
