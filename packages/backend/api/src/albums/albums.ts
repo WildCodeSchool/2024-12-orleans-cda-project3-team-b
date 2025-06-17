@@ -188,7 +188,7 @@ albumsRouter.post('/create', async (req: Request, res) => {
       .where('labels.users_id', '=', userId)
       .executeTakeFirst();
 
-    const gain = Number(milestones?.value) / 100;
+    const gain = Number(milestones?.value) / 1000;
 
     const artistHired = await db
       .selectFrom('labels')

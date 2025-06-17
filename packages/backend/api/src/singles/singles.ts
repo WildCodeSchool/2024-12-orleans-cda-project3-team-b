@@ -5,29 +5,42 @@ import { db } from '@app/backend-shared';
 const singlesRouter = Router();
 
 function getSingles(userId: number) {
-  return db
-    .selectFrom('singles')
-    .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
-    .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-    .leftJoin(
-      'label_artists',
-      'label_artists.artists_hired_id',
-      'artists_hired.id',
-    )
-    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-    .leftJoin('users', 'users.id', 'labels.users_id')
-    .where('labels.users_id', '=', userId)
-    .select([
-      'singles.id',
-      'singles.artists_hired_id',
-      'singles.name as name',
-      'singles.listeners',
-      'singles.money_earned',
-      'singles.score',
-      'artists.firstname as artist_firstname',
-      'artists.lastname as artist_lastname',
-      'artists.alias as artist_alias',
-    ]);
+  return (
+    db
+      .selectFrom('singles')
+      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
+      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+      .leftJoin(
+        'label_artists',
+        'label_artists.artists_hired_id',
+        'artists_hired.id',
+      )
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .leftJoin('users', 'users.id', 'labels.users_id')
+      // .where('labels.users_id', '=', userId)
+      .select([
+        'singles.id',
+        'singles.artists_hired_id',
+        'singles.name as name',
+        'singles.listeners',
+        'singles.money_earned',
+        'singles.score',
+        'artists.firstname as artist_firstname',
+        'artists.lastname as artist_lastname',
+        'artists.alias as artist_alias',
+      ])
+      .where((eb) =>
+        eb.not(
+          eb.exists(
+            eb
+              .selectFrom('singles_albums')
+              .select('singles_albums.id')
+              .whereRef('singles_albums.singles_id', '=', 'singles.id')
+              .where('labels.users_id', '=', userId),
+          ),
+        ),
+      )
+  );
 }
 export type Single = Awaited<
   ReturnType<ReturnType<typeof getSingles>['execute']>
@@ -75,49 +88,6 @@ singlesRouter.get('/filter', async (req: Request, res) => {
   }
 });
 
-singlesRouter.get('/:id', async (req: Request, res) => {
-  const singleId = Number(req.params.id);
-  const userId = req.userId;
-  if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
-    return;
-  }
-
-  try {
-    const singles = await db
-      .selectFrom('singles')
-      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .leftJoin('users', 'users.id', 'labels.users_id')
-      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .where('singles.id', '=', singleId)
-      .where('labels.users_id', '=', userId)
-      .select([
-        'singles.artists_hired_id',
-        'singles.name',
-        'singles.listeners',
-        'singles.money_earned',
-        'singles.score',
-        'artists.firstname as artist_firstname',
-        'artists.lastname as artist_lastname',
-        'artists.alias as artist_alias',
-      ])
-      .execute();
-
-    res.json(singles);
-    return;
-  } catch (error) {
-    console.error('Error fetching singles:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 singlesRouter.post('/', async (req: Request, res) => {
   const { artistHiredId, singleName, genreId, price } = req.body;
 
