@@ -72,7 +72,6 @@ export default function RegisterLabel() {
           logosId: logos.find((logo) => logo.id === selectedLogo)?.id,
         }),
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
       });
 
       if (res.ok) {

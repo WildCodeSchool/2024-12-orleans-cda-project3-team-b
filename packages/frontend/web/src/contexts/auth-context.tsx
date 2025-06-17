@@ -21,7 +21,7 @@ export default function AuthContext({ children, ...props }: AuthProviderProps) {
 
   useEffect(() => {
     const go = async () => {
-      const res = await fetch(`/api/auth/me`, { credentials: 'include' });
+      const res = await fetch(`/api/auth/me`);
       const data = (await res.json()) as { ok: boolean; user: User };
       if (data.ok) {
         setIsLoggedIn(true);

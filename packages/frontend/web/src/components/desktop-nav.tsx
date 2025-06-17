@@ -15,7 +15,6 @@ export default function DesktopNav({ isOpen, setIsOpen }: DesktopNavProps) {
   const logout = async () => {
     const res = await fetch('/api/auth/logout', {
       method: 'POST',
-      credentials: 'include',
     });
     const data = (await res.json()) as { ok: boolean };
     if (data.ok) {

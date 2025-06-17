@@ -12,7 +12,6 @@ export default function MobileNav({ isOpen, closeMenu }: MobileNavProps) {
   const logout = async () => {
     const res = await fetch('/api/auth/logout', {
       method: 'POST',
-      credentials: 'include',
     });
     const data = (await res.json()) as { ok: boolean };
     if (data.ok) {
