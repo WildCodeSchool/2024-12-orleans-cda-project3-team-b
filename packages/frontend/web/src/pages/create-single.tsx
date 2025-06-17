@@ -3,27 +3,26 @@ import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
-// import AddMarketing from '@/components/add-marketing';
+import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCardHire from '@/components/artist-card-hire';
 import ChooseName from '@/components/choose-name';
-// import MarketingCard from '@/components/marketing-card';
+import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
-
-// import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateSingle() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  // const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
-  //   null,
-  // );
+  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+    null,
+  );
   const navigate = useNavigate();
-  // const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [singleName, setSingleName] = useState('');
   const [price, setPrice] = useState<Price>();
   const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
@@ -92,29 +91,29 @@ export default function CreateSingle() {
     void fetchArtists();
   }, [selectedArtistId]);
 
-  // useEffect(() => {
-  //   const fetchMarketing = async () => {
-  //     try {
-  //       if (selectedMarketingId != null) {
-  //         const resMarketing = await fetch('/api/marketing');
-  //         if (!resMarketing.ok)
-  //           throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
-  //         const marketingData: Marketing[] = await resMarketing.json();
-  //         const selectedMarketing = marketingData.find(
-  //           (m) => m.id === selectedMarketingId,
-  //         );
-  //         setMarketing(selectedMarketing ? [selectedMarketing] : []);
-  //       } else {
-  //         setMarketing([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching marketing:', error);
-  //       setMarketing([]);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
+        if (selectedMarketingId != null) {
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
+          );
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
+        } else {
+          setMarketing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
 
-  //   void fetchMarketing();
-  // }, [selectedMarketingId]);
+    void fetchMarketing();
+  }, [selectedMarketingId]);
 
   useEffect(() => {
     const fetchPriceSingle = async () => {
@@ -196,10 +195,14 @@ export default function CreateSingle() {
         </div>
 
         {/* Marketing */}
-        {/* <div className='mt-6 w-full max-w-md'>
+        <div className='mt-6 w-full max-w-md'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (
-              <MarketingCard key={campaign.id} marketing={campaign} />
+              <MarketingCard
+                key={campaign.id}
+                marketing={campaign}
+                budget={budget}
+              />
             ))
           ) : (
             <p className='text-secondary mt-4 text-center text-sm'>
@@ -211,7 +214,7 @@ export default function CreateSingle() {
               setSelectedMarketingId(id);
             }}
           />
-        </div> */}
+        </div>
 
         {messageError ? (
           <p className='mt-4 text-center text-sm text-red-500'>
