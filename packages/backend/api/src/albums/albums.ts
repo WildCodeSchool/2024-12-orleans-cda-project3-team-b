@@ -175,6 +175,36 @@ albumsRouter.post('/create', async (req: Request, res) => {
       )
       .execute();
 
+    const milestones = await db
+      .selectFrom('milestones')
+      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
+      .leftJoin(
+        'label_artists',
+        'label_artists.artists_hired_id',
+        'artists_hired.id',
+      )
+      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+      .select('milestones.value')
+      .where('labels.users_id', '=', userId)
+      .executeTakeFirst();
+
+    const gain = Number(milestones?.value) / 1000;
+
+    const labels = await db
+      .selectFrom('labels')
+      .select('labels.notoriety')
+      .where('labels.users_id', '=', userId)
+      .executeTakeFirst();
+
+    const currentNotoriety = Number(labels?.notoriety);
+    const newNotoriety = Math.min(Number(currentNotoriety) + Number(gain), 5);
+
+    await db
+      .updateTable('labels')
+      .set({ notoriety: Number(newNotoriety) })
+      .where('labels.id', '=', userId)
+      .execute();
+
     res.status(201).json({ success: true });
     return;
   } catch (err) {
