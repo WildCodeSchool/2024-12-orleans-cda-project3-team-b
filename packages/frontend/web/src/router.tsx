@@ -49,7 +49,7 @@ const router = createBrowserRouter([
     element: <InGame />,
     children: [
       {
-        path: 'homepage-game',
+        path: '/homepage-game',
         element: <HomeGame />,
       },
       {

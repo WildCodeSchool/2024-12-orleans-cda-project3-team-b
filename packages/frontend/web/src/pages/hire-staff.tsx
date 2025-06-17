@@ -98,7 +98,7 @@ export default function HireArtist() {
               key={staff.id}
               staff={staff}
               onHire={async () => {
-                if (labelId === undefined) {
+                if (!labelId) {
                   setMessageBudget('Label or budget info not loaded yet.');
                   return;
                 }

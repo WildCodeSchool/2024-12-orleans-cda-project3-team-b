@@ -74,9 +74,9 @@ export default function HireArtist() {
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-4 py-6'>
       <div className='mb-4 flex w-full items-center justify-between'>
-        <button type='button'>
+        <div>
           <ArrowLeft />
-        </button>
+        </div>
         <h1 className='text-secondary text-center text-2xl font-bold underline underline-offset-4'>
           {'HIRE ARTISTS'}
         </h1>
@@ -85,13 +85,13 @@ export default function HireArtist() {
       <div className='mb-8 flex flex-col text-xl font-medium text-teal-800'>
         {'ARTISTS'}
       </div>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
         {sortedArtists.slice(0, visibleCount).map((artist) => (
           <ArtistCard
             key={artist.id}
             artist={artist}
             onHire={async () => {
-              if (labelId === undefined) {
+              if (!labelId) {
                 setMessageBudget('Label or budget info not loaded yet.');
                 return;
               }
@@ -103,7 +103,10 @@ export default function HireArtist() {
                 setMessageBudget('redirection not working');
               }
             }}
+            isOnFire
+            isLink
             budget={budget}
+            to={`/artists/${artist.id}`}
           />
         ))}
       </div>

@@ -23,7 +23,7 @@ export default function ArtistProfileCard({
   const { refreshLabel } = useLabel();
   async function addPoint(
     artistsHiredSkillsId: number,
-    skills_id: number,
+    skillsId: number,
     price: number,
   ) {
     try {
