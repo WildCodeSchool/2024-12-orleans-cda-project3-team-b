@@ -176,77 +176,78 @@ export default function CreateAlbum() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form
-      onSubmit={(event) => {
-        void handleSubmit(event);
-      }}
-    >
-      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
-        <div className='mb-4 flex items-center'>
-          <div>
-            <ArrowLeft />
+    <>
+      <div className='bg-primary flex items-center justify-center pt-4 text-center md:w-full'>
+        <div className='mr-3 flex md:absolute md:left-0'>
+          <ArrowLeft />
+        </div>
+        <h1 className='text-secondary text-center text-lg font-bold md:text-2xl'>
+          {'RECORDING A NEW ALBUM'}
+        </h1>
+        <div className='h-6 w-6' />
+      </div>
+      <form
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
+      >
+        <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
+          <img className='h-22 w-22' src='/assets/album.png' alt='' />
+          <div className='mt-6'>
+            {artistsHired.length > 0 ? (
+              artistsHired.map((artist) => (
+                <ArtistCardHire key={artist.artists_id} artist={artist} />
+              ))
+            ) : (
+              <p className='text-secondary text-s mt-4 text-center'>
+                {'No artist selected'}
+              </p>
+            )}
+            <AddArtist
+              onArtistSelected={(id) => {
+                setSelectedArtistId(id);
+              }}
+            />
           </div>
-          <h1 className='text-secondary text-center text-lg font-bold md:text-2xl'>
-            {'RECORDING A NEW ALBUM'}
-          </h1>
-          <div className='h-6 w-6' />
-        </div>
-        <img className='h-22 w-22' src='/assets/album.png' alt='' />
-        <div className='mt-6'>
-          {artistsHired.length > 0 ? (
-            artistsHired.map((artist) => (
-              <ArtistCardHire key={artist.artists_id} artist={artist} />
-            ))
-          ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
-              {'No artist selected'}
-            </p>
-          )}
-          <AddArtist
-            onArtistSelected={(id) => {
-              setSelectedArtistId(id);
-            }}
-          />
-        </div>
-        <div className='flex flex-col items-center justify-center'>
-          <ChooseName
-            name="Choose your album's name"
-            placeholder="Album's name"
-            value={singleName}
-            onChange={handleChange}
-          />
-        </div>
+          <div className='flex flex-col items-center justify-center'>
+            <ChooseName
+              name="Choose your album's name"
+              placeholder="Album's name"
+              value={singleName}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className='mt-6 flex w-full flex-col items-center gap-2'>
-          {chosenSingles.length > 0 ? (
-            chosenSingles.map((single) => (
-              <SingleCard
-                key={single.id}
-                id={single.id}
-                name={single.name}
-                score={single.score}
-                onToggleSelect={(id) => {
-                  setSelectedSinglesId((prevIds) =>
-                    prevIds.filter((prevId) => prevId !== id),
-                  );
-                }}
-              />
-            ))
-          ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
-              {'No single selected'}
-            </p>
-          )}
-          <ChooseSingle
-            onSingleSelected={(id) => {
-              setSelectedSinglesId((prev) =>
-                prev.includes(id) ? prev : [...prev, id].slice(0, 3),
-              );
-            }}
-            artistId={selectedArtistId}
-          />
-        </div>
-        {/* <div className='mt-6'>
+          <div className='mt-6 flex w-full flex-col items-center gap-2'>
+            {chosenSingles.length > 0 ? (
+              chosenSingles.map((single) => (
+                <SingleCard
+                  key={single.id}
+                  id={single.id}
+                  name={single.name}
+                  score={single.score}
+                  onToggleSelect={(id) => {
+                    setSelectedSinglesId((prevIds) =>
+                      prevIds.filter((prevId) => prevId !== id),
+                    );
+                  }}
+                />
+              ))
+            ) : (
+              <p className='text-secondary text-s mt-4 text-center'>
+                {'No single selected'}
+              </p>
+            )}
+            <ChooseSingle
+              onSingleSelected={(id) => {
+                setSelectedSinglesId((prev) =>
+                  prev.includes(id) ? prev : [...prev, id].slice(0, 3),
+                );
+              }}
+              artistId={selectedArtistId}
+            />
+          </div>
+          {/* <div className='mt-6'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (
               <MarketingCard key={campaign.id} marketing={campaign} />
@@ -262,41 +263,42 @@ export default function CreateAlbum() {
             }}
           />
         </div> */}
-        {messageError ? (
-          <p className='mt-4 text-center text-sm text-red-500'>
-            {messageError}
-          </p>
-        ) : (
-          ''
-        )}
+          {messageError ? (
+            <p className='mt-4 text-center text-sm text-red-500'>
+              {messageError}
+            </p>
+          ) : (
+            ''
+          )}
 
-        <div className='mt-6 flex items-start justify-between gap-x-16'>
-          <VerifyButton
-            color='bg-secondary active:scale-95 transition-transform'
-            image='/assets/not-check.png'
-            onClick={async () => {
-              await navigate(-1);
-            }}
-          >
-            {'Cancel'}
-          </VerifyButton>
-          <div className='justify-center text-center'>
+          <div className='mt-6 flex items-start justify-between gap-x-16'>
             <VerifyButton
-              color={
-                isDisabled
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-500 active:scale-95 transition-transform'
-              }
-              type={'submit'}
-              image='/assets/check.png'
-              disabled={isDisabled}
+              color='bg-secondary active:scale-95 transition-transform'
+              image='/assets/not-check.png'
+              onClick={async () => {
+                await navigate(-1);
+              }}
             >
-              {'Confirm'}
+              {'Cancel'}
             </VerifyButton>
-            {price ? `${price.price} $` : ''}
+            <div className='justify-center text-center'>
+              <VerifyButton
+                color={
+                  isDisabled
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-orange-500 active:scale-95 transition-transform'
+                }
+                type={'submit'}
+                image='/assets/check.png'
+                disabled={isDisabled}
+              >
+                {'Confirm'}
+              </VerifyButton>
+              {price ? `${price.price} $` : ''}
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
