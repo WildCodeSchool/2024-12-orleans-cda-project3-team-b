@@ -146,112 +146,112 @@ export default function CreateSingle() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
-        {/* Header */}
-        <div className='mb-4 flex items-center gap-2'>
-          <div>
-            <ArrowLeft />
-          </div>
-          <h1 className='text-secondary text-center text-lg font-bold sm:text-2xl md:text-xl'>
-            {' RECORDING A NEW SINGLE'}
-          </h1>
-          <div className='h-6 w-6' />
+    <>
+      <div className='bg-primary flex items-center justify-center pt-4 text-center md:w-full'>
+        <div className='mr-3 flex md:absolute md:left-0'>
+          <ArrowLeft />
         </div>
-
-        {/* Image */}
-        <img
-          className='h-20 w-20 sm:h-28 sm:w-28'
-          src='/assets/music-note.png'
-          alt='note'
-        />
-
-        {/* Artist */}
-        <div className='mt-6 max-w-md'>
-          {artistsHired.length > 0 ? (
-            artistsHired.map((artist) => (
-              <ArtistCardHire key={artist.artists_id} artist={artist} />
-            ))
-          ) : (
-            <p className='text-secondary mt-4 text-center text-sm'>
-              {'No artist selected'}
-            </p>
-          )}
-          <AddArtist
-            onArtistSelected={(id) => {
-              setSelectedArtistId(id);
-            }}
-          />
-        </div>
-
-        {/* Single name */}
-        <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
-          <ChooseName
-            name="Choose your single's name"
-            placeholder="Single's name"
-            value={singleName}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Marketing */}
-        <div className='mt-6 w-full max-w-md'>
-          {marketing.length > 0 ? (
-            marketing.map((campaign) => (
-              <MarketingCard
-                key={campaign.id}
-                marketing={campaign}
-                budget={budget}
-              />
-            ))
-          ) : (
-            <p className='text-secondary mt-4 text-center text-sm'>
-              {'No Marketing Campaign selected'}
-            </p>
-          )}
-          <AddMarketing
-            onMarketingSelected={(id) => {
-              setSelectedMarketingId(id);
-            }}
-          />
-        </div>
-
-        {messageError ? (
-          <p className='mt-4 text-center text-sm text-red-500'>
-            {messageError}
-          </p>
-        ) : (
-          ''
-        )}
-
-        {/* Buttons */}
-        <div className='mt-6 flex items-start justify-between gap-x-16'>
-          <VerifyButton
-            color='bg-secondary active:scale-95 transition-transform'
-            image='/assets/not-check.png'
-            onClick={async () => {
-              await navigate(-1);
-            }}
-          >
-            {'Cancel'}
-          </VerifyButton>
-          <div className='justify-center text-center'>
-            <VerifyButton
-              color={
-                isDisabled
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-500 active:scale-95 transition-transform'
-              }
-              image='/assets/check.png'
-              disabled={isDisabled}
-              type={'submit'}
-            >
-              {'Confirm'}
-            </VerifyButton>
-            {price ? `${price.price} $` : ''}
-          </div>
-        </div>
+        <h1 className='text-secondary text-center text-lg font-bold sm:text-2xl md:text-xl'>
+          {' RECORDING A NEW SINGLE'}
+        </h1>
+        <div className='h-6 w-6' />
       </div>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
+          {/* Header */}
+
+          {/* Image */}
+          <img
+            className='h-20 w-20 sm:h-28 sm:w-28'
+            src='/assets/music-note.png'
+            alt='note'
+          />
+
+          {/* Artist */}
+          <div className='mt-6 max-w-md'>
+            {artistsHired.length > 0 ? (
+              artistsHired.map((artist) => (
+                <ArtistCardHire key={artist.artists_id} artist={artist} />
+              ))
+            ) : (
+              <p className='text-secondary mt-4 text-center text-sm'>
+                {'No artist selected'}
+              </p>
+            )}
+            <AddArtist
+              onArtistSelected={(id) => {
+                setSelectedArtistId(id);
+              }}
+            />
+          </div>
+          {/* Single name */}
+          <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
+            <ChooseName
+              name="Choose your single's name"
+              placeholder="Single's name"
+              value={singleName}
+              onChange={handleChange}
+            />
+          </div>
+          {/* Marketing */}
+          <div className='mt-6 w-full max-w-md'>
+            {marketing.length > 0 ? (
+              marketing.map((campaign) => (
+                <MarketingCard
+                  key={campaign.id}
+                  marketing={campaign}
+                  budget={budget}
+                />
+              ))
+            ) : (
+              <p className='text-secondary mt-4 text-center text-sm'>
+                {'No Marketing Campaign selected'}
+              </p>
+            )}
+            <AddMarketing
+              onMarketingSelected={(id) => {
+                setSelectedMarketingId(id);
+              }}
+            />
+          </div>
+
+          {messageError ? (
+            <p className='mt-4 text-center text-sm text-red-500'>
+              {messageError}
+            </p>
+          ) : (
+            ''
+          )}
+
+          {/* Buttons */}
+          <div className='mt-6 flex items-start justify-between gap-x-16'>
+            <VerifyButton
+              color='bg-secondary active:scale-95 transition-transform'
+              image='/assets/not-check.png'
+              onClick={async () => {
+                await navigate(-1);
+              }}
+            >
+              {'Cancel'}
+            </VerifyButton>
+            <div className='justify-center text-center'>
+              <VerifyButton
+                color={
+                  isDisabled
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-orange-500 active:scale-95 transition-transform'
+                }
+                image='/assets/check.png'
+                disabled={isDisabled}
+                type={'submit'}
+              >
+                {'Confirm'}
+              </VerifyButton>
+              {price ? `${price.price} $` : ''}
+            </div>
+          </div>
+        </div>
+      </form>
+    </>
   );
 }

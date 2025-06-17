@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ArrowLeft } from '@/components/arrow-left';
 import ArtistProfileCard from '@/components/artist-profile-card';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
@@ -64,17 +65,24 @@ export default function ArtistHirePage() {
   const isDisabledPrice = price?.price == null || budget < price.price;
 
   return (
-    <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
-      {artistsHired.map((artist) => (
-        <ArtistProfileCard
-          key={artist.id}
-          artist={artist}
-          fetchArtistsHired={fetchArtistsHired}
-          isAddButton
-          price={price}
-          isDisabled={isDisabledPrice}
-        />
-      ))}
+    <div className='bg-primary h-150 flex-col items-center'>
+      <div className='flex items-center justify-center pt-3 md:ml-4 md:justify-start'>
+        <ArrowLeft />
+      </div>
+      <div className='items-center justify-center'>
+        <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
+          {artistsHired.map((artist) => (
+            <ArtistProfileCard
+              key={artist.id}
+              artist={artist}
+              fetchArtistsHired={fetchArtistsHired}
+              isAddButton
+              price={price}
+              isDisabled={isDisabledPrice}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
