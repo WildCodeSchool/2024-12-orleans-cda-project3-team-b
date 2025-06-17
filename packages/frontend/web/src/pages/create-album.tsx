@@ -182,11 +182,11 @@ export default function CreateAlbum() {
       }}
     >
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
-        <div className='mb-4 flex w-full items-center justify-between'>
+        <div className='mb-4 flex items-center'>
           <div>
             <ArrowLeft />
           </div>
-          <h1 className='text-secondary text-center text-2xl font-bold'>
+          <h1 className='text-secondary text-center text-lg font-bold md:text-2xl'>
             {'RECORDING A NEW ALBUM'}
           </h1>
           <div className='h-6 w-6' />

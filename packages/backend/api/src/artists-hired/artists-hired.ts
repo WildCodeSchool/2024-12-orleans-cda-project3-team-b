@@ -7,6 +7,7 @@ const artistsHiredRouter = Router();
 
 artistsHiredRouter.post('/', async (req: Request, res) => {
   const { artistId, labelId, cost, skills } = req.body;
+
   const userId = req.userId;
   if (userId === undefined) {
     res.json({

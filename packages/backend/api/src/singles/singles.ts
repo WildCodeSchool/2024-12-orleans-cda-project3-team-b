@@ -89,8 +89,7 @@ singlesRouter.get('/filter', async (req: Request, res) => {
 });
 
 singlesRouter.post('/', async (req: Request, res) => {
-  const { artistHiredId, singleName, genreId, price } = req.body;
-
+  const { artistHiredId, singleName, genreId, price, skills } = req.body;
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -98,12 +97,23 @@ singlesRouter.post('/', async (req: Request, res) => {
     });
     return;
   }
-
+  const totalGrade = skills.reduce(
+    (sum: number, skill: { grade: number }) => sum + skill.grade,
+    0,
+  );
   try {
     if (!Number(artistHiredId)) {
       res.status(400).json({ error: 'artistId is required' });
       return;
     }
+    const milestones = await db
+      .selectFrom('milestones')
+      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
+      .select('milestones.value')
+      .where('artists_hired.id', '=', artistHiredId)
+      .executeTakeFirst();
+
+    const totalScore = Number(totalGrade) + Number(milestones?.value);
 
     await db
       .insertInto('singles')
@@ -114,7 +124,7 @@ singlesRouter.post('/', async (req: Request, res) => {
         exp_value: 100,
         listeners: 0,
         money_earned: 2000,
-        score: 0,
+        score: totalScore,
       })
       .execute();
 
@@ -134,17 +144,7 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('users_id', '=', userId)
       .execute();
 
-    const milestones = await db
-      .selectFrom('milestones')
-      .leftJoin('artists_hired', 'artists_hired.milestones_id', 'milestones.id')
-      .select('milestones.value')
-      .where('artists_hired.id', '=', artistHiredId)
-      .execute();
-
-    const gain = milestones.map((label) => {
-      const newGain = Number(label.value) / 100;
-      return newGain;
-    });
+    const gain = Number(milestones?.value) / 100;
 
     const artistHired = await db
       .selectFrom('artists_hired')
