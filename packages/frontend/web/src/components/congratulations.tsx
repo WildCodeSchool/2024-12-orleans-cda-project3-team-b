@@ -30,7 +30,10 @@ export default function Congratulations({ text, items }: CongratulationsProps) {
           alt='single cover'
         />
       </div>
-      <div className='mt-6 items-center'>
+      <div className='text-secondary mt-6 items-center font-bold'>
+        <div className='flex'>
+          <h2>{`Score : ${items.score}`}</h2>
+        </div>
         <div className='flex'>
           <h2 className='text-secondary mr-2 font-bold'>
             {'You just earned:'}
