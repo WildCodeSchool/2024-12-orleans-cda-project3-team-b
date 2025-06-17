@@ -5,42 +5,39 @@ import { db } from '@app/backend-shared';
 const singlesRouter = Router();
 
 function getSingles(userId: number) {
-  return (
-    db
-      .selectFrom('singles')
-      .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
-      .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
-      .leftJoin(
-        'label_artists',
-        'label_artists.artists_hired_id',
-        'artists_hired.id',
-      )
-      .leftJoin('labels', 'labels.id', 'label_artists.label_id')
-      .leftJoin('users', 'users.id', 'labels.users_id')
-      // .where('labels.users_id', '=', userId)
-      .select([
-        'singles.id',
-        'singles.artists_hired_id',
-        'singles.name as name',
-        'singles.listeners',
-        'singles.money_earned',
-        'singles.score',
-        'artists.firstname as artist_firstname',
-        'artists.lastname as artist_lastname',
-        'artists.alias as artist_alias',
-      ])
-      .where((eb) =>
-        eb.not(
-          eb.exists(
-            eb
-              .selectFrom('singles_albums')
-              .select('singles_albums.id')
-              .whereRef('singles_albums.singles_id', '=', 'singles.id')
-              .where('labels.users_id', '=', userId),
-          ),
+  return db
+    .selectFrom('singles')
+    .leftJoin('artists_hired', 'singles.artists_hired_id', 'artists_hired.id')
+    .leftJoin('artists', 'artists.id', 'artists_hired.artists_id')
+    .leftJoin(
+      'label_artists',
+      'label_artists.artists_hired_id',
+      'artists_hired.id',
+    )
+    .leftJoin('labels', 'labels.id', 'label_artists.label_id')
+    .leftJoin('users', 'users.id', 'labels.users_id')
+    .select([
+      'singles.id',
+      'singles.artists_hired_id',
+      'singles.name as name',
+      'singles.listeners',
+      'singles.money_earned',
+      'singles.score',
+      'artists.firstname as artist_firstname',
+      'artists.lastname as artist_lastname',
+      'artists.alias as artist_alias',
+    ])
+    .where((eb) =>
+      eb.not(
+        eb.exists(
+          eb
+            .selectFrom('singles_albums')
+            .select('singles_albums.id')
+            .whereRef('singles_albums.singles_id', '=', 'singles.id')
+            .where('labels.users_id', '=', userId),
         ),
-      )
-  );
+      ),
+    );
 }
 export type Single = Awaited<
   ReturnType<ReturnType<typeof getSingles>['execute']>
@@ -76,11 +73,11 @@ singlesRouter.get('/filter', async (req: Request, res) => {
   }
 
   try {
-    const singles = await getSingles(userId)
+    const single = await getSingles(userId)
       .orderBy('id', 'desc')
       .executeTakeFirst();
 
-    res.json(singles);
+    res.json(single);
     return;
   } catch (error) {
     console.error('Error fetching singles:', error);
