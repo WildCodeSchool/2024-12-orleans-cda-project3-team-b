@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -68,7 +67,6 @@ export default function HireArtist() {
       console.error('Error hiring artist:', error);
     }
   };
-  console.log(artists);
 
   const labelId = label?.id ?? 0;
   const budget = label?.budget ?? 0;

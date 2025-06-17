@@ -77,9 +77,9 @@ export default function MyAlbums() {
             <h3 className='font-semibold'>{album.name}</h3>
             <p className='text-sm font-light'>
               {'by '}
-              {album.artist_alias?.trim() != null
-                ? album.artist_alias
-                : `${album.artist_firstname} ${album.artist_lastname}`}
+              {album.alias?.trim() !== null
+                ? album.alias
+                : `${album.firstname} ${album.lastname}`}
             </p>
           </div>
         ))}
