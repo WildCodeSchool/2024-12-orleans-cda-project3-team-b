@@ -1,30 +1,14 @@
-import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router';
+import { useNavigate } from 'react-router';
 
 import Input from '@/components/input';
 import Vinyl from '@/components/vinyl';
 
-import HttpError from '../utils/http-error';
-
 export default function ErrorPage() {
   const navigate = useNavigate();
-  const error = useRouteError();
 
   const returnHome = async () => {
     await navigate('/');
   };
-
-  let title = 'An Error Occurred';
-  let message = 'Something went wrong.';
-
-  if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
-      title = 'Page Not Found - Error 404';
-      message = 'The page you are looking for does not exist.';
-    }
-  } else if (error instanceof HttpError) {
-    title = error.title;
-    message = error.message;
-  }
 
   return (
     <div className='bg-blue flex min-h-screen flex-col'>
@@ -37,8 +21,12 @@ export default function ErrorPage() {
               alt='Logo Label'
             />
             <div className='flex flex-col gap-6'>
-              <h1 className='text-3xl font-light'>{title}</h1>
-              <p className='text-lg text-gray-300'>{message}</p>
+              <h1 className='text-3xl font-light'>
+                {'Page Not Found - Error 404'}
+              </h1>
+              <p className='text-lg text-gray-300'>
+                {'The page you are looking for does not exist.'}
+              </p>
               <Input
                 type='button'
                 value='Return to Home'

@@ -15,7 +15,7 @@ type LabelContextType = {
   refreshLabel: () => Promise<void>;
 };
 
-const LabelContext = createContext<LabelContextType | undefined>(undefined);
+const labelContext = createContext<LabelContextType | undefined>(undefined);
 
 export function LabelProvider({ children }: PropsWithChildren<object>) {
   const [label, setLabel] = useState<InfoLabel | null>(null);
@@ -40,12 +40,12 @@ export function LabelProvider({ children }: PropsWithChildren<object>) {
   );
 
   return (
-    <LabelContext.Provider value={value}>{children}</LabelContext.Provider>
+    <labelContext.Provider value={value}>{children}</labelContext.Provider>
   );
 }
 
 export function useLabel() {
-  const context = useContext(LabelContext);
+  const context = useContext(labelContext);
   if (context === undefined) {
     throw new Error('useLabel must be used within a LabelProvider');
   }

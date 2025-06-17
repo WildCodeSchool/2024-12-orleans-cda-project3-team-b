@@ -11,7 +11,7 @@ pointRouter.post('/point', async (req: Request, res) => {
     });
     return;
   }
-  const { artistsHiredSkillsId, skills_id, price } = req.body;
+  const { artistsHiredSkillsId, skillsId, price } = req.body;
 
   try {
     await db
@@ -20,10 +20,10 @@ pointRouter.post('/point', async (req: Request, res) => {
         grade: eb('grade', '+', 1),
       }))
       .where('artists_hired_skills.id', '=', artistsHiredSkillsId)
-      .where('artists_hired_skills.skills_id', '=', skills_id)
+      .where('artists_hired_skills.skills_id', '=', skillsId)
       .execute();
 
-    const budget = await db
+    await db
       .updateTable('labels')
       .set((eb) => ({
         budget: eb('budget', '-', Number(price)),

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import ArtistCardHire from './artist-card-hire';
+import ArtistCard from './artist-card';
 
 export type ModalMyArtistsProps = {
   readonly isOpen: boolean;
@@ -65,7 +65,7 @@ export default function ModalMyArtists({
               }}
               className='cursor-pointer transition-transform hover:scale-105'
             >
-              <ArtistCardHire artist={artist} />
+              <ArtistCard artist={artist} />
             </div>
           ))}
         </div>

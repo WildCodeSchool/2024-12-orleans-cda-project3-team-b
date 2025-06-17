@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const staffLabelsRouter = Router();
 
-async function getStaff(userId: number) {
+function getStaff(userId: number) {
   return db
 
     .selectFrom('staff_label')
