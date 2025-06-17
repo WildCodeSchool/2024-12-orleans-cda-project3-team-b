@@ -190,13 +190,13 @@ albumsRouter.post('/create', async (req: Request, res) => {
 
     const gain = Number(milestones?.value) / 1000;
 
-    const artistHired = await db
+    const labels = await db
       .selectFrom('labels')
       .select('labels.notoriety')
       .where('labels.users_id', '=', userId)
       .executeTakeFirst();
 
-    const currentNotoriety = Number(artistHired?.notoriety);
+    const currentNotoriety = Number(labels?.notoriety);
     const newNotoriety = Math.min(Number(currentNotoriety) + Number(gain), 5);
 
     await db
