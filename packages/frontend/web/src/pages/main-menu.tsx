@@ -53,7 +53,12 @@ export default function MainMenu() {
 
         <div className='mt-5 grid grid-cols-1 gap-4 md:grid-cols-2'>
           {artists.slice(0, visibleCount).map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} isLink />
+            <ArtistCard
+              key={artist.id}
+              artist={artist}
+              isLink
+              to={`/artists-hired/${artist.id}`}
+            />
           ))}
         </div>
 

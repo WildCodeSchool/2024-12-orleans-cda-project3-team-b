@@ -9,22 +9,25 @@ type ArtistCardProps = {
   readonly budget?: number;
   readonly isLink?: boolean;
   readonly isOnFire?: boolean;
+  readonly to: string;
 };
 export default function ArtistCard({
   artist,
   onHire,
   budget,
   isLink,
+  to,
   isOnFire,
 }: ArtistCardProps) {
   const isDisabled = (budget ?? 0) < artist.price;
+
   return (
     <div
       key={artist.id}
       className='bg-secondary flex h-14 w-70 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)] md:h-20 md:w-110'
     >
       {(isLink ?? false) ? (
-        <Link to={`/artists-hired/${artist.id}`}>
+        <Link to={to}>
           <img
             className='h-10 w-10 rounded-4xl'
             src={`/assets/${artist.image}`}
