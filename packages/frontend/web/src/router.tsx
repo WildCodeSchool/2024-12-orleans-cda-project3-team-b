@@ -28,11 +28,11 @@ const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       {
-        path: 'login',
+        path: '/login',
         element: <Login />,
       },
       {
-        path: 'register',
+        path: '/register',
         element: <Register />,
       },
 
@@ -65,11 +65,11 @@ const router = createBrowserRouter([
         element: <CreateSingle />,
       },
       {
-        path: 'album-congrats',
+        path: '/album-congrats',
         element: <AlbumCongratulations />,
       },
       {
-        path: 'single-congrats',
+        path: '/single-congrats',
         element: <SingleCongratulations />,
       },
       {

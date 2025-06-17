@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import { useLabel } from '@/contexts/label-context';
+
+import type { Price } from '../../../../backend/api/src/games/price';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 import MarketingCard from './marketing-card';
 
@@ -15,6 +18,8 @@ export default function ModalMarketing({
   onSelectMarketing,
 }: ModalMarketingProps) {
   const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const { label } = useLabel();
+  const [price, setPrice] = useState<Price>();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -33,7 +38,23 @@ export default function ModalMarketing({
     void fetchMarketing();
   }, [isOpen]);
 
+  useEffect(() => {
+    const fetchPriceSingle = async () => {
+      try {
+        const res = await fetch('/api/games/price-singles');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data: Price = await res.json();
+
+        setPrice(data);
+      } catch (error) {
+        console.error('Error fetching single price:', error);
+      }
+    };
+    void fetchPriceSingle();
+  }, []);
+
   if (!isOpen) return null;
+  const budget = label?.budget ?? 0;
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/80'>
@@ -57,16 +78,17 @@ export default function ModalMarketing({
 
         <div className='grid grid-cols-2 gap-4'>
           {marketing.map((campaign) => (
-            <div
+            <MarketingCard
+              marketing={campaign}
+              budget={budget}
+              price={price?.price ?? 0}
               key={campaign.id}
               onClick={() => {
                 onSelectMarketing(campaign.id);
                 onClose();
               }}
-              className='cursor-pointer transition-transform hover:scale-105'
-            >
-              <MarketingCard marketing={campaign} />
-            </div>
+            />
+            // </div>
           ))}
         </div>
       </div>
