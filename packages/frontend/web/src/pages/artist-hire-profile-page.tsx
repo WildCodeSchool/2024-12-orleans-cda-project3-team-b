@@ -3,16 +3,16 @@ import { useParams } from 'react-router-dom';
 
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistProfileCard from '@/components/artist-profile-card';
+import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
 
 export default function ArtistHirePage() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [price, setPrice] = useState<Price>();
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const { id } = useParams<{ id: string }>();
+  const { label } = useLabel();
 
   const fetchArtistsHired = useCallback(async () => {
     try {
@@ -46,21 +46,10 @@ export default function ArtistHirePage() {
         console.error('Error fetching single price:', error);
       }
     };
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data: InfoLabel = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
-
-    void fetchInfoLabel();
 
     void fetchPriceSingle();
   }, []);
-  const budget = infoLabel?.budget ?? 0;
+  const budget = label?.budget ?? 0;
 
   const isDisabledPrice = price?.price == null || budget < price.price;
 

@@ -4,6 +4,7 @@ import { db } from '@app/backend-shared';
 
 const pointRouter = Router();
 pointRouter.post('/point', async (req: Request, res) => {
+  const { artistsHiredSkillsId, skillsId, price } = req.body;
   const userId = req.userId;
   if (userId === undefined) {
     res.json({
@@ -11,7 +12,6 @@ pointRouter.post('/point', async (req: Request, res) => {
     });
     return;
   }
-  const { artistsHiredSkillsId, skillsId, price } = req.body;
 
   try {
     await db
@@ -28,8 +28,8 @@ pointRouter.post('/point', async (req: Request, res) => {
       .set((eb) => ({
         budget: eb('budget', '-', Number(price)),
       }))
-      .where('users_id', '=', userId)
-      .executeTakeFirst();
+      .where('labels.users_id', '=', userId)
+      .execute();
 
     res.status(200).json({
       message: 'Point ajouté avec succès',
