@@ -6,7 +6,14 @@ const getLabelRouter = Router();
 function getLabel(userId: number) {
   return db
     .selectFrom('labels')
-    .selectAll()
+    .select([
+      'name',
+      'logos_id',
+      'budget',
+      'notoriety',
+      'levels_id',
+      'users_id',
+    ])
     .where('labels.users_id', '=', userId)
     .execute();
 }

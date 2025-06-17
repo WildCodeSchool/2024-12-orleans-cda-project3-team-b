@@ -22,13 +22,13 @@ export default function ArtistProfileCard({
 }: ArtistProfileCardProps) {
   async function addPoint(
     artistsHiredSkillsId: number,
-    skills_id: number,
+    skillsId: number,
     price: number,
   ) {
     try {
       const response = await fetch(`/api/games/point`, {
         method: 'POST',
-        body: JSON.stringify({ artistsHiredSkillsId, skills_id, price }),
+        body: JSON.stringify({ artistsHiredSkillsId, skillsId, price }),
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });

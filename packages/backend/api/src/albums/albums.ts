@@ -28,10 +28,10 @@ function getAlbums(userId: number) {
       'albums.notoriety_gain',
       'albums.sales',
       'albums.score',
-      'artists.alias as artist_alias',
-      'artists.firstname as artist_firstname',
-      'artists.lastname as artist_lastname',
-      'genres.name as genre_name',
+      'artists.alias',
+      'artists.firstname',
+      'artists.lastname',
+      'genres.name',
     ]);
 }
 
@@ -81,7 +81,7 @@ albumsRouter.get('/filter', async (req: Request, res) => {
   }
 });
 
-async function getSinglesAlbum(albumId: number) {
+function getSinglesAlbum(albumId: number) {
   return db
     .selectFrom('singles_albums')
     .leftJoin('singles', 'singles.id', 'singles_albums.singles_id')

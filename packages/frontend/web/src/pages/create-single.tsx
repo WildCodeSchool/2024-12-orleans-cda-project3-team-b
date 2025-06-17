@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import AddArtist from '@/components/add-artist';
 import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
-import ArtistCardHire from '@/components/artist-card-hire';
+import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
+import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
 import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
@@ -25,10 +25,10 @@ export default function CreateSingle() {
   const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [singleName, setSingleName] = useState('');
   const [price, setPrice] = useState<Price>();
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const [messageError, setMessageError] = useState('');
   const selectedArtist = artistsHired.find((a) => a.id === selectedArtistId);
   const selectedSkills = selectedArtist?.skills ?? [];
+  const { label, refreshLabel } = useLabel();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -61,6 +61,7 @@ export default function CreateSingle() {
           return;
         }
         await navigate('/single-congrats');
+        await refreshLabel();
       } catch (error) {
         console.error('Submission failed:', error);
       }
@@ -127,20 +128,10 @@ export default function CreateSingle() {
         console.error('Error fetching single price:', error);
       }
     };
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data: InfoLabel = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
-    void fetchInfoLabel();
 
     void fetchPriceSingle();
   }, []);
-  const budget = infoLabel?.budget ?? 0;
+  const budget = label?.budget ?? 0;
 
   const isDisabled =
     price?.price === null || budget < (price?.price ?? Infinity);
@@ -168,10 +159,10 @@ export default function CreateSingle() {
           />
 
           {/* Artist */}
-          <div className='mt-6 max-w-md'>
+          <div className='mt-6 w-full max-w-md'>
             {artistsHired.length > 0 ? (
               artistsHired.map((artist) => (
-                <ArtistCardHire key={artist.artists_id} artist={artist} />
+                <ArtistCard key={artist.artists_id} artist={artist} />
               ))
             ) : (
               <p className='text-secondary mt-4 text-center text-sm'>
@@ -184,6 +175,7 @@ export default function CreateSingle() {
               }}
             />
           </div>
+
           {/* Single name */}
           <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
             <ChooseName
@@ -193,27 +185,24 @@ export default function CreateSingle() {
               onChange={handleChange}
             />
           </div>
+
           {/* Marketing */}
-          <div className='mt-6 w-full max-w-md'>
-            {marketing.length > 0 ? (
-              marketing.map((campaign) => (
-                <MarketingCard
-                  key={campaign.id}
-                  marketing={campaign}
-                  budget={budget}
-                />
-              ))
-            ) : (
-              <p className='text-secondary mt-4 text-center text-sm'>
-                {'No Marketing Campaign selected'}
-              </p>
-            )}
-            <AddMarketing
-              onMarketingSelected={(id) => {
-                setSelectedMarketingId(id);
-              }}
-            />
-          </div>
+          {/* <div className='mt-6 w-full max-w-md'>
+          {marketing.length > 0 ? (
+            marketing.map((campaign) => (
+              <MarketingCard key={campaign.id} marketing={campaign} />
+            ))
+          ) : (
+            <p className='text-secondary mt-4 text-center text-sm'>
+              {'No Marketing Campaign selected'}
+            </p>
+          )}
+          <AddMarketing
+            onMarketingSelected={(id) => {
+              setSelectedMarketingId(id);
+            }}
+          />
+        </div> */}
 
           {messageError ? (
             <p className='mt-4 text-center text-sm text-red-500'>

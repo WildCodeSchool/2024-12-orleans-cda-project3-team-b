@@ -4,7 +4,7 @@ import { db } from '@app/backend-shared';
 
 const getLogosRouter = express.Router();
 
-async function getLogos() {
+function getLogos() {
   return db.selectFrom('logos').selectAll().execute();
 }
 
