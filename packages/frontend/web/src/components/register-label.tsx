@@ -2,6 +2,8 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useLabel } from '@/contexts/label-context';
+
 import type { Label as MusicLabel } from '../../../../backend/api/src/games/get-labels';
 import type { Logo } from '../../../../backend/api/src/games/get-logos';
 import Label from './label';
@@ -16,6 +18,7 @@ export default function RegisterLabel() {
   const [selectedLogo, setSelectedLogo] = useState<number>();
   const [message, setMessage] = useState('');
   const [labels, setLabels] = useState<MusicLabel[]>([]);
+  const { refreshLabel } = useLabel();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,6 +76,7 @@ export default function RegisterLabel() {
       });
 
       if (res.ok) {
+        await refreshLabel();
         await navigate('/main-menu');
       } else {
         setMessage('Something went wrong. Please try again.');

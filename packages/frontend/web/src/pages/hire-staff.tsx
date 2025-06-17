@@ -103,16 +103,16 @@ export default function HireArtist() {
                   return;
                 }
                 try {
-                  void handleStaffArtist(
+                  await handleStaffArtist(
                     staff.id,
                     staff.price,
                     labelId,
                     budget,
                   );
-                  await navigate('/main-menu');
                   await refreshLabel();
+                  await navigate('/main-menu');
                 } catch {
-                  setMessageBudget('redirection not working');
+                  setMessageBudget('Failed to hire or redirect.');
                 }
               }}
               budget={budget}

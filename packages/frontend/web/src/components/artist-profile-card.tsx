@@ -1,3 +1,5 @@
+import { useLabel } from '@/contexts/label-context';
+
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Artist } from '../../../../backend/api/src/artists/artists';
 import type { Price } from '../../../../backend/api/src/games/price';
@@ -9,7 +11,6 @@ type ArtistProfileCardProps = {
   readonly isAddButton?: boolean;
   readonly price?: Price;
   readonly isDisabled?: boolean;
-  readonly fetchInfoLabel?: (() => Promise<void>) | undefined;
 };
 
 export default function ArtistProfileCard({
@@ -18,8 +19,8 @@ export default function ArtistProfileCard({
   fetchArtistsHired,
   price,
   isDisabled,
-  fetchInfoLabel,
 }: ArtistProfileCardProps) {
+  const { refreshLabel } = useLabel();
   async function addPoint(
     artistsHiredSkillsId: number,
     skills_id: number,
@@ -28,13 +29,17 @@ export default function ArtistProfileCard({
     try {
       const response = await fetch(`/api/games/point`, {
         method: 'POST',
-        body: JSON.stringify({ artistsHiredSkillsId, skills_id, price }),
+        body: JSON.stringify({
+          artistsHiredSkillsId,
+          skillsId: skills_id,
+          price,
+        }),
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
       });
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
       await response.json();
+      await refreshLabel();
     } catch (error) {
       console.error('Failed to fetch points:', error);
     }
