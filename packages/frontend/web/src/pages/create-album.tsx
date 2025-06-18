@@ -32,6 +32,8 @@ export default function CreateAlbum() {
   const [singleName, setSingleName] = useState('');
   const [messageError, setMessageError] = useState('');
   const [price, setPrice] = useState<Price | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { label, refreshLabel } = useLabel();
 
   useEffect(() => {
@@ -138,27 +140,27 @@ export default function CreateAlbum() {
         'Please select an artist, enter a name for the album and choose minimun 3 singles.',
       );
       return;
-    } else {
-      try {
-        await fetch('/api/albums/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            artistHiredId: selectedArtistId,
-            singleName: singleName.trim(),
-            singleId: selectedSinglesId,
-            genreId: artistsHired.find((a) => a.id === selectedArtistId)
-              ?.genre_id,
-            price: price?.price,
-          }),
-        });
-        await navigate('/album-congrats');
-        await refreshLabel();
-      } catch (error) {
-        console.error('Submission failed:', error);
-      }
+    }
+    setIsSubmitting(true);
+    try {
+      await fetch('/api/albums/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          artistHiredId: selectedArtistId,
+          singleName: singleName.trim(),
+          singleId: selectedSinglesId,
+          genreId: artistsHired.find((a) => a.id === selectedArtistId)
+            ?.genre_id,
+          price: price?.price,
+        }),
+      });
+      await navigate('/album-congrats');
+      await refreshLabel();
+    } catch (error) {
+      console.error('Submission failed:', error);
     }
   };
   const budget = label?.budget ?? 0;
@@ -278,13 +280,13 @@ export default function CreateAlbum() {
           <div className='justify-center text-center'>
             <VerifyButton
               color={
-                isDisabled
+                isDisabled || isSubmitting
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-orange-500 active:scale-95 transition-transform'
               }
               type={'submit'}
               image='/assets/check.png'
-              disabled={isDisabled}
+              disabled={isDisabled || isSubmitting}
             >
               {'Confirm'}
             </VerifyButton>
