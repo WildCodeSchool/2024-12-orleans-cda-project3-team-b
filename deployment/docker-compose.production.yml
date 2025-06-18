@@ -39,19 +39,19 @@ services:
     env_file:
       - ./.env
     depends_on:
-    database:
-      condition: service_healthy
+      database:
+        condition: service_healthy
   migrations:
     image: taketomi001/migrations:latest
     env_file:
       - ./.env
     depends_on:
-    database:
-      condition: service_healthy
+      database:
+        condition: service_healthy
 
   web:
     image: taketomi001/client:latest
     volumes:
       - web-client-build:/app
 volumes:
-web-client-build:
+  web-client-build:

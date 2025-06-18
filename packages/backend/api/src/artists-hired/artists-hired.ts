@@ -7,22 +7,21 @@ const artistsHiredRouter = Router();
 
 artistsHiredRouter.post('/', async (req: Request, res) => {
   const { artistId, labelId, cost, skills } = req.body;
-
   const userId = req.userId;
+
   if (userId === undefined) {
-    res.json({
-      ok: false,
-    });
+    res.json({ ok: false });
     return;
   }
 
-  try {
-    if (!Number(artistId)) {
-      res.status(400).json({ error: 'artistId is required' });
-      return;
-    }
+  if (!Number(artistId)) {
+    res.status(400).json({ error: 'artistId is required' });
+    return;
+  }
 
-    const artist = await db
+  const trx = await db.startTransaction().execute();
+  try {
+    const artist = await trx
       .selectFrom('artists')
       .select(['milestones_id', 'notoriety'])
       .where('artists.id', '=', artistId)
@@ -33,7 +32,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       return;
     }
 
-    const artistsHiredId = await db
+    const artistsHiredId = await trx
       .insertInto('artists_hired')
       .values({
         artists_id: artistId,
@@ -48,7 +47,8 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
         .json({ error: 'Failed to retrieve hired artist_hired ID' });
       return;
     }
-    await db
+
+    await trx
       .insertInto('label_artists')
       .values({
         label_id: labelId,
@@ -56,7 +56,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       })
       .execute();
 
-    await db
+    await trx
       .insertInto('artists_hired_skills')
       .values(
         skills.map((skill: { skillsId: number; grade: number }) => ({
@@ -67,7 +67,7 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       )
       .execute();
 
-    await db
+    await trx
       .updateTable('labels')
       .set((eb) => ({
         budget: eb('budget', '-', cost),
@@ -75,13 +75,13 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
       .where('users_id', '=', userId)
       .execute();
 
+    await trx.commit().execute();
     res.status(201).json({
       ok: true,
       message: 'Artist hired successfully',
     });
   } catch (error) {
-    console.error('Error hiring artist:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    await trx.rollback().execute();
   }
 });
 

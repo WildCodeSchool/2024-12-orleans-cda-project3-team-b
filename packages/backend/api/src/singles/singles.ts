@@ -19,13 +19,13 @@ function getSingles(userId: number) {
     .select([
       'singles.id',
       'singles.artists_hired_id',
-      'singles.name as name',
+      'singles.name',
       'singles.listeners',
       'singles.money_earned',
       'singles.score',
-      'artists.firstname as artist_firstname',
-      'artists.lastname as artist_lastname',
-      'artists.alias as artist_alias',
+      'artists.firstname',
+      'artists.lastname',
+      'artists.alias',
     ])
     .where((eb) =>
       eb.not(
@@ -181,7 +181,7 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('id', '=', artistHiredId)
       .execute();
 
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true, ok: true });
     return;
   } catch (err) {
     console.error('Insert failed:', err);

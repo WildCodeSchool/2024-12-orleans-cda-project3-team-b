@@ -3,32 +3,32 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
-// import AddMarketing from '@/components/add-marketing';
+import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
 import ChooseSingle from '@/components/choose.single';
-// import MarketingCard from '@/components/marketing-card';
+import MarketingCard from '@/components/marketing-card';
 import SingleCard from '@/components/single-card';
 import VerifyButton from '@/components/verify-button';
 import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Price } from '../../../../backend/api/src/games/price';
-// import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 import type { Single } from '../../../../backend/api/src/singles/singles';
 
 export default function CreateAlbum() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  // const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
-  //   null,
-  // );
+  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+    null,
+  );
   const [chosenSingles, setChosenSingles] = useState<Single[]>([]);
   const navigate = useNavigate();
   const [selectedSinglesId, setSelectedSinglesId] = useState<number[]>([]);
-  // const [marketing, setMarketing] = useState<Marketing[]>([]);
-  // const [submitted, setSubmitted] = useState(false);
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [submitted, setSubmitted] = useState(false);
   const [singleName, setSingleName] = useState('');
   const [messageError, setMessageError] = useState('');
   const [price, setPrice] = useState<Price | undefined>(undefined);
@@ -58,29 +58,29 @@ export default function CreateAlbum() {
     void fetchArtists();
   }, [selectedArtistId]);
 
-  // useEffect(() => {
-  //   const fetchMarketing = async () => {
-  //     try {
-  //       if (selectedMarketingId != null) {
-  //         const resMarketing = await fetch('/api/marketing');
-  //         if (!resMarketing.ok)
-  //           throw new Error(`Marketing error: ${resMarketing.status}`);
-  //         const marketingData: Marketing[] = await resMarketing.json();
-  //         const selectedMarketing = marketingData.find(
-  //           (m) => m.id === selectedMarketingId,
-  //         );
-  //         setMarketing(selectedMarketing ? [selectedMarketing] : []);
-  //       } else {
-  //         setMarketing([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching marketing:', error);
-  //       setMarketing([]);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
+        if (selectedMarketingId != null) {
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing error: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
+          );
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
+        } else {
+          setMarketing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
 
-  //   void fetchMarketing();
-  // }, [selectedMarketingId]);
+    void fetchMarketing();
+  }, [selectedMarketingId]);
 
   useEffect(() => {
     const fetchSingles = async () => {
@@ -167,7 +167,11 @@ export default function CreateAlbum() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={(event) => {
+        void handleSubmit(event);
+      }}
+    >
       <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6'>
         <div className='mb-4 flex w-full items-center justify-between'>
           <div>
@@ -204,7 +208,7 @@ export default function CreateAlbum() {
           />
         </div>
 
-        <div className='mt-6 flex h-30 flex-col items-center gap-2 overflow-y-scroll'>
+        <div className='mt-2 flex w-full flex-col items-center gap-2'>
           {chosenSingles.length > 0 ? (
             chosenSingles.map((single) => (
               <SingleCard
@@ -220,23 +224,27 @@ export default function CreateAlbum() {
               />
             ))
           ) : (
-            <p className='text-secondary text-s mt-4 text-center'>
+            <p className='text-secondary text-s mt-2 text-center'>
               {'No single selected'}
             </p>
           )}
+          <ChooseSingle
+            onSingleSelected={(id) => {
+              setSelectedSinglesId((prev) =>
+                prev.includes(id) ? prev : [...prev, id].slice(0, 3),
+              );
+            }}
+            artistId={selectedArtistId}
+          />
         </div>
-        <ChooseSingle
-          onSingleSelected={(id) => {
-            setSelectedSinglesId((prev) =>
-              prev.includes(id) ? prev : [...prev, id].slice(0, 10),
-            );
-          }}
-          artistId={selectedArtistId}
-        />
-        {/* <div className='mt-6'>
+        <div className='mt-6'>
           {marketing.length > 0 ? (
             marketing.map((campaign) => (
-              <MarketingCard key={campaign.id} marketing={campaign} />
+              <MarketingCard
+                key={campaign.id}
+                marketing={campaign}
+                budget={budget}
+              />
             ))
           ) : (
             <p className='text-secondary text-s mt-4 text-center'>
@@ -248,7 +256,7 @@ export default function CreateAlbum() {
               setSelectedMarketingId(id);
             }}
           />
-        </div> */}
+        </div>
         {messageError ? (
           <p className='mt-4 text-center text-sm text-red-500'>
             {messageError}
