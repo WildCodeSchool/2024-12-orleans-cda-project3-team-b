@@ -26,7 +26,7 @@ export default function ArtistCard({
       key={artist.id}
       className='bg-secondary flex h-14 w-70 items-center justify-evenly rounded-sm text-white shadow-[3px_5px_6px_rgba(0,0,0,0.30)] md:h-20 md:w-110'
     >
-      {(isLink ?? false) && to != null ? (
+      {(isLink ?? false) && to ? (
         <Link to={to}>
           <img
             className='h-10 w-10 rounded-4xl'

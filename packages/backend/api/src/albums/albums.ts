@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { type Request, Router } from 'express';
 
 import { db } from '@app/backend-shared';
