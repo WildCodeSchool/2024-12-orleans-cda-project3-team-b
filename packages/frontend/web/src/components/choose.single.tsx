@@ -12,15 +12,14 @@ export default function ChooseSingle({ onSingleSelected, artistId }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className='mt-8 flex flex-col items-center justify-center'>
-      <button
-        type='button'
+    <div className='flex flex-col items-center justify-center'>
+      <div
         onClick={() => {
           setIsModalOpen(true);
         }}
       >
         <AddSingle />
-      </button>
+      </div>
 
       <ModalSingles
         isOpen={isModalOpen}

@@ -19,7 +19,7 @@ postRegisterLabelRouter.post('/register-label', async (req: Request, res) => {
       .values({
         name,
         logos_id: logosId,
-        budget: 15000,
+        budget: 11000,
         score_xp: 0,
         notoriety: 0,
         users_id: userId,

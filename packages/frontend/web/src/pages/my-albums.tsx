@@ -74,12 +74,12 @@ export default function MyAlbums() {
         <h2 className='font-bold'>{'ALBUMS'}</h2>
         {albums.slice(0, visibleCount).map((album) => (
           <div key={album.id} className='text-center'>
-            <h3 className='font-semibold'>{album.name}</h3>
+            <h3 className='font-semibold'>{album.albumName}</h3>
             <p className='text-sm font-light'>
               {'by '}
-              {album.artist_alias?.trim() != null
-                ? album.artist_alias
-                : `${album.artist_firstname} ${album.artist_lastname}`}
+              {(album.alias ?? null) !== null
+                ? album.alias
+                : `${album.firstname} ${album.lastname}`}
             </p>
           </div>
         ))}

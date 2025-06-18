@@ -54,7 +54,12 @@ export default function MyArtists() {
       </div>
       <div className='mt-5 grid grid-cols-2 gap-4'>
         {artists.slice(0, visibleCount).map((artist) => (
-          <ArtistCard key={artist.id} artist={artist} />
+          <ArtistCard
+            key={artist.id}
+            artist={artist}
+            isLink
+            to={`/artists-hired/${artist.id}`}
+          />
         ))}
       </div>
 

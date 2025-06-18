@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { ArrowLeft } from '@/components/arrow-left';
 import ArtistProfileCard from '@/components/artist-profile-card';
+import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
-import type { InfoLabel } from '../../../../backend/api/src/games/label-info';
 import type { Price } from '../../../../backend/api/src/games/price';
 
 export default function ArtistHirePage() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [price, setPrice] = useState<Price>();
-  const [infoLabel, setInfoLabel] = useState<InfoLabel | null>(null);
   const { id } = useParams<{ id: string }>();
+  const { label } = useLabel();
 
   const fetchArtistsHired = useCallback(async () => {
     try {
@@ -45,36 +46,32 @@ export default function ArtistHirePage() {
         console.error('Error fetching single price:', error);
       }
     };
-    const fetchInfoLabel = async () => {
-      try {
-        const res = await fetch('/api/games/label');
-        const data: InfoLabel = await res.json();
-        setInfoLabel(data);
-      } catch (error) {
-        console.error('Error fetching budget:', error);
-      }
-    };
-
-    void fetchInfoLabel();
 
     void fetchPriceSingle();
   }, []);
-  const budget = infoLabel?.budget ?? 0;
+  const budget = label?.budget ?? 0;
 
   const isDisabledPrice = price?.price == null || budget < price.price;
 
   return (
-    <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
-      {artistsHired.map((artist) => (
-        <ArtistProfileCard
-          key={artist.id}
-          artist={artist}
-          fetchArtistsHired={fetchArtistsHired}
-          isAddButton
-          price={price}
-          isDisabled={isDisabledPrice}
-        />
-      ))}
+    <div className='bg-primary h-150 flex-col items-center'>
+      <div className='flex items-center justify-center pt-3 md:ml-4 md:justify-start'>
+        <ArrowLeft />
+      </div>
+      <div className='items-center justify-center'>
+        <div className='bg-primary flex flex-col items-center space-y-4 px-4 py-6'>
+          {artistsHired.map((artist) => (
+            <ArtistProfileCard
+              key={artist.id}
+              artist={artist}
+              fetchArtistsHired={fetchArtistsHired}
+              isAddButton
+              price={price}
+              isDisabled={isDisabledPrice}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

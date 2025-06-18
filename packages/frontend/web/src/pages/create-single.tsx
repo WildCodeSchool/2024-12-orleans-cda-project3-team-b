@@ -3,30 +3,31 @@ import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddArtist from '@/components/add-artist';
-// import AddMarketing from '@/components/add-marketing';
+import AddMarketing from '@/components/add-marketing';
 import { ArrowLeft } from '@/components/arrow-left';
 import ArtistCard from '@/components/artist-card';
 import ChooseName from '@/components/choose-name';
-// import MarketingCard from '@/components/marketing-card';
+import MarketingCard from '@/components/marketing-card';
 import VerifyButton from '@/components/verify-button';
 import { useLabel } from '@/contexts/label-context';
 
 import type { ArtistHired } from '../../../../backend/api/src/artists-hired/artists-hired';
 import type { Price } from '../../../../backend/api/src/games/price';
-
-// import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
+import type { Marketing } from '../../../../backend/api/src/marketing/marketing';
 
 export default function CreateSingle() {
   const [artistsHired, setArtistsHired] = useState<ArtistHired[]>([]);
   const [selectedArtistId, setSelectedArtistId] = useState<number | null>(null);
-  // const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
-  //   null,
-  // );
+  const [selectedMarketingId, setSelectedMarketingId] = useState<number | null>(
+    null,
+  );
   const navigate = useNavigate();
-  // const [marketing, setMarketing] = useState<Marketing[]>([]);
+  const [marketing, setMarketing] = useState<Marketing[]>([]);
   const [singleName, setSingleName] = useState('');
   const [price, setPrice] = useState<Price>();
   const [messageError, setMessageError] = useState('');
+  const selectedArtist = artistsHired.find((a) => a.id === selectedArtistId);
+  const selectedSkills = selectedArtist?.skills ?? [];
   const { label, refreshLabel } = useLabel();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +53,7 @@ export default function CreateSingle() {
             genreId: artistsHired.find((a) => a.id === selectedArtistId)
               ?.genre_id,
             price: price?.price,
+            skills: selectedSkills,
           }),
         });
 
@@ -90,29 +92,29 @@ export default function CreateSingle() {
     void fetchArtists();
   }, [selectedArtistId]);
 
-  // useEffect(() => {
-  //   const fetchMarketing = async () => {
-  //     try {
-  //       if (selectedMarketingId != null) {
-  //         const resMarketing = await fetch('/api/marketing');
-  //         if (!resMarketing.ok)
-  //           throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
-  //         const marketingData: Marketing[] = await resMarketing.json();
-  //         const selectedMarketing = marketingData.find(
-  //           (m) => m.id === selectedMarketingId,
-  //         );
-  //         setMarketing(selectedMarketing ? [selectedMarketing] : []);
-  //       } else {
-  //         setMarketing([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching marketing:', error);
-  //       setMarketing([]);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchMarketing = async () => {
+      try {
+        if (selectedMarketingId != null) {
+          const resMarketing = await fetch('/api/marketing');
+          if (!resMarketing.ok)
+            throw new Error(`Marketing fetch failed: ${resMarketing.status}`);
+          const marketingData: Marketing[] = await resMarketing.json();
+          const selectedMarketing = marketingData.find(
+            (m) => m.id === selectedMarketingId,
+          );
+          setMarketing(selectedMarketing ? [selectedMarketing] : []);
+        } else {
+          setMarketing([]);
+        }
+      } catch (error) {
+        console.error('Error fetching marketing:', error);
+        setMarketing([]);
+      }
+    };
 
-  //   void fetchMarketing();
-  // }, [selectedMarketingId]);
+    void fetchMarketing();
+  }, [selectedMarketingId]);
 
   useEffect(() => {
     const fetchPriceSingle = async () => {
@@ -135,108 +137,114 @@ export default function CreateSingle() {
     price?.price === null || budget < (price?.price ?? Infinity);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
-        {/* Header */}
-        <div className='mb-4 flex w-full flex-col items-center justify-between gap-2 sm:flex-row'>
-          <div>
-            <ArrowLeft />
-          </div>
-          <h1 className='text-secondary text-center text-xl font-bold sm:text-2xl'>
-            {' RECORDING A NEW SINGLE'}
-          </h1>
-          <div className='h-6 w-6' />
+    <>
+      <div className='bg-primary flex items-center justify-center pt-4 text-center md:w-full'>
+        <div className='mr-3 flex md:absolute md:left-0'>
+          <ArrowLeft />
         </div>
-
-        {/* Image */}
-        <img
-          className='h-20 w-20 sm:h-28 sm:w-28'
-          src='/assets/music-note.png'
-          alt='note'
-        />
-
-        {/* Artist */}
-        <div className='mt-6 w-full max-w-md'>
-          {artistsHired.length > 0 ? (
-            artistsHired.map((artist) => (
-              <ArtistCard key={artist.artists_id} artist={artist} />
-            ))
-          ) : (
-            <p className='text-secondary mt-4 text-center text-sm'>
-              {'No artist selected'}
-            </p>
-          )}
-          <AddArtist
-            onArtistSelected={(id) => {
-              setSelectedArtistId(id);
-            }}
-          />
-        </div>
-
-        {/* Single name */}
-        <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
-          <ChooseName
-            name="Choose your single's name"
-            placeholder="Single's name"
-            value={singleName}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Marketing */}
-        {/* <div className='mt-6 w-full max-w-md'>
-          {marketing.length > 0 ? (
-            marketing.map((campaign) => (
-              <MarketingCard key={campaign.id} marketing={campaign} />
-            ))
-          ) : (
-            <p className='text-secondary mt-4 text-center text-sm'>
-              {'No Marketing Campaign selected'}
-            </p>
-          )}
-          <AddMarketing
-            onMarketingSelected={(id) => {
-              setSelectedMarketingId(id);
-            }}
-          />
-        </div> */}
-
-        {messageError ? (
-          <p className='mt-4 text-center text-sm text-red-500'>
-            {messageError}
-          </p>
-        ) : (
-          ''
-        )}
-
-        {/* Buttons */}
-        <div className='mt-6 flex items-start justify-between gap-x-16'>
-          <VerifyButton
-            color='bg-secondary active:scale-95 transition-transform'
-            image='/assets/not-check.png'
-            onClick={async () => {
-              await navigate(-1);
-            }}
-          >
-            {'Cancel'}
-          </VerifyButton>
-          <div className='justify-center text-center'>
-            <VerifyButton
-              color={
-                isDisabled
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-orange-500 active:scale-95 transition-transform'
-              }
-              image='/assets/check.png'
-              disabled={isDisabled}
-              type={'submit'}
-            >
-              {'Confirm'}
-            </VerifyButton>
-            {price ? `${price.price} $` : ''}
-          </div>
-        </div>
+        <h1 className='text-secondary text-center text-lg font-bold sm:text-2xl md:text-xl'>
+          {' RECORDING A NEW SINGLE'}
+        </h1>
+        <div className='h-6 w-6' />
       </div>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <div className='bg-primary flex min-h-screen flex-col items-center px-4 py-6 sm:px-6 md:px-12'>
+          {/* Header */}
+
+          {/* Image */}
+          <img
+            className='h-20 w-20 sm:h-28 sm:w-28'
+            src='/assets/music-note.png'
+            alt='note'
+          />
+
+          {/* Artist */}
+          <div className='mt-6 w-full max-w-md'>
+            {artistsHired.length > 0 ? (
+              artistsHired.map((artist) => (
+                <ArtistCard key={artist.artists_id} artist={artist} />
+              ))
+            ) : (
+              <p className='text-secondary mt-4 text-center text-sm'>
+                {'No artist selected'}
+              </p>
+            )}
+            <AddArtist
+              onArtistSelected={(id) => {
+                setSelectedArtistId(id);
+              }}
+            />
+          </div>
+
+          {/* Single name */}
+          <div className='mt-6 flex w-full max-w-md flex-col items-center justify-center'>
+            <ChooseName
+              name="Choose your single's name"
+              placeholder="Single's name"
+              value={singleName}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Marketing */}
+          <div className='mt-6 w-full max-w-md'>
+            {marketing.length > 0 ? (
+              marketing.map((campaign) => (
+                <MarketingCard
+                  key={campaign.id}
+                  marketing={campaign}
+                  budget={budget}
+                />
+              ))
+            ) : (
+              <p className='text-secondary mt-4 text-center text-sm'>
+                {'No Marketing Campaign selected'}
+              </p>
+            )}
+            <AddMarketing
+              onMarketingSelected={(id) => {
+                setSelectedMarketingId(id);
+              }}
+            />
+          </div>
+
+          {messageError ? (
+            <p className='mt-4 text-center text-sm text-red-500'>
+              {messageError}
+            </p>
+          ) : (
+            ''
+          )}
+
+          {/* Buttons */}
+          <div className='mt-6 flex items-start justify-between gap-x-16'>
+            <VerifyButton
+              color='bg-secondary active:scale-95 transition-transform'
+              image='/assets/not-check.png'
+              onClick={async () => {
+                await navigate(-1);
+              }}
+            >
+              {'Cancel'}
+            </VerifyButton>
+            <div className='justify-center text-center'>
+              <VerifyButton
+                color={
+                  isDisabled
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-orange-500 active:scale-95 transition-transform'
+                }
+                image='/assets/check.png'
+                disabled={isDisabled}
+                type={'submit'}
+              >
+                {'Confirm'}
+              </VerifyButton>
+              {price ? `${price.price} $` : ''}
+            </div>
+          </div>
+        </div>
+      </form>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-export default function Loader() {
+export default function authLoader() {
   return (
     <div className='flex min-h-[75vh] flex-col items-center justify-center'>
       <p className='font-red-rose text-2xl font-semibold'>{'LOADING ...'}</p>

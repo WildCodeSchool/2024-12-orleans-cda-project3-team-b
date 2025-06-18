@@ -106,6 +106,7 @@ export default function HireArtist() {
             isOnFire
             isLink
             budget={budget}
+            to={`/artists/${artist.id}`}
           />
         ))}
       </div>

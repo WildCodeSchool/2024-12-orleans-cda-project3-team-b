@@ -12,7 +12,6 @@ export default function StaffLabelsCard({ staff }: StaffCardProps) {
         staffId: staff.id,
       }),
       headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
     });
   };
 
