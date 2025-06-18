@@ -29,6 +29,7 @@ export default function CreateSingle() {
   const selectedArtist = artistsHired.find((a) => a.id === selectedArtistId);
   const selectedSkills = selectedArtist?.skills ?? [];
   const { label, refreshLabel } = useLabel();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSingleName(event.target.value);
@@ -42,29 +43,33 @@ export default function CreateSingle() {
         'Please select an artist and enter a name for the single.',
       );
       return;
-    } else {
-      try {
-        const res = await fetch('/api/singles', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            artistHiredId: selectedArtistId,
-            singleName: singleName.trim(),
-            genreId: artistsHired.find((a) => a.id === selectedArtistId)
-              ?.genre_id,
-            price: price?.price,
-            skills: selectedSkills,
-          }),
-        });
+    }
+    setIsSubmitting(true);
 
-        if (!res.ok) {
-          return;
-        }
-        await navigate('/single-congrats');
-        await refreshLabel();
-      } catch (error) {
-        console.error('Submission failed:', error);
+    try {
+      const res = await fetch('/api/singles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          artistHiredId: selectedArtistId,
+          singleName: singleName.trim(),
+          genreId: artistsHired.find((a) => a.id === selectedArtistId)
+            ?.genre_id,
+          price: price?.price,
+          skills: selectedSkills,
+        }),
+      });
+
+      if (!res.ok) {
+        setMessageError('Failed to create the single.');
+        setIsSubmitting(false);
+        return;
       }
+      await refreshLabel();
+      await navigate('/single-congrats');
+    } catch (error) {
+      console.error('Submission failed:', error);
+      setIsSubmitting(false);
     }
   };
 
@@ -230,12 +235,12 @@ export default function CreateSingle() {
             <div className='justify-center text-center'>
               <VerifyButton
                 color={
-                  isDisabled
+                  isDisabled || isSubmitting
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-orange-500 active:scale-95 transition-transform'
                 }
                 image='/assets/check.png'
-                disabled={isDisabled}
+                disabled={isDisabled || isSubmitting}
                 type={'submit'}
               >
                 {'Confirm'}
