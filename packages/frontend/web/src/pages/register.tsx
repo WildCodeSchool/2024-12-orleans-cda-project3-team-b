@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import ErrorForm from '@/components/errors-form';
 import Input from '@/components/input';
@@ -11,6 +11,7 @@ export default function Register() {
   const [isAccepted, setIsAccepted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const passwordCriteria = {
     minLength: password.length >= 8,
@@ -64,6 +65,7 @@ export default function Register() {
         setEmail('');
         setPassword('');
         setIsAccepted(false);
+        await navigate('/login');
       }
     } catch (error) {
       console.error(error);
