@@ -181,7 +181,7 @@ singlesRouter.post('/', async (req: Request, res) => {
       .where('id', '=', artistHiredId)
       .execute();
 
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true, ok: true });
     return;
   } catch (err) {
     console.error('Insert failed:', err);

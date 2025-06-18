@@ -14,75 +14,74 @@ artistsHiredRouter.post('/', async (req: Request, res) => {
     return;
   }
 
+  if (!Number(artistId)) {
+    res.status(400).json({ error: 'artistId is required' });
+    return;
+  }
+
+  const trx = await db.startTransaction().execute();
   try {
-    if (!Number(artistId)) {
-      res.status(400).json({ error: 'artistId is required' });
+    const artist = await trx
+      .selectFrom('artists')
+      .select(['milestones_id', 'notoriety'])
+      .where('artists.id', '=', artistId)
+      .executeTakeFirst();
+
+    if (!artist) {
+      res.status(404).json({ error: 'Artist not found' });
       return;
     }
 
-    await db.transaction().execute(async (trx) => {
-      const artist = await trx
-        .selectFrom('artists')
-        .select(['milestones_id', 'notoriety'])
-        .where('artists.id', '=', artistId)
-        .executeTakeFirst();
+    const artistsHiredId = await trx
+      .insertInto('artists_hired')
+      .values({
+        artists_id: artistId,
+        milestones_id: artist.milestones_id,
+        notoriety: artist.notoriety,
+      })
+      .executeTakeFirst();
 
-      if (!artist) {
-        res.status(404).json({ error: 'Artist not found' });
-        return;
-      }
+    if (!artistsHiredId) {
+      res
+        .status(500)
+        .json({ error: 'Failed to retrieve hired artist_hired ID' });
+      return;
+    }
 
-      const artistsHiredId = await trx
-        .insertInto('artists_hired')
-        .values({
-          artists_id: artistId,
-          milestones_id: artist.milestones_id,
-          notoriety: artist.notoriety,
-        })
-        .executeTakeFirst();
+    await trx
+      .insertInto('label_artists')
+      .values({
+        label_id: labelId,
+        artists_hired_id: Number(artistsHiredId.insertId),
+      })
+      .execute();
 
-      if (!artistsHiredId) {
-        res
-          .status(500)
-          .json({ error: 'Failed to retrieve hired artist_hired ID' });
-        return;
-      }
-
-      await trx
-        .insertInto('label_artists')
-        .values({
-          label_id: labelId,
+    await trx
+      .insertInto('artists_hired_skills')
+      .values(
+        skills.map((skill: { skillsId: number; grade: number }) => ({
+          skills_id: skill.skillsId,
+          grade: skill.grade,
           artists_hired_id: Number(artistsHiredId.insertId),
-        })
-        .execute();
+        })),
+      )
+      .execute();
 
-      await trx
-        .insertInto('artists_hired_skills')
-        .values(
-          skills.map((skill: { skillsId: number; grade: number }) => ({
-            skills_id: skill.skillsId,
-            grade: skill.grade,
-            artists_hired_id: Number(artistsHiredId.insertId),
-          })),
-        )
-        .execute();
+    await trx
+      .updateTable('labels')
+      .set((eb) => ({
+        budget: eb('budget', '-', cost),
+      }))
+      .where('users_id', '=', userId)
+      .execute();
 
-      await trx
-        .updateTable('labels')
-        .set((eb) => ({
-          budget: eb('budget', '-', cost),
-        }))
-        .where('users_id', '=', userId)
-        .execute();
-
-      res.status(201).json({
-        ok: true,
-        message: 'Artist hired successfully',
-      });
+    await trx.commit().execute();
+    res.status(201).json({
+      ok: true,
+      message: 'Artist hired successfully',
     });
   } catch (error) {
-    console.error('Error hiring artist:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    await trx.rollback().execute();
   }
 });
 

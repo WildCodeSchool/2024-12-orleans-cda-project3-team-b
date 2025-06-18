@@ -187,22 +187,26 @@ export default function CreateSingle() {
           </div>
 
           {/* Marketing */}
-          {/* <div className='mt-6 w-full max-w-md'>
-          {marketing.length > 0 ? (
-            marketing.map((campaign) => (
-              <MarketingCard key={campaign.id} marketing={campaign} />
-            ))
-          ) : (
-            <p className='text-secondary mt-4 text-center text-sm'>
-              {'No Marketing Campaign selected'}
-            </p>
-          )}
-          <AddMarketing
-            onMarketingSelected={(id) => {
-              setSelectedMarketingId(id);
-            }}
-          />
-        </div> */}
+          <div className='mt-6 w-full max-w-md'>
+            {marketing.length > 0 ? (
+              marketing.map((campaign) => (
+                <MarketingCard
+                  key={campaign.id}
+                  marketing={campaign}
+                  budget={budget}
+                />
+              ))
+            ) : (
+              <p className='text-secondary mt-4 text-center text-sm'>
+                {'No Marketing Campaign selected'}
+              </p>
+            )}
+            <AddMarketing
+              onMarketingSelected={(id) => {
+                setSelectedMarketingId(id);
+              }}
+            />
+          </div>
 
           {messageError ? (
             <p className='mt-4 text-center text-sm text-red-500'>
